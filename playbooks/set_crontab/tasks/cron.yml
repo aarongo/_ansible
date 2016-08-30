@@ -1,0 +1,5 @@
+---
+- name: Test
+  cron: name="check dirs" job="ls -alh > /dev/null"
+- name: Sercond
+  cron: name="Test crond" job="uptime >> ~/1.txt"

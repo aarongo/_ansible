@@ -1,0 +1,5 @@
+---
+- name: Cron Test
+  hosts: nginx
+  tasks:
+    - include: 'tasks/cron.yml'
