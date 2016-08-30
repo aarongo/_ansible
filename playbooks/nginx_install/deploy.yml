@@ -1,0 +1,9 @@
+---
+- name: Install NGINX NO1
+  hosts: nginx
+  sudo: True
+  vars:
+    nginx_dir: /software/nginx/
+    soft_dir: /tmp/
+  tasks:
+    - include: 'tasks/install_nginx.yml'

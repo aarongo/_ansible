@@ -1,0 +1,36 @@
+---
+- name: NGINX {{ ansible_eth0.ipv4.address }} | Installing NGINX source | Copy software packages to Client
+  copy:
+    src={{ item }} dest={{ soft_dir }}
+  with_items:
+    - "files/pcre-8.39.tar.gz"
+    - "files/zlib-1.2.8.tar.gz"
+    - "files/openssl-1.0.2f.tar.gz"
+    - "files/nginx-1.8.0.tar.gz"
+- name: NGINX {{ ansible_eth0.ipv4.address }} | Copy Install NGINX Script to Client
+  copy:
+    src=files/nginx_install.sh
+    dest={{ soft_dir }}
+    mode=0755
+- name: NGINX {{ ansible_eth0.ipv4.address }} | Starting Install NGINX
+  shell:
+    /bin/bash {{ soft_dir }}nginx_install.sh
+- name: Check List Clients files
+  shell: rm -rf  {{ soft_dir }}*
+  
+- name: Template NGINX CONFIG To Clients
+  template:
+    src=templates/nginx.conf.j2
+    dest={{ nginx_dir }}conf/nginx.conf
+    mode=0644
+- name: Starting Nginx {{ nginx_dir }}sbin/nginx.........
+  command: /software/nginx/sbin/nginx
+  become: true
+  become_user: root
+- name: NGINX {{ ansible_eth0.ipv4.address }} | Copy Index.html To Clients Test Nginx Starting 
+  template:
+    src=templates/index.html.j2
+    dest={{ nginx_dir }}html/index.html
+    owner=nginx
+    group=nginx
+    mode=0755
