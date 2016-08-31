@@ -1,2 +1,8 @@
 [nginx]
 nginx_server1 ansible_ssh_host=127.0.0.1 ansible_ssh_port=2222
+
+
+#[app_group]
+#别名 ansible_ssh_host=主机地址 ansible_ssh_port=ssh端口 
+#[app_greoup:vars]主机组变量
+#ansible_sudo_pass='76132fbbe6'设置sudo 密码

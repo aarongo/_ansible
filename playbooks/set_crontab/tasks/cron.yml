@@ -1,5 +1,3 @@
 ---
-- name: Test
-  cron: name="check dirs" job="ls -alh > /dev/null"
-- name: Sercond
-  cron: name="Test crond" job="uptime >> ~/1.txt"
+- name: NTP SYNC
+  cron: name="NTP Sync" minute="0" hour="0" job="/usr/sbin/ntpdate ntp.cdc.carrefour.com > /dev/null"
