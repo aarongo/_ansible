@@ -1,6 +1,0 @@
----
-- name: Init System Info
-  hosts: nginx
-  sudo: True
-  tasks:
-    - include: 'tasks/limit.yml'
