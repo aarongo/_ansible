@@ -4,29 +4,41 @@
     dest={{ soft_dir }} 
     mode=755
     state=directory
+
+
 - name: Transferred Packages To IP:{{ ansible_eth1.ipv4.address }} HOST_NAME={{ ansible_hostname }}
   copy:
     src={{ item }} dest={{ soft_dir }} mode=0755
   with_items: install_packages
+
+
 - name: Run Local Script At Remote Server
   script: nginx_install.sh
+
+
 - name: Remove IP:{{ ansible_eth1.ipv4.address }} HOST_NAME={{ ansible_hostname }} Save Packages Dir
   file:
     dest={{ soft_dir }}
     state=absent
+
+
 - name: Copy Templage Config To IP:{{ ansible_eth1.ipv4.address }} HOST_NAME={{ ansible_hostname }}
   template:
     src=nginx.conf.j2
     dest={{ nginx_dir }}conf/nginx.conf
     mode=0644
 
+
 - name: Copy Nginx Script To IP:{{ ansible_eth1.ipv4.address }} HOST_NAME={{ ansible_hostname }} And Start
   copy:
     src=nginx.sh dest="/etc/init.d/nginx" mode=0755
   notify:
     - start nginx
+
+
 - name: Add System Script At IP:{{ ansible_eth1.ipv4.address }} HOST_NAME={{ ansible_hostname }}
   command: /sbin/chkconfig nginx on
+
 
 - name: Copy Template Index To IP:{{ ansible_eth1.ipv4.address }} HOST_NAME={{ ansible_hostname }}
   template:
