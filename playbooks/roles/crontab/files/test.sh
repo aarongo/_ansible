@@ -1,2 +1,2 @@
-#!{{shell_path}}
+#!/bin/bash
 /usr/bin/uptime > /dev/null
