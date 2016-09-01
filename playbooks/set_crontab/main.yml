@@ -1,7 +1,0 @@
----
-- name: Cron Configuer
-  hosts: app_group
-  sudo: True
-  tasks:
-    - include: 'tasks/cron.yml'
-    - include: 'tasks/ntp_stop.yml'

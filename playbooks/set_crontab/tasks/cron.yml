@@ -1,3 +1,0 @@
----
-- name: NTP SYNC
-  cron: name="NTP Sync" minute="0" hour="0" job="/usr/sbin/ntpdate ntp.cdc.carrefour.com > /dev/null"

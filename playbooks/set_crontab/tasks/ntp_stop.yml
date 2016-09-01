@@ -1,3 +1,0 @@
----
-- name: Stop Local  NTPD Service
-  service: name=ntpd state=stopped
