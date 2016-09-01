@@ -67,12 +67,17 @@ Ansible 流程介绍
 └── site.yml
 ```
 defaults: 配置默认变量的目录,可以被 vars 内配置的变量覆盖掉
+
 files: 文件存放位置
 handlers: Handlers里面的每一个handler，也是对module的一次调用。而handler与tasks不同的是，handlers不会默认的按顺序执行 只有当TASKS种的action的执行状态是changed时，才会触发notify handler的执行
+
 meta: 其中列出的 “角色依赖” 将被添加到 roles中,(判断系统,从而安装软件)
 tasks: 所有的任务列表
+
 templates: 所有j2文件存放位置
+
 site.yml: 执行 playbook 文件入口
+
 ```
 ---
 - hosts: nginx
@@ -81,7 +86,11 @@ site.yml: 执行 playbook 文件入口
     - nginx #调取角色的名称(目录名)
 ```
 vars:变量存放位置,优先级高于 defaults
+
 所有 copy tasks 可以引用 roles/x/files/ 中的文件，不需要指明文件的路径。
+
 所有 script tasks 可以引用 roles/x/files/ 中的脚本，不需要指明文件的路径。
+
 所有 template tasks 可以引用 roles/x/templates/ 中的文件，不需要指明文件的路径。
+
 所有 include tasks 可以引用 roles/x/tasks/ 中的文件，不需要指明文件的路径
