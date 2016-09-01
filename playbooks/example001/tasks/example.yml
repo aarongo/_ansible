@@ -1,0 +1,7 @@
+---
+- name: Example Ansible Tset cycle ansible_eth0
+  debug: msg={{ item.key }}={{ item.value }}
+  with_dict: ansible_eth0.ipv4
+- name: Example Ansible Tset cycle ansible_eth1
+  debug: msg={{ item.key }}={{ item.value }}
+  with_dict: ansible_eth1.ipv4

@@ -1,0 +1,9 @@
+---
+# vars file for nginx
+nginx_dir: /software/nginx/
+soft_dir: /tmp/packages/
+install_packages:
+  - "files/pcre-8.39.tar.gz"
+  - "files/zlib-1.2.8.tar.gz"
+  - "files/openssl-1.0.2f.tar.gz"
+  - "files/nginx-1.8.0.tar.gz"
