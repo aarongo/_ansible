@@ -42,29 +42,26 @@ Ansible 流程介绍
 1.使用ansible-galaxy init -p playbooks/roles nginx生成 Roles-->nginx
 2.目录介绍
 ```
-├── nginx
-│   ├── README.md
-│   ├── defaults
-│   │   └── main.yml
-│   ├── files
-│   │   ├── nginx-1.8.0.tar.gz
-│   │   ├── nginx.sh
-│   │   ├── nginx_install.sh
-│   │   ├── openssl-1.0.2f.tar.gz
-│   │   ├── pcre-8.39.tar.gz
-│   │   └── zlib-1.2.8.tar.gz
-│   ├── handlers
-│   │   └── main.yml
-│   ├── meta
-│   │   └── main.yml
-│   ├── tasks
-│   │   └── main.yml
-│   ├── templates
-│   │   ├── index.html.j2
-│   │   └── nginx.conf.j2
-│   └── vars
-│       └── main.yml
-└── site.yml
+├── README.md
+├── files
+│   ├── nginx-1.8.0.tar.gz
+│   ├── openssl-1.0.2f.tar.gz
+│   ├── pcre-8.39.tar.gz
+│   └── zlib-1.2.8.tar.gz
+├── handlers
+│   └── main.yml
+├── meta
+│   └── main.yml
+├── tasks
+│   └── main.yml
+├── templates
+│   ├── index.html.j2
+│   ├── log_cut.sh.j2
+│   ├── nginx.conf.j2
+│   ├── nginx.sh.j2
+│   └── nginx_install.sh.j2
+└── vars
+    └── main.yml
 ```
 defaults: 配置默认变量的目录,可以被 vars 内配置的变量覆盖掉
 
