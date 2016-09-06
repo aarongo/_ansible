@@ -1,0 +1,34 @@
+#!/bin/bash
+# This Script For Ansible Install Nginx
+# set LANG
+sudo echo "export LC_ALL=C" >> /etc/profile;source /etc/profile
+# Install libary
+{% for soft in install_libary %}
+	yum -y install {{soft}}
+{% endfor %}
+groupadd -r {{user}}
+useradd -s /sbin/nologin -g {{group}} -r {{user}}
+
+#Install Pcre
+cd {{soft_dir}}pcre-{{pcre_version}}
+./configure \
+{{pcre_Build_parameters}}
+make && make install
+
+#Install zlib
+cd {{soft_dir}}zlib-{{zlib_version}}
+./configure \
+{{zlib_Build_parameters}}
+make && make install
+
+#Install openssl
+cd {{soft_dir}}openssl-{{openssl_version}}
+./configure \
+{{openssl_Build_parameters}}
+make && make install
+
+#Install Nginx
+cd {{soft_dir}}nginx-{{nginx_version}}
+./configure \
+{{nginx_Build_parameters}}
+make && make install

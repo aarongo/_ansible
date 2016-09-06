@@ -1,49 +1,87 @@
 ---
-- name: IP:{{ ansible_eth1.ipv4.address }} HOST_NAME={{ ansible_hostname }} Create Save Packeges Temp Dir
+- name: At Remote Server Create Save Packeges Temp Dir
   file:
     dest={{ soft_dir }} 
     mode=755
     state=directory
 
 
-- name: Transferred Packages To IP:{{ ansible_eth1.ipv4.address }} HOST_NAME={{ ansible_hostname }}
-  copy:
-    src={{ item }} dest={{ soft_dir }} mode=0755
+- name: At Remote Server Create Script Save Save_Path
+  file:
+    dest={{script_path}}
+    mode=0644
+    state=directory
+
+
+- name: Unzip Software File To Remote
+  unarchive:
+    src={{ item }} dest={{ soft_dir }}
   with_items: install_packages
 
 
-- name: Run Local Script At Remote Server
-  script: nginx_install.sh
+- name: After parse transfer files to remote........
+  template: 
+    src=nginx_install.sh.j2
+    dest={{soft_dir}}nginx_install.sh
+    mode=0755
 
 
-- name: Remove IP:{{ ansible_eth1.ipv4.address }} HOST_NAME={{ ansible_hostname }} Save Packages Dir
+- name: After parse Transfer Files For cront nginx cut logs.....
+  template:
+    src=log_cut.sh.j2
+    dest={{script_path}}log_cut.sh
+    mode=0755
+
+
+- name: Crontab Create For Nginx Logs Cutting At Every 00:00
+  cron:
+    name="Nginx Cut logs" minute="0" hour="0" job="{{script_path}}log_cut.sh"
+  notify:
+    - restart crond
+
+
+- name: Running Remote Script Install Nginx.......
+  shell: "{{soft_dir}}nginx_install.sh"
+  args:
+    chdir: "{{soft_dir}}"
+    executable: "/bin/bash"
+
+
+- name: Remove Remote Packages Dir
   file:
     dest={{ soft_dir }}
     state=absent
 
 
-- name: Copy Templage Config To IP:{{ ansible_eth1.ipv4.address }} HOST_NAME={{ ansible_hostname }}
+- name: At Remote Server Create Nginx Logs Save_Path
+  file:
+    dest={{ nginx_log_dir }}
+    mode=0644
+    state=directory
+
+    
+- name: Transfer Nginx configuration To Remote server....
   template:
     src=nginx.conf.j2
     dest={{ nginx_dir }}conf/nginx.conf
     mode=0644
 
 
-- name: Copy Nginx Script To IP:{{ ansible_eth1.ipv4.address }} HOST_NAME={{ ansible_hostname }} And Start
-  copy:
-    src=nginx.sh dest="/etc/init.d/nginx" mode=0755
+- name: Copy Nginx Script To Remote Add system........
+  template:
+    src=nginx.sh.j2 dest="/etc/init.d/nginx" mode=0755
   notify:
     - start nginx
 
 
-- name: Add System Script At IP:{{ ansible_eth1.ipv4.address }} HOST_NAME={{ ansible_hostname }}
+- name: Add System Script At Remote  
   command: /sbin/chkconfig nginx on
 
 
-- name: Copy Template Index To IP:{{ ansible_eth1.ipv4.address }} HOST_NAME={{ ansible_hostname }}
+- name: Copy(Index) Template Index To Remote Server   
   template:
     src=index.html.j2
     dest={{ nginx_dir }}html/index.html
-    owner=nginx
-    group=nginx
+    owner={{user}}
+    group={{group}}
     mode=0755

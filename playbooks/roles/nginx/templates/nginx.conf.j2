@@ -5,8 +5,8 @@ user nginx nginx;
 worker_processes  2;
 worker_rlimit_nofile 51200;
 
-error_log  /software/nginx/logs/nginx_error.log  error;
-pid        /software/nginx/logs/nginx.pid;
+
+pid        {{nginx_pid_path}};
 
 #Events Set
 events {
@@ -48,14 +48,14 @@ http {
                                 '"$http_referer" "$http_user_agent" '
                                 '$request_time '
                                 '$upstream_response_time';
-
+    access_log  {{ nginx_log_dir}}{{ ansible_hostname }}-{{ nginx_access_log_name }} Ansible_install;
+    error_log  {{ nginx_log_dir}}{{ ansible_hostname }}-{{ nginx_error_log_name}};
 
 server {
     listen       80;
     server_name  127.0.0.1; 
     error_page  404 /404.html;
     error_page  500 501 502 503 504 /500.html;
-    access_log  logs/127.0.0.1_access.log Ansible_install;
 
     set $http_carrefour_client_ip $proxy_add_x_forwarded_for;
     set $Hit_Host SH-P-Z-24-6-M-1;

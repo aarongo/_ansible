@@ -1,4 +1,0 @@
----
-# defaults file for nginx
-nginx_dir: /software/nginx/
-soft_dir: /tmp/packages/
