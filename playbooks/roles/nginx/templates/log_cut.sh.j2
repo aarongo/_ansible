@@ -1,19 +1,19 @@
 #!/bin/bash
 #This Script For Nginx Logs Cutting
 
-## 零点执行该脚本
+## At 00:00
 
-## Nginx 日志文件所在的目录
+## Logs paths
 SAVE_LOGS_PATH={{nginx_cutlog_save_path}}
 Nginx_Pid=`cat {{nginx_pid_path}}`
 
-## 获取昨天的 yyyy-MM-dd
+## get date
 YESTERDAY=$(date -d "yesterday" +%Y-%m-%d)
 
-## 移动文件
+## Move Logs To New Cut logs Path
 mv {{ nginx_log_dir}}{{ ansible_hostname }}-{{ nginx_access_log_name }} ${SAVE_LOGS_PATH}/access_${YESTERDAY}.log
 
-## 向 Nginx 主进程发送 USR1 信号。USR1 信号是重新打开日志文件
+## Reload Nginx Process | rewrite logs
 #echo "76132fbbe6" |sudo -S kill -USR1 ${Nginx_Pid}
 #or
 #sudo kill -USR1 ${Nginx_Pid}

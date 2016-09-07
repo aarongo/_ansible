@@ -1,4 +1,10 @@
 ---
+###Create Login For general User
+login_user: ansible
+sudoers_gorup: sudos
+#password is v6flaKTsd#7n
+login_user_password: $6$rounds=656000$PFOfKkVRiLtr3xzO$rbDWrRzh4p5n0BNDb9imv1MQyh5x/1RCGBW5Q4pdv1R2XffXY0B8OTgMpWlTYdDPwAWBXsguE7EhPQjAHvnd2/
+###Create Login End
 # defaults file for nginx
 #Create Script Dir
 script_path: /software/script/

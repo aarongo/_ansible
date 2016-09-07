@@ -4,3 +4,5 @@
   service: name=nginx state=started
 - name: restart crond
   service: name=crond state=restarted
+- name: restart nginx
+  service: name=nginx state=restarted
