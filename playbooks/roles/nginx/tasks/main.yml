@@ -93,11 +93,10 @@
   template:
     src=nginx.sh.j2 dest="/etc/init.d/nginx" mode=0755
   notify:
+    - enable service nginx
     - start nginx
+  tags: enable service nginx
 
-
-- name: Add System Script At Remote  
-  command: /sbin/chkconfig nginx on
 
 
 - name: Copy(Index) Template Index To Remote Server   

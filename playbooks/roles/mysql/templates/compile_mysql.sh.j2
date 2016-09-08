@@ -1,0 +1,10 @@
+#!/bin/bash
+##For Compile Mysql
+
+if [[ ! -d "{{up_path}}" ]]; then
+	cd {{Files_Tmp_Path}}mysql-{{mysql_version}};{{compile}};make && make install
+else
+  	mkdir {{up_path}}
+  	cd {{Files_Tmp_Path}}mysql-{{mysql_version}};{{compile}};make && make install
+fi
+echo """export PATH="{{software_path}}"/bin:$PATH""" >>/etc/profile;source /etc/profile
