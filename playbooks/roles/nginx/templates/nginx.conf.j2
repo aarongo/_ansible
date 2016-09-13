@@ -60,11 +60,11 @@ server {
     set $http_carrefour_client_ip $proxy_add_x_forwarded_for;
     set $Hit_Host SH-P-Z-24-6-M-1;
 
-    location / {
+    location ~* / {
         root   html;
         index  index.html index.htm;
     }
-    location /nginx_status 
+    location ~* /nginx_status 
     {
         stub_status on;
         access_log off;

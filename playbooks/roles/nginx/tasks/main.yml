@@ -90,6 +90,7 @@
     - restart nginx
   tags: nginx reload
 
+
 - name: Copy Nginx Script To Remote Add system........
   template:
     src=nginx.sh.j2 dest="/etc/init.d/nginx" mode=0755

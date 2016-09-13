@@ -36,17 +36,25 @@ myisam_sort_buffer_size = 512M
 thread_cache_size = 512
 thread_concurrency = 16
 
-query_cache_size= 0
-query_cache_type=0
+query_cache_size= 64M
+query_cache_limit = 16M
+query_cache_min_res_unit = 32M
 max_connections = 4000
+max_connect_errors = 6000
 
-innodb_buffer_pool_size = 150M
+innodb_buffer_pool_size = 3192M
+innodb_file_io_threads = 4
+innodb_thread_concurrency = 8
+innodb_flush_log_at_trx_commit = 2
+innodb_log_buffer_size = 32M 
+innodb_log_file_size = 64M
+innodb_log_files_in_group = 4
+innodb_file_per_table = 0
 lower_case_table_names = 1
 log_bin_trust_function_creators = 1
 
 
 default-storage-engine=InnoDB
-innodb-file-per-table=1
 
 character_set_server=utf8
 
@@ -66,7 +74,7 @@ server-id	= 1
 
 [mysqldump]
 quick
-max_allowed_packet = 10000M
+max_allowed_packet = 64M
 
 [mysql]
 no-auto-rehash
@@ -74,7 +82,7 @@ prompt=(\\u@\\h--\\p) [\\d]>\\_
 
 [myisamchk]
 key_buffer_size = 32M
-sort_buffer_size = 32M
+sort_buffer_size = 16M
 read_buffer = 2M
 write_buffer = 2M
 

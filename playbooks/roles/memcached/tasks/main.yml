@@ -1,0 +1,44 @@
+---
+# tasks file for memcached
+- name: Install Libaray
+  yum: name={{item}} state=latest
+  with_items: library_list
+  tags: install memcached
+
+- name: Set the max open file descriptors 
+  sysctl: name=fs.file-max value={{ memcached_fs_file_max }} state=present ignoreerrors=yes
+  tags: install memcached
+
+- name: Create Packages  directory if it doesn't exist
+  file: path={{Tmp_Packages}} state=directory mode=0755
+  tags: install memcached
+- name: Create Script Directory if it doesn't exist
+  file: path={{script_path}} state=directory mode=0755
+  tags: send script
+
+- name: Download Memcached Packages and Unarchive
+  unarchive: 
+    src=http://www.memcached.org/files/memcached-1.4.31.tar.gz 
+    dest={{Tmp_Packages}} 
+    copy=no
+  tags: install memcached
+
+- name: Transfer Files To Remote Server
+  template: src=install.sh.j2 dest={{Tmp_Packages}}install.sh mode=0755
+  tags: install memcached
+- name: Transfer Memcached Script To Remote Server
+  template: src=memcached.sh.j2 dest={{script_path}}memcached.sh mode=0755
+  tags: send script
+
+- name: Run Install Memcached ............
+  shell: "{{Tmp_Packages}}install.sh"
+  args:
+    chdir: "{{Tmp_Packages}}"
+    executable: "/bin/bash"
+  tags: install memcached
+
+- name: Remove Tmp_Packages
+  file:
+    dest={{ Tmp_Packages }}
+    state=absent
+  tags: install memcached

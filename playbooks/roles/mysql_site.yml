@@ -1,5 +1,4 @@
 ---
-- hosts: nginx
-  sudo: True
+- hosts: mysql
   roles:
     - mysql

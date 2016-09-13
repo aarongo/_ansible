@@ -1,0 +1,5 @@
+---
+- hosts: nginx
+  sudo: True
+  roles:
+    - memcached

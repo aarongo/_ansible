@@ -1,7 +1,12 @@
 [nginx]
-nginx_server1 ansible_ssh_host=127.0.0.1 ansible_ssh_port=2222
+127.0.0.1
+[nginx:vars]
+ansible_ssh_port=2222
 
-
+#[mysql]
+#10.90.6.114
+#[mysql:vars]
+#ansible_ssh_port=22
 
 #[app_group]
 #别名 ansible_ssh_host=主机地址 ansible_ssh_port=ssh端口 

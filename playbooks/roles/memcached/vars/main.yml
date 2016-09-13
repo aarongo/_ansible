@@ -1,0 +1,28 @@
+---
+# vars file for memcached
+Tmp_Packages: /software/Tmp_Packages/
+script_path: /software/script/
+##Download Memcached
+name: memcached
+Version: 1.4.31
+##-------
+##Install parameter
+library_list:
+  - gcc
+  - gcc-c++
+  - make
+  - libevent
+  - libevent-devel
+prefix: /software/{{name}}-{{Version}}
+parameter: --prefix={{prefix}} --enable-threads --enable-64bit
+##------
+##Start Parameter
+memcached_port_list:
+  - 11211
+  - 11212
+  - 11213
+  - 11214
+memcached_listen_address: 0.0.0.0
+memcached_max_conn: 1024
+memcached_meroy_size: 512
+memcached_fs_file_max: 756024
