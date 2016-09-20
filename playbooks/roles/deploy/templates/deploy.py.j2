@@ -1,0 +1,117 @@
+#!/usr/bin/env python
+# _*_coding:utf-8_*_
+
+# chkconfig: 2345 80 90
+# description:tomcat
+
+
+import subprocess
+import time
+import sys
+import signal
+import os
+import httplib
+import socket
+
+
+tomcat_name = "{{container_name}}"
+tocmat_home = "{{container_home}}"
+wait_counnt = 10
+
+
+def get_tomcat_pid():
+    p = subprocess.Popen(['ps', '-Ao', 'pid,command'], stdout=subprocess.PIPE)
+    out, err = p.communicate()
+    for line in out.splitlines():
+        if 'java' in line:
+            if tomcat_name in line:
+                pid = int(line.split(None, 1)[0])
+                return pid
+
+
+def start_tomcat():
+    os.environ["JAVA_HOME"] = "{{container_java_home}}"
+    os.environ["JRE_HOME"] = "{{container_jre_home}}"
+    if get_tomcat_pid() is not None:
+        print "stdout".center(100, '-')
+        print "\033[32m %s Is Started \033[0m".center(100, '-') % tomcat_name
+        print "end".center(100, '-')
+    else:
+        command_start_tomcat = "%sbin/startup.sh" % tocmat_home
+        p = subprocess.Popen(command_start_tomcat, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE, shell=True)
+        stdout, stderr = p.communicate()
+        print stdout, stderr
+
+
+def stop_tomcat():
+    wait_sleep = 0
+    if get_tomcat_pid() is None:
+        print "\033[32m %s is Not Running\033[0m".center(50, '-') % tomcat_name
+    else:
+        command_stop_tomcat = "%sbin/shutdown.sh" % tocmat_home
+        p = subprocess.Popen(command_stop_tomcat, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE, shell=True)
+        stdout, stderr = p.communicate()
+        while (get_tomcat_pid() is not None):
+            print "waiting for processes to exit\n"
+            wait_sleep += 1
+            time.sleep(1)
+            if wait_sleep == wait_counnt:
+                os.kill(get_tomcat_pid(), signal.SIGKILL)
+                print "\033[32m Stop Tomcat is sucessful \033[0m".center(50, '-')
+                break
+
+
+def get_status_code(host, path="/"):
+    try:
+        conn = httplib.HTTPConnection(host)
+        conn.request("HEAD", path)
+        return conn.getresponse().status
+
+    except StandardError:
+        return None
+
+
+def usage():
+    print "\033[31mPlease Input start|stop|status|restart\033[0m"
+
+
+def check_status():
+    if get_tomcat_pid() is not None:
+        print "\033[31mWaiting Check Web Packages SuccessFul\033[0m".center(100, '-')
+        while True:
+            ipaddress_port = socket.gethostbyname(
+                socket.gethostname()) + ":8080"
+            front_return_code = get_status_code(
+                host=ipaddress_port, path='/login')
+            if front_return_code == 200:
+                print "|" + "\033[32m%s Web Ruturn Code:%s\033[0m".center(100, '-') % (tomcat_name, front_return_code) + "|"
+                print "|" + "\033[32mCheck URL:http://%s/login\033[0m".center(100, '-') % ipaddress_port + "|"
+                break
+    else:
+        print "\033[32m%s Not Running Or Not Exist \033[0m".center(50, '-') % tomcat_name
+
+
+def main():
+    try:
+        if sys.argv[1] == 'start':
+            start_tomcat()
+            check_status()
+        elif sys.argv[1] == 'stop':
+            stop_tomcat()
+        elif sys.argv[1] == 'status':
+            check_status()
+        elif sys.argv[1] == 'restart':
+            stop_tomcat()
+            time.sleep(5)
+            start_tomcat()
+            check_status()
+        else:
+            usage()
+    except IndexError:
+        usage()
+
+
+if __name__ == '__main__':
+    main()

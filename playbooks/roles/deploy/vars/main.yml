@@ -1,0 +1,25 @@
+---
+#Tomcat Script Vars
+container_name: tomcat_front
+container_home: "/software/{{container_name}}/"
+container_java_home: /software/jdk1.7/
+container_jre_home: "{{container_java_home}}jre"
+#Tomcat Script Vars end
+# vars file for deploy
+deploy_file_name: cybershop-front-0.0.1-SNAPSHOT.war
+deploy_directory: cybershop-front-0.0.1-SNAPSHOT
+##############远程服务器############
+#get  setup server time and  create tmp deploy directory
+extracted_directory : /software/tmp_deploy_directory/{{ansible_date_time.date}}-{{ansible_date_time.hour}}-{{ansible_date_time.minute}}
+#Links Directory
+static_directory: /data/www
+picture_directory: /software/upload
+#Create Soft To extracted directory
+static_link_directory: "{{extracted_directory}}/www"
+picture_link_directory: "{{extracted_directory}}/assets/upload"
+#Project Directory
+deploy_project_directory: /software/deploy-front/
+#Create start Tomcat deploy project
+deploy_link_project: "{{deploy_project_directory}}{{deploy_directory}}"
+#check Url
+check_url: http://{{ansible_eth0.ipv4.address}}:8080/login

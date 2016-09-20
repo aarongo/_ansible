@@ -1,0 +1,50 @@
+---
+# tasks file for deploy
+# Install pip for remote server
+
+##################检测 url######################
+# - name: pip Install
+#   yum: name=python-pip state=latest
+#   tags: pip install
+
+# - name: install httplib2 for check url
+#   pip: name=httplib2
+#   tags: httplib2 install
+
+# - name: Get Web Pages Status
+#   uri: url={{check_url}}
+#   tags: Check url
+##################end######################
+- name: Enable Service Tomcat
+  template: src=deploy.py.j2 dest=/etc/init.d/tomcat mode=0755
+  notify:
+    - enabled tomcat
+
+- name: Judge extracted_directory
+  file: dest={{extracted_directory}} mode=755 state=directory
+  tags: check extracted_directory
+
+
+- name: extracted *.war To Remote directory
+  unarchive: src={{deploy_file_name}} dest={{extracted_directory}}
+  tags: unarchive war files
+
+
+- name: Create Static directory To project directory
+  file: src={{static_directory}} dest={{static_link_directory}} state=link
+  tags: create static link
+
+- name: Create Picture Directory To Project Directory
+  file: src={{picture_directory}} dest={{picture_link_directory}} state=link
+  tags: crate picture link
+
+
+- name: Deploy project For Tomcat
+  file: src={{extracted_directory}} dest="{{deploy_project_directory}}{{deploy_directory}}" state=link
+  notify:
+    - restart tomcat
+  tags: create project link to Tomcat
+
+
+
+
