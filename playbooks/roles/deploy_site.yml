@@ -1,4 +1,12 @@
 ---
 - hosts: nginx
+  sudo: true
   roles:
     - deploy
+
+
+
+# ---
+# - hosts: "{{host_group}}"
+#   roles:
+#     - deploy

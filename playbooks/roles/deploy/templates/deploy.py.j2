@@ -104,7 +104,6 @@ def main():
             check_status()
         elif sys.argv[1] == 'restart':
             stop_tomcat()
-            time.sleep(5)
             start_tomcat()
             check_status()
         else:
