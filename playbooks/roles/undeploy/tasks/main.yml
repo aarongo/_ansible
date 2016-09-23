@@ -1,0 +1,31 @@
+---
+# tasks file for undeploy
+
+- name: remove old links ===>删除老front软连接
+  file: path="{{deploy_project_directory_front}}{{project_name}}" state=absent
+  when: (env == "front")
+- name: rollback to front ===>回退到{{svn_version}}
+  file: src="{{extracted_directory}}" dest="{{deploy_link_project_front}}" state=link
+  when: (env == "front")
+
+
+- name: remove old links ===>删除老web软连接
+  file: path="{{deploy_project_directory_backend}}{{project_name}}" state=absent
+  when: (env == "web")
+- name: rollback to web ===>回退到{{svn_version}}
+  file: src="{{extracted_directory}}" dest="{{deploy_link_project_backend}}" state=link
+  when: (env == "web")
+
+
+- name: remove old links ===>删除老mobile软连接
+  file: path="{{deploy_project_directory_mobile}}{{project_name}}" state=absent
+  when: (env == "mobile")
+- name: rollback to mobile ===>回退到{{svn_version}}
+  file: src="{{extracted_directory}}" dest="{{deploy_link_project_mobile}}" state=link
+  when: (env == "mobile")
+
+
+- name: Runn tomcat_handle At Remote Server==>重启远端服务
+  shell: "{{script_home}}tomcat_handle restart {{env}}"
+  register: handle
+- debug: var=handle.stdout_lines

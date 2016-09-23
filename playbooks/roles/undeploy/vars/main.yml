@@ -1,0 +1,17 @@
+---
+#Script Directory
+script_home: /software/script/
+# vars file for deploy==程序目录
+project_name: cybershop-{{env}}-0.0.1-SNAPSHOT
+##############远程服务器############
+#get  setup server time and  create tmp deploy directory ===临时文件存放位置,解压位置
+tmp_save_directory: /software/tmp_deploy_directory/
+extracted_directory : "{{tmp_save_directory}}{{project_name}}-{{svn_version}}"
+#Project Directory==程序存放目录
+deploy_project_directory_front: /software/deploy-front/
+deploy_project_directory_backend: /software/deploy-backend/
+deploy_project_directory_mobile: /software/deploy-mobile/
+#Create start Tomcat deploy project===程序软连接目录
+deploy_link_project_front: "{{deploy_project_directory_front}}{{project_name}}"
+deploy_link_project_backend: "{{deploy_project_directory_backend}}{{project_name}}"
+deploy_link_project_mobile: "{{deploy_project_directory_mobile}}{{project_name}}"
