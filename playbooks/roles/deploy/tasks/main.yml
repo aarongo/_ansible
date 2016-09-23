@@ -15,18 +15,24 @@
 #   uri: url={{check_url}}
 #   tags: Check url
 ##################end######################
-- name: Enable Service Tomcat ==>开启 tomcat 系统服务
-  template: src=deploy.py.j2 dest=/etc/init.d/tomcat mode=0755
-  notify:
-    - enabled tomcat
+- name: Judge Script directory ==>判断远端脚本存放路径
+  file: dest={{script_home}} mode=0755 state=directory
+  tags: check script directory
+
 
 - name: Judge extracted_directory =>判断临时目录 {{tmp_save_directory}}
   file: dest={{tmp_save_directory}} mode=755 state=directory
   tags: check extracted_directory
 
+
 - name: Judge extracted_directory =>判断解压目录 {{extracted_directory}}
   file: dest={{extracted_directory}} mode=755 state=directory
   tags: check extracted_directory
+
+
+- name: Trans j2 Script To Remote  ==>传送脚本到远端服务器
+  template: src=deploy_project.py.j2 dest={{script_home}}tomcat_handle mode=0755
+
 
 - name: extracted *. war To Remote directory ==> 解压 {{deploy_file_name}}到 {{extracted_directory}}
   unarchive: src={{deploy_file_name}} dest={{extracted_directory}}
@@ -38,34 +44,32 @@
   tags: create static link
   when: (env == "front") or (env == "mobile")
 
+
 - name: Create Picture Directory To Project Directory ==>创建 {{env}} 图片软连接
   file: src={{picture_directory}} dest={{picture_link_directory}} state=link
-  tags: crate picture link
   when: (env == "front") or (env == "web") or (env == "mobile")
+  tags: crate picture link
 
 
 - name: Deploy project For Tomcat-front ==> 创建 front 部署软连接
   file: src={{extracted_directory}} dest="{{deploy_link_project_front}}" state=link
-  notify:
-    - restart tomcat
   when: env == "front"
+  tags: create project link to Tomcat-front
+
+
 - name: Deploy project For Tomcat-web ==> 创建 web 部署软连接
   file: src={{extracted_directory}} dest="{{deploy_link_project_backend}}" state=link
-  notify:
-    - restart tomcat
   when: env == "web"
+  tags: create project link to Tomcat-web
+
+
 - name: Deploy project For Tomcat-mobile ==> 创建 mobile 部署软连接
   file: src={{extracted_directory}} dest="{{deploy_link_project_mobile}}" state=link
-  notify:
-    - restart tomcat
   when: env == "mobile"
-- name: Deploy project For Tomcat-api ==> 创建 api 部署软连接
-  file: src={{extracted_directory}} dest="{{deploy_link_project_api}}" state=link
-  notify:
-    - restart tomcat
-  when: env == "api"
-  tags: create project link to Tomcat
+  tags: create project link to Tomcat-mobile
 
 
-
-
+- name: Runn tomcat_handle At Remote Server==>重启远端服务
+  shell: "{{script_home}}tomcat_handle restart {{env}}"
+  register: handle
+- debug: var=handle.stdout_lines

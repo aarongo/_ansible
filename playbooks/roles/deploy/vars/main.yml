@@ -1,4 +1,6 @@
 ---
+#Script Directory
+script_home: /software/script/
 #Tomcat Script Vars===程序目录
 container_name: "tomcat_{{env}}"
 container_home: "/software/{{container_name}}/"
@@ -11,7 +13,7 @@ deploy_directory: cybershop-{{env}}-0.0.1-SNAPSHOT
 ##############远程服务器############
 #get  setup server time and  create tmp deploy directory ===临时文件存放位置,解压位置
 tmp_save_directory: /software/tmp_deploy_directory/
-extracted_directory : "{{tmp_save_directory}}{{ansible_date_time.date}}-{{ansible_date_time.hour}}-{{env}}-{{svn_version}}"
+extracted_directory : "{{tmp_save_directory}}{{deploy_directory}}-{{svn_version}}"
 #Links Directory===静态资源,图片目录
 static_directory: /data/www
 picture_directory: /software/upload
