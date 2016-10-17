@@ -26,6 +26,4 @@
 
 
 - name: Runn tomcat_handle At Remote Server==>重启远端服务
-  shell: "{{script_home}}tomcat_handle restart {{env}}"
-  register: handle
-- debug: var=handle.stdout_lines
+  shell: chdir={{script_home}} nohup ./tomcat_handle restart {{env}} &

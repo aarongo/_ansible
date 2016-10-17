@@ -2,19 +2,6 @@
 # tasks file for deploy
 # Install pip for remote server
 
-##################检测 url######################
-# - name: pip Install
-#   yum: name=python-pip state=latest
-#   tags: pip install
-
-# - name: install httplib2 for check url
-#   pip: name=httplib2
-#   tags: httplib2 install
-
-# - name: Get Web Pages Status
-#   uri: url={{check_url}}
-#   tags: Check url
-##################end######################
 - name: Judge Script directory ==>判断远端脚本存放路径
   file: dest={{script_home}} mode=0755 state=directory
   tags: check script directory
@@ -47,7 +34,7 @@
 
 - name: Create Picture Directory To Project Directory ==>创建 {{env}} 图片软连接
   file: src={{picture_directory}} dest={{picture_link_directory}} state=link
-  when: (env == "front") or (env == "web") or (env == "mobile")
+  when: (env == "front") or (env == "backend") or (env == "mobile")
   tags: crate picture link
 
 
@@ -57,10 +44,10 @@
   tags: create project link to Tomcat-front
 
 
-- name: Deploy project For Tomcat-web ==> 创建 web 部署软连接
+- name: Deploy project For Tomcat-backend ==> 创建 backend 部署软连接
   file: src={{extracted_directory}} dest="{{deploy_link_project_backend}}" state=link
-  when: env == "web"
-  tags: create project link to Tomcat-web
+  when: env == "backend"
+  tags: create project link to Tomcat-backend
 
 
 - name: Deploy project For Tomcat-mobile ==> 创建 mobile 部署软连接
@@ -69,7 +56,15 @@
   tags: create project link to Tomcat-mobile
 
 
-- name: Runn tomcat_handle At Remote Server==>重启远端服务
-  shell: "{{script_home}}tomcat_handle restart {{env}}"
-  register: handle
-- debug: var=handle.stdout_lines
+- name: Restart Tomcat {{env}}
+  shell: chdir={{script_home}} nohup ./tomcat_handle restart {{env}} &
+
+
+- name: Check Url Retries 12 delay 5 changed_when=false ==> 重启 Tomcat {{env}} 重试12次,每次等5秒 状态失败检测
+  shell: curl --write-out %{http_code} --silent --output /dev/null {{check_url}} warn=no
+  register: return_code
+  until: return_code.stdout.find("200") != -1
+  retries: 12
+  delay: 5
+  changed_when: false
+- debug: msg="{{ return_code.stdout }}"

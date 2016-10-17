@@ -1,6 +1,0 @@
----
-# handlers file for deploy
-- name: enabled tomcat
-  service: name=tomcat enabled=yes
-- name: restart tomcat
-  service: name=tomcat state=restarted
