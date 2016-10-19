@@ -1,5 +1,0 @@
----
-- hosts: nginx
-  sudo: True
-  roles:
-    - system

@@ -105,7 +105,7 @@ def main():
             elif sys.argv[1] == 'status':
                 check_status(path="/login", port=8080)
             elif sys.argv[1] == 'restart':
-                stop_tomcat()
+                stop_tomcat()   
                 start_tomcat()
                 check_status(path="/login", port=8080)
         elif sys.argv[2] == "mobile":

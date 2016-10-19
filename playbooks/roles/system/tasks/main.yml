@@ -1,8 +1,0 @@
----
-- name: Add mappings to /etc/security/limits.conf
-  blockinfile:
-    dest: /etc/security/limits.conf
-    block: |
-      {{item.info}}
-    marker: "# {mark} ANSIBLE MANAGED BLOCK {{item.name}}"
-  with_items: limit_conf

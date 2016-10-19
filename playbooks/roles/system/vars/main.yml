@@ -1,5 +1,0 @@
----
-# vars file for system
-limit_conf:
-  - { name: soft, info: "*   soft    nofile  65536" }
-  - { name: hard, info: "*   hard    nofile  65536" }

@@ -1,0 +1,4 @@
+---
+limit_conf:
+  - { name: soft, info: "*   soft    nofile  65535" }
+  - { name: hard, info: "*   hard    nofile  65535" }

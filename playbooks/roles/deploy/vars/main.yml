@@ -30,3 +30,9 @@ deploy_link_project_front: "{{deploy_project_directory_front}}{{deploy_directory
 deploy_link_project_backend: "{{deploy_project_directory_backend}}{{deploy_directory}}"
 deploy_link_project_mobile: "{{deploy_project_directory_mobile}}{{deploy_directory}}"
 deploy_link_project_api: "{{deploy_project_directory_api}}{{deploy_directory}}"
+#check Url front
+check_url_front: http://{{ansible_eth0.ipv4.address}}:8080/login
+#check Url Mobile
+check_url_mobile: http://{{ansible_eth0.ipv4.address}}:8080/mobile/api/user/login
+#check Url backend
+check_ur_backend: http://{{ansible_eth0.ipv4.address}}:8080/login

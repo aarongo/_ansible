@@ -1,0 +1,42 @@
+input {
+    file {
+        path => ["{{input_logs_path_name}}"]
+    }
+}
+
+filter {
+    grok {
+        match => { "message" => "%{NGINXACCESS}" }
+    }
+
+    if [http_user_agent] =~ "inf-ssl-duty-scan" {
+        drop { }
+    }
+
+    date {
+        match => [ "time_local" , "dd/MMM/yyyy:HH:mm:ss Z" ]
+    }
+
+    geoip {
+        source => "remote_addr"
+    }
+
+    kv {
+        source => "request"
+        field_split => "&?"
+        value_split => "="
+        include_keys => [ "network", "country", "language", "deviceId" ]
+    }
+
+    urldecode {
+        all_fields => true
+    }
+}
+
+output {
+    redis {
+        host => "{{redis_server}}"
+        data_type => "list"
+        key => "logstash:nginx:access_log"
+        }
+}

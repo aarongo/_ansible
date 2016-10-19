@@ -1,7 +1,7 @@
-[nginx]
-127.0.0.1
-[nginx:vars]
-ansible_ssh_port=2222
+[logstash]
+172.31.20.20
+[logstash:vars]
+ansible_ssh_port=22
 
 #[mysql]
 #10.90.6.114

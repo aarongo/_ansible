@@ -26,6 +26,12 @@
   tags: unarchive war files
 
 
+- name: Create Picture Directory when assets Not exist ===>创建{{env}} 静态资源目录
+  file: dest={{extracted_directory}}/assets mode=755 state=directory
+  when: (env == "front") or (env == "web") or (env == "mobile")
+  tags: create assets Directory
+
+
 - name: Create Static directory To project directory  ==>创建 {{env}} 静态软连接
   file: src={{static_directory}} dest={{static_link_directory}} state=link
   tags: create static link
@@ -34,7 +40,7 @@
 
 - name: Create Picture Directory To Project Directory ==>创建 {{env}} 图片软连接
   file: src={{picture_directory}} dest={{picture_link_directory}} state=link
-  when: (env == "front") or (env == "backend") or (env == "mobile")
+  when: (env == "front") or (env == "web") or (env == "mobile")
   tags: crate picture link
 
 
@@ -46,7 +52,7 @@
 
 - name: Deploy project For Tomcat-backend ==> 创建 backend 部署软连接
   file: src={{extracted_directory}} dest="{{deploy_link_project_backend}}" state=link
-  when: env == "backend"
+  when: env == "web"
   tags: create project link to Tomcat-backend
 
 
@@ -60,11 +66,37 @@
   shell: chdir={{script_home}} nohup ./tomcat_handle restart {{env}} &
 
 
-- name: Check Url Retries 12 delay 5 changed_when=false ==> 重启 Tomcat {{env}} 重试12次,每次等5秒 状态失败检测
-  shell: curl --write-out %{http_code} --silent --output /dev/null {{check_url}} warn=no
+- name: Check Url Retries 12 delay 5 changed_when=false Tomcat==>重启 重试12次,每次等5秒 状态失败检测
+  shell: curl --write-out %{http_code} --silent --output /dev/null {{check_url_front}} warn=no
   register: return_code
   until: return_code.stdout.find("200") != -1
   retries: 12
   delay: 5
   changed_when: false
+  when: env == "front"
 - debug: msg="{{ return_code.stdout }}"
+  when: env == "front"
+
+
+- name: Check Url Retries 12 delay 5 changed_when=false Tomcat==>重启重试24次,每次等5秒 状态失败检测
+  shell: curl --write-out %{http_code} --silent --output /dev/null {{check_url_mobile}} warn=no
+  register: return_code
+  until: return_code.stdout.find("200") != -1
+  retries: 24
+  delay: 5
+  changed_when: false
+  when: env == "mobile"
+- debug: msg="{{ return_code.stdout }}"
+  when: env == "mobile"
+
+
+- name: Check Url Retries 12 delay 5 changed_when=false Tomcat==>重启重试12次,每次等5秒 状态失败检测
+  shell: curl --write-out %{http_code} --silent --output /dev/null {{check_ur_backend}} warn=no
+  register: return_code
+  until: return_code.stdout.find("200") != -1
+  retries: 12
+  delay: 5
+  changed_when: false
+  when: env == "web"
+- debug: msg="{{ return_code.stdout }}"
+  when: env == "web"
