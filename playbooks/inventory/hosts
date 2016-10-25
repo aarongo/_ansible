@@ -1,5 +1,6 @@
 [logstash]
-172.31.20.20
+#172.31.20.20
+172.31.1.250
 [logstash:vars]
 ansible_ssh_port=22
 

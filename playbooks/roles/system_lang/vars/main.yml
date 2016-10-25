@@ -1,0 +1,6 @@
+---
+# vars file for system_lang
+i18n:
+  - { name: lc_all, info: "export LC_ALL=en_US.UTF-8" }
+  - { name: lang, info: "export LANG=en_US.UTF-8" }
+  - { name: language, info: "export LANGUAGE=en_US.UTF-8"}

@@ -1,0 +1,6 @@
+---
+# 运行时指定-extra-vars "env=xxxxx"
+- hosts: "{{env}}"
+  roles:
+    - zabbix_connections}
+}

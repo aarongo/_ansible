@@ -1,0 +1,37 @@
+---
+# tasks file for zabbix_conntions
+- name: save script path is exists
+  file: dest={{script_path}} mode=0755 state=directory
+  
+
+- name: transfer script to {{script_path}}
+  template: src=tcp_connections.sh.j2 dest={{script_path}}tcp_connections.sh mode=0755
+  tags: transfer script
+
+
+- name: Add mappings to {{agentd_config_path}}
+  blockinfile:
+    dest: "{{agentd_config_path}}"
+    block: |
+      {{item.info}}
+    marker: "# {mark} ANSIBLE MANAGED BLOCK {{item.name}}"
+  with_items: agentd
+  when: (env == "web-backend") or (env == "mysql") or (env == "cache_group") or (env == "app_group") or (env == "soa_group") or (env == "wechat_group")
+
+
+- name: transfer tcp_connections.conf to {{agentd_configd_path}}
+  template: src=tcp_connections.conf.j2 dest={{agentd_configd_path}}tcp_connections.conf mode=0755
+  tags: transfer agentd conf
+
+
+- name: stop zabbix_agentd
+  shell: pkill -9 zabbix
+  args:
+    chdir: /usr/bin/
+  tags: stop zabbix
+
+- name: start zabbix_agentd
+  shell: /software/zabbix_agent/sbin/zabbix_agentd
+  args:
+    chdir: /software/zabbix_agent/sbin/
+  tags: start zabbix
