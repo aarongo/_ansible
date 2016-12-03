@@ -8,8 +8,10 @@
 . /etc/rc.d/init.d/functions
 
 set -a
+#if python 2.7X 
+#PREFIX=/usr/local
 
-PREFIX=/usr/local
+PREFIX=/usr
 
 SUPERVISORD=$PREFIX/bin/supervisord
 SUPERVISORCTL=$PREFIX/bin/supervisorctl

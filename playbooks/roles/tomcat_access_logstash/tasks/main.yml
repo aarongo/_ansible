@@ -1,0 +1,45 @@
+---
+# tasks file for tomcat_conf
+- name: Transfer tomcat Server.xml to remote
+  template: 
+    src=server.xml.j2
+    dest={{conf_path}}server.xml
+    mode=600
+  tags: transfer server.xml
+
+- debug: msg="Please Run  {{ script_path }} (start|stop|status|restart)"
+
+
+- name: Transfer supervisord config
+  template:
+    src=logstash-supervisor.conf.j2
+    dest={{supervisord_conf_path}}{{supervisord_conf_name}}
+    mode=644
+  sudo: yes
+  tags: transfer supervisord conf
+
+
+- name: transfer logstash config
+  template:
+    src=logstash_tomcat_access.conf.j2
+    dest={{remote_logstash_conf_path}}{{logstash_conf_name}}
+    mode=644
+  sudo: yes
+  tags: transfer logstash conf
+
+
+- name: stop supervisor
+  shell: /etc/init.d/supervisor stop
+  args:
+    chdir: /etc/init.d/
+  sudo: yes
+  tags: stop supervisor
+
+- name: start supervisor
+  shell: /etc/init.d/supervisor start
+  args:
+    chdir: /etc/init.d/
+  sudo: yes
+  tags: start supervisor
+
+

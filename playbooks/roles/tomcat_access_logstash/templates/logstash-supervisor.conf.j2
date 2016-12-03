@@ -1,0 +1,10 @@
+[program:tomcat-access-log]
+command = {{logstash_bin_home}} -f {{remote_logstash_conf_path}}{{logstash_conf_name}}
+autostart = true
+autorestart = true
+startsecs = 5
+startretries = 3
+user = logstash
+redirect_stderr = true
+stdout_logfile={{logstash_logs_path}}tomcat-access-log-std.log
+stderr_logfile={{logstash_logs_path}}tomcat-access-log.log

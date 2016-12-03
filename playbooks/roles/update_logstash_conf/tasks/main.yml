@@ -1,0 +1,20 @@
+---
+- name: transfer logstash config
+  template:
+    src=logstash_nginx_access.conf.j2
+    dest={{remote_logstash_conf_path}}{{logstash_conf_name}}
+    mode=644
+  tags: update_logstash_conf
+
+
+- name: stop supervisor
+  shell: /etc/init.d/supervisor stop
+  args:
+    chdir: /etc/init.d/
+  tags: stop supervisor
+
+- name: start supervisor
+  shell: /etc/init.d/supervisor start
+  args:
+    chdir: /etc/init.d/
+  tags: start supervisor

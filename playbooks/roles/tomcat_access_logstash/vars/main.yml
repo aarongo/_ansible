@@ -1,0 +1,31 @@
+---
+# vars file for tomcat_conf
+
+
+tomcat_logs_path: /software/tomcat_app/logs/
+redis_address: 10.171.35.25
+
+#process setup server.xml
+conf_path: /software/tomcat_app/conf/
+appBase: /software/deploy_app
+docBase: cybershop-mobile-0.0.1-SNAPSHOT
+port: 8080
+URIEncoding: UTF-8
+connectionTimeout: 20000
+#END
+
+
+#logstash transfer setup
+#supervisord
+supervisord_conf_path: /software/supervisord/conf.d/
+supervisord_conf_name: logstash-supervisor.conf
+#logstash
+remote_logstash_conf_path: /software/supervisord/logstash/conf/
+logstash_bin_home: /software/logstash/bin/logstash
+logstash_conf_name: logstash-shipper.conf
+logstash_logs_path: /software/supervisord/logs/
+#end
+
+
+#tomcat handle script
+script_path: /software/script/carrefour_app.sh

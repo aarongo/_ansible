@@ -1,5 +1,5 @@
 ---
-#Setup Supervisor
+#Setup Supervisor 
 - name: Jange Packages save_path === 判断存放 tar 包的路径是否存在
   file: dest={{remote_packages_save_path}} mode=0755 state=directory
   tags: install supervisord
@@ -23,6 +23,15 @@
     chdir: "{{remote_packages_save_path}}{{item}}"
   with_items: supervisor_directory
   tags: install supervisord
+
+
+# if python is 2.7.10 add
+# - name: Setup supervisord conf === 初始化 supervisord 配置文件
+#   shell: /usr/local/bin/echo_supervisord_conf > /etc/supervisord.conf
+#   args:
+#     chdir: /usr/local/bin/
+#   tags: install supervisord
+
 
 - name: Setup supervisord conf === 初始化 supervisord 配置文件
   shell: echo_supervisord_conf > /etc/supervisord.conf

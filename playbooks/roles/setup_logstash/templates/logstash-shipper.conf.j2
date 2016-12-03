@@ -6,6 +6,7 @@ input {
 
 filter {
     grok {
+        patterns_dir => [ "/software/supervisord/logstash/patterns" ]
         match => { "message" => "%{NGINXACCESS}" }
     }
 
@@ -40,3 +41,51 @@ output {
         key => "logstash:nginx:access_log"
         }
 }
+#家乐福生产 nginx-logstash-access  clients
+#input {
+#  file{
+#    type=>"carrefour-access"
+#    path=>"/software/nginx/logs/CSLP80014f.cdc.carrefour.com_access.log"
+#    codec=>"json"
+#  }
+#}
+#filter {
+#  grok {
+#    match => { "remoteIP" => "%{IP:remoteIP}" }
+#    overwrite => [ "remoteIP" ]
+#  }
+#}
+#filter{
+#    if [remoteIP] != "-" and [remoteIP] !~ ".*,.*"{
+#                geoip {
+#                        source => "remoteIP"
+#                        target => "geoip"
+#                        database => "/software/supervisord/logstash/geoipdat/GeoLiteCity.dat"
+#                }
+#    }
+#}
+#output {
+#  redis {
+#    host => "10.171.35.25"
+#    port => "6379"
+#    db => "0"
+#    data_type => "list"
+#    key => "nginx-logstash-access"
+#  }
+#}
+#家乐福生产环境 logstash server
+#input {
+#    redis{
+#        host => "10.171.35.25"
+#        type => "carrefour-access"
+#        data_type => "list"
+#        key => "nginx-logstash-access"
+#        codec=>"json"
+#    }
+#}
+#output {
+#    elasticsearch {
+#      hosts => "10.171.35.11"
+#      index => "logstash-nginx-access-%{+YYYY.MM.dd}"
+#  }
+#}

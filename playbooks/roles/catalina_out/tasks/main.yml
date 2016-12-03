@@ -1,0 +1,25 @@
+---
+# for catalina.out cut
+- name: backup logs directory
+  file:
+    dest={{catalina_backup_path}}
+    state=directory
+    mode=0755
+  when: catalina_backup_path.isdir is not defined
+
+
+- name: catalina.out cutting logs script path
+  file:
+    dest={{cutting_script_path}}
+    state=directory
+    mode=0755
+  when: cutting_script_path.isdir is not defined
+
+
+- name: transfer script to remote
+  template: src=catalina.sh.j2 dest={{cutting_script_path}}catalina.sh mode=0755
+
+
+- name: Crontab Create
+  cron:
+    name="catalina cutting" minute="0" hour="0" job="{{cutting_script_path}}catalina.sh > /dev/null"

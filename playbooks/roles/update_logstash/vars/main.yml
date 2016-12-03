@@ -1,0 +1,6 @@
+---
+# vars file for update_logstash
+nginx_logs_path: /software/nginx/logs/
+patterns: /software/supervisord/logstash/patterns
+geoip: /software/supervisord/logstash/geoipdat/GeoLiteCity.dat
+logstash_conf_path: /software/supervisord/logstash/conf/

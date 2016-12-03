@@ -1,0 +1,16 @@
+---
+# tasks file for nginx_conf
+# copy conf to remote
+
+
+- name: Copy conf To {{ansible_hostname}}
+  template: 
+    src=nginx.conf.j2
+    dest={{remote_conf_path}}nginx.conf
+    mode=0644
+
+- name: reload nginx conf
+  shell: /software/nginx/sbin/nginx -s reload
+  args:
+    chdir: /software/nginx/sbin/
+  

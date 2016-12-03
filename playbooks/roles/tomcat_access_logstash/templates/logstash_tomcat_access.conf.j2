@@ -1,0 +1,25 @@
+input {
+  file{
+    type=>"tomcat-access"
+    path=>""{{tomcat_logs_path}}localhost_access_log*.txt""
+    codec => json {
+      charset => "UTF-8"
+    }
+  }
+}
+filter {
+  if [type] == 'tomcat-access' {
+    json {
+      source => "@fields"
+    }
+  }
+}
+output {
+    redis {
+      host => "{{redis_address}}"
+      port => "6379"
+      db => "0"
+      data_type => "list"
+      key => "tomcat:redis"
+    }
+}

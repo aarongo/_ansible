@@ -1,0 +1,7 @@
+---
+# vars file for nginx_conf
+remote_conf_path: /software/nginx/conf/
+nginx_log_path: /software/nginx/logs/
+static1_path: /software/deploy_front/cybershop-front-0.0.1-SNAPSHOT/www/$1
+static2_path: /software/deploy_front/cybershop-front-0.0.1-SNAPSHOT/www/$1/$2
+pic_path: /software/deploy_front/cybershop-front-0.0.1-SNAPSHOT/assets/upload

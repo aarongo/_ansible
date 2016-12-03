@@ -1,13 +1,13 @@
-[logstash]
+#[logstash]
 #172.31.20.20
-172.31.1.250
-[logstash:vars]
-ansible_ssh_port=22
-
-#[mysql]
-#10.90.6.114
-#[mysql:vars]
+#172.31.1.250
+#[logstash:vars]
 #ansible_ssh_port=22
+
+[test]
+172.31.20.20
+[test:vars]
+ansible_ssh_port=22
 
 #[app_group]
 #别名 ansible_ssh_host=主机地址 ansible_ssh_port=ssh端口 

@@ -1,0 +1,4 @@
+---
+- name: restart cornd
+  service: name=crond state=restarted
+  sudo: yes

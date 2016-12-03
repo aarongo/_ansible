@@ -1,0 +1,12 @@
+#!/bin/bash
+# Author EdwardLiu
+# For Nginx logs Cutting
+
+NGINX_EXEX="/software/nginx/sbin/"
+YESTERDAY=$(date -d "yesterday" +%Y-%m-%d)
+
+mv {{LOGS_PATH}}{{ ansible_hostname }}f.cdc.carrefour.com_access.log {{SAVE_LOGS_PATH}}access_${YESTERDAY}.log
+
+${NGINX_EXEX}nginx -s  reopen
+
+find {{SAVE_LOGS_PATH}} -mtime +7 -name "*.log" -exec rm -rf {} \;

@@ -1,0 +1,5 @@
+---
+# vars file for update_logstash_conf
+nginx_logs_path: /software/nginx/logs/
+remote_logstash_conf_path: /software/supervisord/logstash/conf/
+logstash_conf_name: logstash-shipper.conf

@@ -1,0 +1,14 @@
+---
+# tasks file for system_info
+- name: 服务器型号
+  debug: var=ansible_product_name
+
+- name: 系统类型
+  debug: var=ansible_os_family
+
+- name: 内核型号
+  debug: var=ansible_kernel
+
+
+- name: 操作系统版本
+  debug: var=ansible_distributionansible_distribution_version

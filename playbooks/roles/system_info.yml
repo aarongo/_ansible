@@ -1,0 +1,4 @@
+---
+- hosts: test
+  roles:
+    - system_info

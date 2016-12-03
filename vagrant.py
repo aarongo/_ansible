@@ -39,6 +39,7 @@ from paramiko import SSHConfig
 from cStringIO import StringIO
 from optparse import OptionParser
 from collections import defaultdict
+
 try:
     import json
 except:
@@ -59,6 +60,7 @@ parser.add_option('--list', default=False, dest="list", action="store_true",
 parser.add_option('--host', default=None, dest="host",
                   help="Generate additional host specific details for given host for Ansible")
 (options, args) = parser.parse_args()
+
 
 #
 # helper functions
@@ -101,6 +103,7 @@ def get_a_ssh_config(box_name):
             host_config['identityfile'] = id
 
     return {v: host_config[k] for k, v in _ssh_to_ansible}
+
 
 # List out servers that vagrant has running
 # ------------------------------

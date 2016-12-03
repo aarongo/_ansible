@@ -1,0 +1,13 @@
+---
+# tasks file for nginx_restart
+- name: Stop Nginx 
+  shell: pkill -9 nginx
+  args:
+    chdir: /usr/bin/
+  tags: stop nginx
+
+- name: start Nginx 
+  shell: {{Nginx_Home}}nginx
+  args:
+    chdir: {{Nginx_Home}}
+  tags: start nginx

@@ -1,0 +1,10 @@
+服务器型号:{{ansible_product_name}}
+系统类型:{{ansible_os_family}}
+内核型号为:{{ansible_kernel}}
+操作系统版本:{{ansible_distribution}}{{ansible_distribution_version}}
+物理内存大小:{{ansible_memtotal_mb}}
+虚拟内存大小:{{ansible_swaptotal_mb}}
+cpu型号:{{ansible_processor[-1]}}
+cpu核心数:{{ansible_processor_vcpus}}
+服务器主机名:{{ansible_hostname}}
+服务器IP地址:{{ansible_all_ipv4_addresses}}
