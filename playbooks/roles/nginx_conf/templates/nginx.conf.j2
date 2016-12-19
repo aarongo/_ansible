@@ -42,25 +42,32 @@ http {
     proxy_hide_header X-Powered-By;
     add_header Via $Hit_Host;
     ###add xianliu
-    #limit_req_zone $binary_remote_addr zone=newone:10m rate=20r/s;
-    #limit_req_zone $binary_remote_addr zone=newtwo:10m rate=30r/s;
-    #limit_req_zone $binary_remote_addr zone=newthree:10m rate=1r/s;
+    limit_req_zone $binary_remote_addr zone=newone:10m rate=20r/s;
+    limit_req_zone $binary_remote_addr zone=newtwo:10m rate=30r/s;
+    limit_req_zone $binary_remote_addr zone=newthree:10m rate=1r/s;
     ###add End
-  
-    log_format  carrefour_log      '$http_host '
-                          '$remote_addr - $remote_user [$time_local] '
-                          '"$request" $status $body_bytes_sent "$request_body" '
-                          '"$http_referer" "$http_user_agent" "$http_x_forwarded_for" '
-                          '$request_time '  
-                          '$upstream_response_time';
 
+    log_format carrefour_log '{"@timestamp":"$time_iso8601",'
+                 '"host":"$server_addr",'
+                 '"clientip":"$remote_addr",'
+                 '"size":$body_bytes_sent,'
+                 '"responsetime":$request_time,'
+                 '"upstreamtime":"$upstream_response_time",'
+                 '"upstreamhost":"$upstream_addr",'
+                 '"server_host":"$host",'
+                 '"url":"$uri",'
+		         '"url-info":"$request_uri",'
+                 '"xff":"$http_x_forwarded_for",'
+                 '"referer":"$http_referer",'
+                 '"agent":"$http_user_agent",'
+                 '"status":"$status"}';
 #upstream
     upstream tomcat-web {
         ##tomcat-fornt node1 10.171.120.3
         #server cslp80003f.cdc.carrefour.com:8080 max_fails=0;
         server {{ ansible_hostname }}f.cdc.carrefour.com:8080 max_fails=0; 
         keepalive 16;
-    }
+	}
 
     upstream pickup-web {
         ##----Pickup-Server Node1 10.171.35.5
@@ -74,49 +81,52 @@ http {
     upstream piwik {
         ##----monitor-node1: 10.171.35.15
         server cslp80039u.cdc.carrefour.com max_fails=0;
-    }
+	}
 
     upstream solr {
-    server cslp80032u.cdc.carrefour.com max_fails=0;
-    }
+	server cslp80032u.cdc.carrefour.com max_fails=0;
+	}
 
     upstream question {
         ###  pickup-node1: 10.151.254.21
         server cslp75411u.cdc.carrefour.com max_fails=0;
-    }
+	}
 
     upstream tomcat-app {
         ###  use App_server VIP
         #server app.eco.cdc.carrefour.com max_fails=0;
         ## use local DNS
         #server cslp80025u.cdc.carrefour.com:8080 max_fails=0;
-    #server cslp80016u.cdc.carrefour.com:8080 max_fails=0;
-    #server cslp80017u.cdc.carrefour.com:8080 max_fails=0;
-    #server cslp80018u.cdc.carrefour.com:8080 max_fails=0;
-    server cslp80019u.cdc.carrefour.com:8080 max_fails=0;
-    server cslp80020u.cdc.carrefour.com:8080 max_fails=0;
+	server cslp80016u.cdc.carrefour.com:8080 max_fails=0;
+	server cslp80017u.cdc.carrefour.com:8080 max_fails=0;
+	server cslp80018u.cdc.carrefour.com:8080 max_fails=0;
+	server cslp80019u.cdc.carrefour.com:8080 max_fails=0;
+	server cslp80020u.cdc.carrefour.com:8080 max_fails=0;
+	#server cslp80021u.cdc.carrefour.com:8080 max_fails=0;
+	#server cslp80022u.cdc.carrefour.com:8080 max_fails=0;
+	server cslp80015u.cdc.carrefour.com:8080 max_fails=0;
         keepalive 16;
     }
 #server
     server {
         listen       80;
         server_name  www.carrefour.cn; 
-    error_page  404 /404.html;
-        error_page  500 501 502 503 504 /500.html;
+	error_page  404 /404.html;
+        error_page  500 501 502 503 504	/500.html;
         access_log  logs/{{ ansible_hostname }}f.cdc.carrefour.com_access.log carrefour_log;
-    #allow 10.171.120.0/16;
-    #allow 124.193.192.94;
-    #allow 10.132.254.169;
-    #allow 10.132.255.167;
-    #allow 10.132.254.185;
-    #allow 10.132.255.254;
-    #allow 10.132.253.110;
-    #allow 58.100.51.177;
-    #allow 218.108.33.98;
-    #allow 223.72.89.40;
-    #allow 101.81.60.91;
-    #allow 119.188.155.94;
-    #deny all;
+	#allow 10.171.120.0/16;
+	#allow 124.193.192.94;
+	#allow 10.132.254.169;
+	#allow 10.132.255.167;
+	#allow 10.132.254.185;
+	#allow 10.132.255.254;
+	#allow 10.132.253.110;
+	#allow 58.100.51.177;
+	#allow 218.108.33.98;
+	#allow 223.72.89.40;
+	#allow 101.81.60.91;
+	#allow 119.188.155.94;
+	#deny all;
         set $http_carrefour_client_ip $proxy_add_x_forwarded_for;
         set $Hit_Host SH-P-Z-24-6-M-1;
 
@@ -127,12 +137,40 @@ http {
         location @proxy_tomcat_web {
             proxy_pass http://tomcat-web;    
         }
-    #add kibana
-    #location  /app\/kibana\/* {
-    #    proxy_pass http://10.171.35.11:8090;
-    #}
-    #add tomcat_app static files
-    location ~* /mobile/api/index/getIndexInfo {
+	#deny search
+	#location ~* \/mobile\/api\/product\/search {
+	    #deny all;
+        #    limit_req zone=newtwo burst=40;
+        #    limit_req_status 503;
+        #    proxy_pass http://tomcat-app;
+	    
+	#}
+	#deny search end
+	#add kibana
+	location ~* (/app\/kibana\/*|bundles\/*|elasticsearch\/*) {
+            auth_basic "secret";
+            auth_basic_user_file {{remote_conf_path}}passwd.db;
+	    proxy_pass http://10.171.35.11:80;
+	}
+	#add download fiels
+	location ~* \/log_analysis {
+	    root  /software/picture_upload/;
+	    autoindex on;
+	}
+	#add download end
+	#add tomcat_app static files
+	#add zabbix and piwik
+	location ~* \/zabbix {
+	    proxy_pass http://cslp80039u.cdc.carrefour.com:8080;
+	}
+        location ~* /piwik/ {
+           proxy_pass http://cslp80039u.cdc.carrefour.com:80;
+        }
+        location ~* /piwik.(php|js) {
+            proxy_pass http://piwik;
+        }
+	#ann zabbix and piwik end
+	location ~* /mobile/api/index/getIndexInfo {
             set $isApp "true";
             set $flag 0;
             if (-e "/data/www/mobileHomeIndex/${http_subsiteId}-${http_language}.json") {
@@ -147,37 +185,70 @@ http {
             if (-e "/data/www/mobileHomeIndex/1-zh-CN.json") {
                 rewrite ^(.*)$ /mobileHomeIndex/1-zh-CN.json? last;
             }
-        #limit_req zone=newone burst=40;
+            limit_req zone=newone burst=40;
             proxy_pass http://tomcat-app;
         }
-    location ~* /mobileHomeIndex {
+	location ~* /mobileHomeIndex {
             #add No cache--2016-04-07
             add_header Cache-Control no-store;
-            root /data/www;
+	        root /data/www;
+	    }
+	#add Tomcat_app static END
+	#Start Mobile NewHome App static
+	location ~* /mobile/api/index/byNewGetIndexInfo {
+            set $flag 0;
+            if (-e "/data/www/mobileNewHomeIndex/${http_subsiteId}-${http_language}.json") {
+                set $flag 1;
+            }
+            if ($flag = 1) {
+                rewrite ^(.*)$ /mobileNewHomeIndex/${http_subsiteId}-${http_language}.json? last;
+            }
+            if ($flag = 0) {
+                rewrite ^(.*)$ /mobileHomeIndex/1-zh-CN.json? last;
+            }
+	    limit_req zone=newtwo burst=40;
+	    limit_req_status 503;
         }
-    #add Tomcat_app static END
-
-    location ~* /mobile/(api|www)/* {
-        set $isApp "true";
-            if ($http_os ~* "(ios|android)"){
-                set $isApp "false";
-            }   
-        #Support Wechat API Interface
-            if ($isApp = "true"){
-            proxy_pass http://tomcat-app;
-            }   
-        #Support APP API Interface
-            if ($isApp = "false"){
-            proxy_pass http://tomcat-app;
-            }   
-    }
+        location ~* /mobile/api/index/overseasShop {
+            set $flag 0;
+            if (-e "/data/www/mobileNewHomeIndex/${http_subsiteId}-${http_language}.json") {
+                set $flag 1;
+            }
+            if ($flag = 1) {
+                rewrite ^(.*)$ /mobileNewHomeIndex/${http_subsiteId}-${http_language}.json? last;
+            }
+            if ($flag = 0) {
+               rewrite ^(.*)$ /mobileHomeIndex/78-zh-CN.json? last;
+            }
+            limit_req zone=newtwo burst=40;
+            limit_req_status 503;
+        }
+        location ~* /mobileNewHomeIndex {
+            add_header Cache-Control no-store;
+            root /data/www/;
+            limit_req zone=newtwo burst=40;
+            limit_req_status 503;
+        }
+	#End Mobile NewHome App static
+	location ~* /mobile/(api|www)/* {
+	    set $isApp "true";
+    	    if ($http_os ~* "(ios|android)"){
+    	    	set $isApp "false";
+            }	
+    	#Support Wechat API Interface
+    	    if ($isApp = "true"){
+    		proxy_pass http://tomcat-app;
+            }	
+    	#Support APP API Interface
+    	    if ($isApp = "false"){
+    		proxy_pass http://tomcat-app;
+            }
+            limit_req zone=newtwo burst=40;
+            limit_req_status 503;
+	}
 
         location ~* /member/myintegral {
             rewrite (.*) http://www.carrefour.cn/member/show;
-        }
-
-        location ~* /piwik.(php|js) {
-            proxy_pass http://piwik;
         }
 
         location ~* "/questionnaire\/(collect|manage|login|questionnaire_engquestionnaire|querycollectinfo|query|welcome|main|acceptstatus)\.html"{
@@ -192,10 +263,10 @@ http {
         location ~* /mini/show {
             rewrite (.*) http://www.carrefour.cn;
         }
-    
-    location ~* /druid/ {
-        set_real_ip_from 10.151.0.0/16;
-        real_ip_header X-Forwarded-For;
+	
+	location ~* /druid/ {
+	    set_real_ip_from 10.151.0.0/16;
+	    real_ip_header X-Forwarded-For;
             proxy_pass http://tomcat-web;
             proxy_set_header Connection "";
             proxy_http_version 1.1;
@@ -203,9 +274,9 @@ http {
             set $http_carrefour_client_ip $proxy_add_x_forwarded_for;   
             proxy_set_header Host $host;
             proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header wm-client-ip $http_carrefour_client_ip;
+	    proxy_set_header wm-client-ip $http_carrefour_client_ip;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    }
+	}
 
         location ~* "\.(gif|jpg|jpeg|png|bmp|swf|css|js|apk)$" {
             root {{pic_path}};
@@ -222,20 +293,20 @@ http {
             root {{static2_path}};
             try_files $uri @proxy_tomcat_web;
         }
-    ### Add Postal rules --data:16-09-02
-    location ~* /portal {
-        proxy_pass http://pickup-web;
-    }
-    location ~* /omni\-system {
-        proxy_pass http://pickup-web;
-    }
+	### Add Postal rules --data:16-09-02
+	location ~* /portal {
+	    proxy_pass http://pickup-web;
+	}
+	location ~* /omni\-system {
+	    proxy_pass http://pickup-web;
+	}
         location ~* /order\-service {
             proxy_pass http://pickup-web;
         }
         location ~* /cb\-service {
             proxy_pass http://pickup-web;
         }
-    ###Add Postal Rules --end
+	###Add Postal Rules --end
         location ~* /questionnaire/info/accept.do {
             proxy_pass http://pickup-web;
         }
@@ -243,8 +314,8 @@ http {
         location ~* /A1_INTE/receiverOrder.do {
             proxy_pass http://pickup-web;
         }
-    
-    location /nginx_status{
+	
+	location /nginx_status{
             stub_status on;
             access_log off;
             allow 127.0.0.1;
@@ -252,8 +323,8 @@ http {
         }
 
         location  / {
-            #limit_req zone=newtwo burst=40;
-            #limit_req_status 503;  
+            limit_req zone=newtwo burst=40;
+            limit_req_status 503;	
             proxy_pass http://tomcat-web;
             proxy_set_header Connection "";
             proxy_http_version 1.1;
