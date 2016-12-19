@@ -1,5 +1,11 @@
 ---
 # vars file for update_logstash_conf
+supervisord_config: /software/supervisord/conf.d/
+supervisord_config_name: logstash-supervisor.conf
 nginx_logs_path: /software/nginx/logs/
 remote_logstash_conf_path: /software/supervisord/logstash/conf/
 logstash_conf_name: logstash-shipper.conf
+memcached_logs_path: /software/logs/memcached/
+logstash_memcached_name: logstash-memcached.conf
+redis_address: 10.171.35.25
+redis_port: 6379

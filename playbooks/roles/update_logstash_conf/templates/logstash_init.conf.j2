@@ -1,0 +1,20 @@
+[program:tomcat-access-log]
+command = /software/logstash/bin/logstash -f /software/supervisord/logstash/conf/logstash-shipper.conf
+autostart = true
+autorestart = true
+startsecs = 5
+startretries = 3
+user = logstash
+redirect_stderr = true
+stdout_logfile=/software/supervisord/logs/tomcat-access-log-std.log
+stderr_logfile=/software/supervisord/logs/tomcat-access-log.log
+[program:app-memcached-log]
+command = /software/logstash/bin/logstash -f /software/supervisord/logstash/conf/logstash-memcached.conf
+autostart = true
+autorestart = true
+startsecs = 5
+startretries = 3
+user = logstash
+redirect_stderr = true
+stdout_logfile=/software/supervisord/logs/app-memcached-log-std.log
+stderr_logfile=/software/supervisord/logs/app-memcached-log.log

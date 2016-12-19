@@ -1,0 +1,12 @@
+---
+- name: transfer script to remote
+  copy:
+    src: global.sh
+    dest: "/software/script/global.sh"
+    mode: 0755
+
+
+- name: run script at remote
+  shell: /software/script/global.sh {{env}}
+  args:
+    chdir: /software/script/

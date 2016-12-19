@@ -7,6 +7,22 @@
   tags: update_logstash_conf
 
 
+- name: transfer logstash config --- memcached
+  template:
+    src=logstash_memcached_access.conf.j2
+    dest={{remote_logstash_conf_path}}{{logstash_memcached_name}}
+    mode=644
+  tags: memcached_upload
+
+
+- name: transfer supervisor config ----add memcached
+  template:
+    src=logstash_init.conf.j2
+    dest={{supervisord_config}}{{supervisord_config_name}}
+    mode=644
+  tags: Add_supervisor_conf
+  
+
 - name: stop supervisor
   shell: /etc/init.d/supervisor stop
   args:
