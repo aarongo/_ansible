@@ -1,0 +1,12 @@
+---
+# vars file for tomcat
+#外部传 java 版本,Tomcat 版本
+INSTALL_HOME: /software
+JAVA_HOME_8: /software/jdk1.8.0_51
+# 脚本参数调用
+CATALINA_HOME: /software/apache-tomcat-{{tomcat_version}}
+TOMCAT_USER: tomcat
+# 配置文件调用
+TOMCAT_SERVER_XML: "{{CATALINA_HOME}}/conf/"
+TOMCAT_START_PORT: 8080
+TOMCAT_DOCBASE: /software/tomcat_process_list

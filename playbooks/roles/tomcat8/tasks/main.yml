@@ -1,0 +1,46 @@
+---
+# tasks file for tomcat7
+# Create user group
+- name: Create group
+  group:
+    name: tomcat
+    gid: 1000
+- name: Create user
+  user:
+    name: tomcat
+    comment: "tomcat start user"
+    uid: 1000
+    group: tomcat
+
+# install java  8
+- name: Install Java 8u51
+  unarchive:
+    src: jdk-8u51-linux-x64.tar.gz
+    dest: "{{INSTALL_HOME}}"
+
+- name: Install Tomcat 8
+  unarchive:
+    src: apache-tomcat-8.5.11.tar.gz
+    dest: "{{INSTALL_HOME}}"
+    owner: tomcat
+    group: tomcat
+
+- name: Configure Tomcat8
+  template:
+    src: server.xml.j2
+    dest: "{{TOMCAT_SERVER_XML}}server.xml"
+    owner: tomcat
+    group: tomcat
+    mode: 0600
+  notify: restart tomcat
+
+# install tomcat script
+- name: transfer script for tomcat8
+  template:
+    src: tomcat_init_8.sh.j2
+    dest: /etc/init.d/tomcat
+    mode: 0755
+
+# Add Tomcat Into local
+- name: Start Tomcat
+  service: name=tomcat state=started enabled=yes
