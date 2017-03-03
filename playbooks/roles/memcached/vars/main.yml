@@ -4,7 +4,9 @@ Tmp_Packages: /software/Tmp_Packages/
 script_path: /software/script/
 ##Download Memcached
 name: memcached
-Version: 1.4.31
+Version: "{{version}}"
+psutil_download_adress: https://pypi.python.org/packages/78/0a/aa90434c6337dd50d182a81fe4ae4822c953e166a163d1bf5f06abb1ac0b/psutil-5.1.3.tar.gz
+argparse_download_adress: https://pypi.python.org/packages/18/dd/e617cfc3f6210ae183374cd9f6a26b20514bbb5a792af97949c5aacddf0f/argparse-1.4.0.tar.gz
 ##-------
 ##Install parameter
 library_list:
@@ -13,16 +15,8 @@ library_list:
   - make
   - libevent
   - libevent-devel
+  - python-devel
 prefix: /software/{{name}}-{{Version}}
 parameter: --prefix={{prefix}} --enable-threads --enable-64bit
 ##------
-##Start Parameter
-memcached_port_list:
-  - 11211
-  - 11212
-  - 11213
-  - 11214
-memcached_listen_address: 0.0.0.0
-memcached_max_conn: 1024
-memcached_meroy_size: 512
 memcached_fs_file_max: 756024

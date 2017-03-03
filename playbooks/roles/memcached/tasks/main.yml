@@ -18,24 +18,19 @@
 
 - name: Download Memcached Packages and Unarchive
   unarchive: 
-    src=http://www.memcached.org/files/memcached-1.4.31.tar.gz 
+    src=http://www.memcached.org/files/memcached-{{Version}}.tar.gz 
     dest={{Tmp_Packages}} 
     copy=no
   tags: install memcached
 
-- name: Transfer Files To Remote Server
-  template: src=install.sh.j2 dest={{Tmp_Packages}}install.sh mode=0755
-  tags: install memcached
-- name: Transfer Memcached Script To Remote Server
-  template: src=memcached.sh.j2 dest={{script_path}}memcached.sh mode=0755
-  tags: send script
-
-- name: Run Install Memcached ............
-  shell: "{{Tmp_Packages}}install.sh"
+- name: configure And install memcached {{Version}}
+  shell: "./configure {{parameter}}&&make && make install"
   args:
-    chdir: "{{Tmp_Packages}}"
-    executable: "/bin/bash"
-  tags: install memcached
+    chdir: "{{Tmp_Packages}}{{name}}-{{Version}}"
+
+#配置memcached操作脚本
+- name: Transfer Memcached Script To Remote Server
+  template: src=action_memcached.py.j2 dest={{script_path}}action_memcached mode=0755
 
 - name: Remove Tmp_Packages
   file:
