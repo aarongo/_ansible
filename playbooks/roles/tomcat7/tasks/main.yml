@@ -1,16 +1,18 @@
 ---
 # tasks file for tomcat7
-# Create user group
-- name: Create group
-  group:
-    name: tomcat
-    gid: 1000
-- name: Create user
-  user:
-    name: tomcat
-    comment: "tomcat start user"
-    uid: 1000
-    group: tomcat
+- name: Create a new group For System sudos
+  group: name={{sudoers_gorup}} system=yes state=present
+
+- name: Create A New User For Login And Add sudos
+  user: name={{login_user}}
+        state=present
+        groups="{{sudoers_gorup}}"
+        password={{ login_user_password }}
+        comment="Comment"
+        append=yes
+
+- name: configure sudoers
+  lineinfile: dest=/etc/sudoers backup=yes state=present regexp='^%{{sudoers_gorup}}' insertafter="^# %wheel" line='%{{sudoers_gorup}} ALL=(ALL) ALL'
 
 # install java 7 or 8
 - name: Install Java 7u79
@@ -22,15 +24,31 @@
   unarchive:
     src: apache-tomcat-7.0.75.tar.gz
     dest: "{{INSTALL_HOME}}"
-    owner: tomcat
-    group: tomcat
+    owner: "{{login_user}}"
+    group: "{{sudoers_gorup}}"
+
+# Create init process path
+- name: Create tomcat process directory
+  file:
+    path: "{{TOMCAT_DOCBASE}}"
+    owner: "{{login_user}}"
+    group: "{{sudoers_gorup}}"
+    state: directory
+
+- name: Create index.html to process path
+  template:
+    src: index.html.j2
+    dest: "{{TOMCAT_DOCBASE}}/index.html"
+    owner: "{{login_user}}"
+    group: "{{sudoers_gorup}}"
+    mode: 0600
 
 - name: Configure Tomcat 7
   template:
     src: server.xml.j2
     dest: "{{TOMCAT_SERVER_XML}}server.xml"
-    owner: tomcat
-    group: tomcat
+    owner: "{{login_user}}"
+    group: "{{sudoers_gorup}}"
     mode: 0600
   notify: restart tomcat
 
