@@ -1,0 +1,45 @@
+---
+# 配置系统代开文件数
+- name: Add mappings to /etc/security/limits.conf
+  blockinfile:
+    dest: /etc/security/limits.conf
+    block: |
+      {{item.info}}
+    marker: "# {mark} ANSIBLE MANAGED BLOCK {{item.name}}"
+  with_items: limit_conf
+
+# 配置 DNS
+- name: init Dns config files
+  copy: content="" dest="/etc/resolv.conf"
+- name: Add DNS Server
+  blockinfile:
+    dest: /etc/resolv.conf
+    block: |
+      {{item.info}}
+    marker: "# {mark} Ansible Input DNS {{item.name}}"
+  with_items: DNS_Server
+
+# 配置主机名
+- name: set remote hostname
+  hostname:
+    name: "{{hostname}}"
+
+# 配置定时任务 同步时间
+- name: install ntupdate sync time form 202.120.2.101
+  yum: 
+    name: ntpdate
+    state: latest
+    
+# 只有状态为改变的时候才会触发重启 action
+- name: Creates a cron for sync time
+  cron:
+    name: "create crond sync time"
+    job: "/usr/sbin/ntpdate 202.120.2.101"
+  notify:
+    - restart crond
+# - name: restart machine
+#   shell: sleep 2 && shutdown -r now "Ansible updates triggered"
+#   async: 1
+#   poll: 0
+#   # sudo: true
+#   ignore_errors: true
