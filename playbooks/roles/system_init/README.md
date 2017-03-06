@@ -13,12 +13,12 @@ system_init
 --------------
 
 
-limit_conf:
-  - { name: soft, info: "*   soft    nofile  65535" }
-  - { name: hard, info: "*   hard    nofile  65535" }
-DNS_Server:
-  - { name: pubilc, info: "nameserver {{pubilc_adress}}"}
-  - { name: Search_domain, info: "nameserver {{search_adress}}"}
+	limit_conf:
+	  - { name: soft, info: "*   soft    nofile  65535" }
+	  - { name: hard, info: "*   hard    nofile  65535" }
+	DNS_Server:
+	  - { name: pubilc, info: "nameserver {{pubilc_adress}}"}
+	  - { name: Search_domain, info: "nameserver {{search_adress}}"}
 
 依赖
 ------------
@@ -42,6 +42,9 @@ BSD
 Author Information
 ------------------
 
-Author:EdwardLIu
-E-mail: lonnyliu@126.com
+> Author:EdwardLIu
+
+****
+
+> E-mail: lonnyliu@126.com
 
