@@ -1,0 +1,4 @@
+---
+- hosts: unknow
+  roles:
+    - authorized
