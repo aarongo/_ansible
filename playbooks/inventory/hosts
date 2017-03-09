@@ -10,13 +10,19 @@
 ansible_ssh_port=22
 
 [unknow]
-10.90.26.153
+10.90.26.152
 [unknow:vars]
 ansible_ssh_pass="PASSWORD"
 
 [tomcat]
 172.31.10.100
 [tomcat:vars]
+ansible_ssh_port=22
+
+
+[zabbix-agent]
+172.31.10.100
+[zabbix-agent:vars]
 ansible_ssh_port=22
 
 [zookeeper-cluster]

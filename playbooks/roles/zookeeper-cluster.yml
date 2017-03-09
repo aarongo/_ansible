@@ -1,5 +1,0 @@
-- name: Zookeeper cluster setup
-  hosts: zookeeper-cluster
-  roles:
-    - role: zookeeper-cluster
-      zookeeper_hosts: "{{groups['zookeeper-cluster']}}"

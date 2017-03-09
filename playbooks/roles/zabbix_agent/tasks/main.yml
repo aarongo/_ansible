@@ -1,0 +1,53 @@
+---
+# tasks file for roles/zabbix_agent
+# -----1-----
+# 创建zabbix 使用用户
+- name: Create a new group For zabbix_agentd
+  group: name={{zabbix_user}} system=yes state=present
+
+- name: Create A New User For zabbix_agentd
+  user: name={{zabbix_user}}
+        state=present
+        groups="{{zabbix_user}}"
+        comment="zabbix_agent use"
+        append=yes
+# -----1End-----
+
+
+# -----2-----
+# 发送安装文件到远程 根据传送的参数做判断是否使用本地包
+- name: install zabbix_agentd from default
+  include: default.yml
+  when: zabbix_agent_verison == "default"
+- name: install zabbix_agentd from version
+  include: version.yml
+  when: zabbix_agent_verison != "default"
+
+# -----3-----
+# zabbix agent 配置文件配置
+- name: transfer agent config.......
+  template:
+    src: zabbix_agentd.conf.j2
+    dest: "{{zabbix_agent_conf}}/zabbix_agentd.conf"
+
+- name: create......
+  file:
+    path: "{{zabbix_agent_home}}/logs"
+    state: directory
+    owner: zabbix
+    group: zabbix
+# ----3End----
+
+# -----4-----
+# 配置启动脚本
+- name: transfer agent script .......
+  template:
+    src: zabbix_agentd.j2
+    dest: ~/zabbix_agentd
+    mode: 0755
+
+- name: start zabbix_agentd
+  shell: ./zabbix_agentd start
+  args:
+    chdir: ~/
+# -----4End-----

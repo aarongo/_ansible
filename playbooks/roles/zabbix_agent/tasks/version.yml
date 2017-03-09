@@ -1,0 +1,15 @@
+---
+# 选择版本安装
+- name: DownLoad and unarchive zabbix-{{zabbix_agent_verison}}
+  unarchive:
+    src: "{{zabbix_agent_download_url}}zabbix-{{zabbix_agent_verison}}.tar.gz"
+    dest: /tmp/
+    copy: no
+    owner: root
+    group: root
+
+- name: zabbix_agent install {{zabbix_agent_verison}}
+  shell: "{{zabbix_configure}} && make && make install"
+  args:
+    chdir: "/tmp/zabbix-{{zabbix_agent_verison}}"
+   

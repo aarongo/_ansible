@@ -1,5 +1,0 @@
----
-- hosts: tomcat
-  roles:
-    - { role: tomcat7, when: "tomcat_version=='7.0.75'"}
-    - { role: tomcat8, when: "tomcat_version=='8.5.11'"}

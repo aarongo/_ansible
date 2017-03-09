@@ -1,0 +1,12 @@
+{% if zabbix_agent_verison == "default" %}
+LogFile={{LogFile_default}}
+PidFile={{zabbix_agent_home}}/logs/zabbix_agentd.pid
+{% else %}
+LogFile={{LogFile_other}}
+PidFile={{zabbix_agent_home}}/logs/zabbix_agentd.pid
+{% endif %}
+Server={{zabbix_server_addresss}}
+ListenPort={{port}}
+ServerActive={{zabbix_server_addresss}}
+Hostname={{ansible_hostname}}
+Include={{zabbix_agent_home}}/etc/zabbix_agentd.conf.d/*.conf

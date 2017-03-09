@@ -1,0 +1,21 @@
+---
+# defaults file for roles/zabbix_agent
+# 进行选择时使用
+zabbix_agent_download_url: https://excellmedia.dl.sourceforge.net/project/zabbix/ZABBIX%20Latest%20Stable/{{zabbix_agent_verison}}/
+# 直接安装使用---默认
+zabbix_agent_file: zabbix-2.4.4.tar.gz
+zabbix_user: zabbix
+zabbix_server_addresss: "{{zabbix_server_ip}}"
+
+
+# zabbix配置文件使用
+zabbix_agent_home: /software/zabbix_agent
+LogFile_other: "{{zabbix_agent_home}}/logs/zabbix-{{zabbix_agent_verison}}.log"
+LogFile_default: "{{zabbix_agent_home}}/logs/zabbix-agentd-2.4.4.log"
+port: 10050
+
+
+
+# zabbix angent configure 使用
+zabbix_configure: ./configure --prefix={{zabbix_agent_home}} --enable-agent 
+zabbix_agent_conf: /software/zabbix_agent/etc
