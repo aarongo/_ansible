@@ -1,19 +1,20 @@
 ---
 # defaults file for zookeeper-cluster
 client_port: 2181
-init_limit: 5
-sync_limit: 2
+init_limit: 10
+sync_limit: 5
 tick_time: 2000
 
-data_dir: /software/zookeeper/data
-log_dir: /software/zookeeper/logs
+data_dir: /jboss/zookeeper/data
+log_dir: /jboss/zookeeper/log
 
-zookeeper_home: /software/zookeeper-{{zookeeper_version}}/
-zookeeper_config_path: /software/zookeeper-{{zookeeper_version}}/conf
-INSTALL_HOME: /software
-JAVA_HOME: /software/jdk1.7.0_79
+zookeeper_home: /jboss/zookeeper-{{zookeeper_version}}/
+zookeeper_config_path: /jboss/zookeeper-{{zookeeper_version}}/conf
+INSTALL_HOME: /jboss
+JAVA_HOME: /jboss/jdk1.8.0_102
 
 
 profile:
-  - { name: JAVA_HOME, info: "export JAVA_HOME=/software/jdk1.7.0_79"}
+  - { name: JAVA_HOME, info: "export JAVA_HOME=/jboss/jdk1.8.0_102"}
   - { name: PATH, info: "export PATH=${JAVA_HOME}/bin:$PATH"}
+  - { name: CLASSPATH, info: "export CLASSPATH=.$CLASSPATH:$JAVA_HOME/lib:$JAVA_HOME/jre/lib:$JAVA_HOME/lib/tools.jar"}

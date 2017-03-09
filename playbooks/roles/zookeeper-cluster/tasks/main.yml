@@ -1,10 +1,20 @@
 ---
 # tasks file for zookeeper-cluster
+
+# 创建目录
+- name: create directory
+  file:
+    path: "{{INSTALL_HOME}}"
+    state: directory
+    owner: root
+    group: root 
+
+
 # 安装 JAVA_HOME
-- name: Install Java 7u79
+- name: Install Java 8u102
   unarchive:
-    src: jdk-7u79-linux-x64.tar.gz
-    dest: "{{INSTALL_HOME}}"
+    src: jdk-8u102-linux-x64.tar.gz
+    dest: "{{INSTALL_HOME}}/"
 
 # 更新系统环境变量 JAVA_HOME
 - name: Add mappings to /etc/profile
@@ -15,11 +25,13 @@
     marker: "# {mark} ANSIBLE MANAGED BLOCK {{item.name}}"
   with_items: profile
 
+
+
 # 直接网络下载安装 zookeeper
 - name: Download zookeeper {{zookeeper_version}}
   unarchive:
     src: http://apache.org/dist/zookeeper/zookeeper-{{zookeeper_version}}/zookeeper-{{zookeeper_version}}.tar.gz
-    dest: /software/
+    dest: "{{INSTALL_HOME}}/"
     owner: root
     group: root
     copy: no
