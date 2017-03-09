@@ -20,6 +20,8 @@
   unarchive:
     src: http://apache.org/dist/zookeeper/zookeeper-{{zookeeper_version}}/zookeeper-{{zookeeper_version}}.tar.gz
     dest: /software/
+    owner: root
+    group: root
     copy: no
 
 # 传送配置文件到远程服务器
