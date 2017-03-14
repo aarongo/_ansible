@@ -1,0 +1,10 @@
+---
+# tasks file for roles/redis
+
+# 导入安装redis 的yml
+- name: input install yaml
+  include: redis_install.yml
+
+# 配置文件导入
+- name: input config 
+  include: redis_conf.yml

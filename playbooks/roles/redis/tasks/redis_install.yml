@@ -1,0 +1,25 @@
+---
+# 安装依赖
+# - name: install Dependent for redis
+#   yum: name={{item}} state=present
+#   with_items: Dependent
+
+# 根据输入版本下载安装 redis
+- name: download redis {{Redis_Version}}
+  unarchive:
+    src: "{{Download_Address}}"
+    dest: /tmp/
+    copy: no
+
+# 编译安装
+- name: Use shell build redis and install
+  shell: "make PREFIX={{Redis_Home}} install"
+  args:
+    chdir: "/tmp/{{Redis_Version}}"
+
+# 脚本配置
+- name: transfer script to redis server
+  template:
+    src: redis_init_script.j2
+    dest: "{{Redis_Home}}/bin/redis"
+    mode: 0755

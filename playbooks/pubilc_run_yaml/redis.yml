@@ -1,0 +1,6 @@
+---
+# {{ groups['redis_master'][0] }} 直接获取 host文件中主机 IP 地址或者主机名
+# 外部传redis 角色进来,根据传入的角色进行匹配主机组
+- hosts: "redis_{{roles}}"
+  roles:
+    - role: redis

@@ -1,0 +1,28 @@
+---
+# tasks file for roles/redis-conf
+
+# 创建配置文件目录
+- name: Create redis-conf Path
+  file:
+    path: "{{Redis_Config_Path}}"
+    state: directory
+
+# 创建日志存放目录
+- name: Create redis-logs Path
+  file:
+    path: "{{logs_path}}"
+    state: directory
+
+# 传送文件到远程---master
+- name: transfer redis-conf to remote server--master
+  template:
+    src: redis_master.conf.j2
+    dest: "{{Redis_Config_Path}}/redis.conf"
+  when: ("{{roles}}" == "master")
+
+# 传送文件到远程-----slave
+- name: transfer redis-conf to remote server---slave
+  template:
+    src: redis_slave.conf.j2
+    dest: "{{Redis_Config_Path}}/redis.conf"
+  when: ("{{roles}}" == "slave")
