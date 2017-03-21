@@ -1,0 +1,48 @@
+---
+# 创建 elastic 使用的用户
+- name: Create User  {{ user }} For  elasticsearch-cluster
+  user: name={{ user }}
+        state=present
+        password={{ user_password }}
+        comment="user for elasticsearch-cluster"
+        append=yes
+
+
+# 创建elastic 使用的数据和日志目录
+- name: Create elasticsearch-cluster data/logs directory
+  file:
+    dest: "{{item}}"
+    state: directory
+    owner: "{{ user }}"
+    group: "{{ user }}"
+  with_items: "{{elasticsearch_cluster_directory}}"
+
+
+# 解压 elastic 进行安装
+- name: unarchive elasticsearch-cluster fies to remote
+  unarchive:
+    src: "{{ ELASTIC_HOME }}.tar.gz"
+    dest: "{{ BASE_HOME }}"
+    owner: "{{ user }}"
+    group:  "{{ user }}"
+
+# 传送配置文件到远程
+- name: transfer elasticsearch-cluster config
+  template:
+    src: elasticsearch.yml.j2
+    dest: "{{ BASE_HOME }}/{{ ELASTIC_HOME }}/config/elasticsearch.yml"
+    owner: "{{ user }}"
+    group:  "{{ user }}"
+- name: transfer elasticsearch-cluster config
+  template:
+    src: jvm.options.j2
+    dest: "{{ BASE_HOME }}/{{ ELASTIC_HOME }}/config/jvm.options"
+    owner: "{{ user }}"
+    group:  "{{ user }}"
+- name: transfer elasticsearch-cluster script 
+  template:
+    src: elasticsearch_handle.sh.j2
+    dest: "{{ BASE_HOME }}/{{ ELASTIC_HOME }}/bin/elasticsearch_handle.sh"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: 0755

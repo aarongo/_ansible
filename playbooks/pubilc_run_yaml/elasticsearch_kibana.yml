@@ -1,0 +1,4 @@
+---
+- hosts: kibana
+  roles:
+    - elasticsearch_kibana

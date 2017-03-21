@@ -26,3 +26,8 @@
     src: redis_slave.conf.j2
     dest: "{{Redis_Config_Path}}/redis.conf"
   when: ("{{roles}}" == "slave")
+
+- name: start redis......
+  shell: ./redis start
+  args:
+    chdir: "{{Redis_Home}}/bin"

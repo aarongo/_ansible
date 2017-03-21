@@ -5,6 +5,7 @@ Dependent:
   - gcc
   - gcc-c++
   - tcl
+  - make
 Redis_Version: "redis-{{version}}"
 Download_Address: "http://download.redis.io/releases/{{Redis_Version}}.tar.gz"
 Redis_Home: "{{Redis_Home}}"

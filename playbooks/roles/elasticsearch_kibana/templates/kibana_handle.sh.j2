@@ -1,0 +1,9 @@
+#!/bin/bash
+
+str=$"/n"
+KIBANA_HOME="{{ BASE_HOME }}/{{ KIBANA_NAME }}"
+cd  ${KIBANA_HOME}
+sstr=$(echo -e $str)  
+
+/bin/su - {{ user }} -c "/usr/bin/nohup ${KIBANA_HOME}/bin/kibana &"
+echo "${sstr}"

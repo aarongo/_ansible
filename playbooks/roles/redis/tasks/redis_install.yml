@@ -1,9 +1,8 @@
 ---
 # 安装依赖
-# - name: install Dependent for redis
-#   yum: name={{item}} state=present
-#   with_items: Dependent
-
+- name: install Dependent for redis
+  yum: name="{{item}}" state=latest
+  with_items: "{{Dependent}}"
 # 根据输入版本下载安装 redis
 - name: download redis {{Redis_Version}}
   unarchive:

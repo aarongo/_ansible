@@ -6,5 +6,5 @@
   include: redis_install.yml
 
 # 配置文件导入
-- name: input config 
+- name: input config yaml
   include: redis_conf.yml

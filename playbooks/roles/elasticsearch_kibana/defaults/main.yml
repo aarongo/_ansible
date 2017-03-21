@@ -1,0 +1,11 @@
+---
+# defaults file for roles/elasticsearch_kibana
+# Create user for elasticserach 
+user: kibana
+#password is v6flaKTsd#7n
+user_password: $6$rounds=656000$PFOfKkVRiLtr3xzO$rbDWrRzh4p5n0BNDb9imv1MQyh5x/1RCGBW5Q4pdv1R2XffXY0B8OTgMpWlTYdDPwAWBXsguE7EhPQjAHvnd2/
+BASE_HOME: /software
+KIBANA_NAME: kibana-5.2.2-linux-x86_64
+kibana_port: 5601
+kibana_host: 0.0.0.0
+kibana_elasticsearch_url: http://172.31.10.119:9200

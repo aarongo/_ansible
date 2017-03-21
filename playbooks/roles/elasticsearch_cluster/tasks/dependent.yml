@@ -1,0 +1,44 @@
+---
+# install java  8
+- name: Install Java 8u51 for elasticsearch-cluster
+  unarchive:
+    src: jdk-8u51-linux-x64.tar.gz
+    dest: "{{BASE_HOME}}"
+
+    
+# 更新系统环境变量 JAVA_HOME
+- name: Add mappings to /etc/profile
+  blockinfile:
+    dest: /etc/profile
+    block: |
+      {{item.info}}
+    marker: "# {mark} ANSIBLE MANAGED BLOCK {{item.name}}"
+  with_items: "{{profile}}"
+
+
+# 更新系统打开文件数
+- name: Add mappings to /etc/security/limits.conf
+  blockinfile:
+    dest: /etc/security/limits.conf
+    block: |
+      {{item.info}}
+    marker: "# {mark} ANSIBLE MANAGED BLOCK {{item.name}}"
+  with_items: "{{limit}}"
+
+# 增加虚拟内存 ---这步需要重启
+- name: Add mappings to /etc/sysctl.conf
+  blockinfile:
+    dest: /etc/sysctl.conf
+    block: |
+      {{item.info}}
+    marker: "# {mark} ANSIBLE MANAGED BLOCK {{item.name}}"
+  with_items: "{{maxvirtualmemory}}"
+
+
+
+# 更改代开进程数
+- name: change mappings /etc/security/limits.d/90-nproc.conf
+  lineinfile:
+    dest: /etc/security/limits.d/90-nproc.conf
+    regexp: '\*          soft    nproc     1024'
+    line: '*          soft    nproc     2048'
