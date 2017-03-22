@@ -1,0 +1,31 @@
+---
+# install x-pack for elasticsearch0cluster
+
+# 传送插件
+- name: transfer x-pack to remote server
+  copy:
+    src: x-pack-5.2.2.zip
+    dest: "{{ top_dir }}x-pack-5.2.2.zip"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: 0644
+
+
+# # 安装插件
+# - name: install x-pack 5.2.2
+#   shell: "source /etc/profile&&./elasticsearch-plugin install file://{{ top_dir }}x-pack-5.2.2.zip"
+#   args:
+#     chdir: "{{ BASE_HOME }}/{{ ELASTIC_HOME }}/bin"
+
+
+
+# 只启用监控功能--因为监控功能免费
+# 传送申请的 license 文件到远程
+# 需要收到运行 curl -XPUT -u elastic 'http://ipaddress:9200/_xpack/license?acknowledge=true' -d @/software/data/elastic5/license.json password: changeme
+- name: transfer license.json to remote server
+  copy:
+    src: license.json
+    dest: "{{ top_dir }}license.json"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: 0644

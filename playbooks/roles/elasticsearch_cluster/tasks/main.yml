@@ -4,8 +4,13 @@
 - name: include dependent for elasticsearch-cluster
   include: dependent.yml
 
+
 - name: include elasticsearch_stup for elasticsearch-cluster
   include: elasticserach_setup.yml
+
+
+- name: include plugins for elasticsearch_stup
+  include: plugins.yml
 
 
 # 启动 elastic----启动未成功(5.2.2版本需要内核3.5+)

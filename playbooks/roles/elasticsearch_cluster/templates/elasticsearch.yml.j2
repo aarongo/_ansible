@@ -90,3 +90,5 @@ discovery.zen.minimum_master_nodes: 3
 # 增加跨域
 http.cors.enabled: true
 http.cors.allow-origin: "*"
+# 如果你在Elasticsearch已禁用自动索引的创建，在elasticsearch.yml配置action.auto_create_index允许X-pack创造以下指标：
+action.auto_create_index: .security,.monitoring*,.watches,.triggered_watches,.watcher-history*

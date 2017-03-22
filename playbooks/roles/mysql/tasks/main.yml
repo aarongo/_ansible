@@ -2,7 +2,7 @@
 # tasks file for mysql
 - name: Install library For Msyql.....
   yum: name={{item}} state=latest
-  with_items: Library
+  with_items: "{{Library}}"
   tags: install mysql
 
 - name: Create New related user

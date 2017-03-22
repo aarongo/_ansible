@@ -1,5 +1,0 @@
----
-- name: Dict Test
-  hosts: nginx
-  tasks:
-    - include: 'tasks/example.yml'

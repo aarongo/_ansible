@@ -1,7 +1,7 @@
 ---
 # tasks file for roles/elasticsearch_kibana
 
-# 创建 elastic 使用的用户
+# 创建 kibans 使用的用户
 - name: Create User  {{ user }} For  elasticsearch-cluster
   user: name={{ user }}
         state=present
@@ -32,7 +32,7 @@
     owner: "{{ user }}"
     group: "{{ user }}"
 
-# 传送脚本到远程
+# 传送脚本到远程 需要收到到服务器启动
 - name: transfer init script to kibana
   template:
     src: kibana_handle.sh.j2
@@ -40,3 +40,7 @@
     owner: "{{ user }}"
     group: "{{ user }}"
     mode: 0755
+
+# 安装 x-pack 插件
+- name: include plugins.yml
+  include: plugins.yml
