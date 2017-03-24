@@ -5,3 +5,7 @@ limit_conf:
 DNS_Server:
   - { name: pubilc, info: "nameserver {{pubilc_adress}}"}
   - { name: Search_domain, info: "nameserver {{search_adress}}"}
+pip_global_url:
+  - { name: global, info: "[global]"}
+  - { name: host, info: "trusted-host =  mirrors.aliyun.com"}
+  - { name: conf, info: "index-url = http://mirrors.aliyun.com/pypi/simple"}

@@ -1,12 +1,36 @@
 ---
+# 配置 epel 安装 libselinux-python
+- name: include update module
+  include: update_epel/main.yml
+
 # 配置系统代开文件数
 - name: Add mappings to /etc/security/limits.conf
   blockinfile:
-    dest: /etc/security/limits.conf
+    dest: "/etc/security/limits.conf"
     block: |
       {{item.info}}
     marker: "# {mark} ANSIBLE MANAGED BLOCK {{item.name}}"
-  with_items: limit_conf
+  with_items: "{{limit_conf}}"
+
+
+# 配置pip 源
+- name: creste pip directory
+  file:
+    dest: ~/.pip
+    state: directory
+    mode: 0644
+- name: creste pip config
+  file:
+    path: ~/.pip/pip.conf
+    state: touch
+    mode: 0644
+- name: Add mappings to ~/.pip/pip.conf
+  blockinfile:
+    dest: "~/.pip/pip.conf"
+    block: |
+      {{item.info}}
+    marker: "# {mark} ANSIBLE MANAGED BLOCK {{item.name}}"
+  with_items: "{{pip_global_url}}" 
 
 # 配置 DNS
 - name: init Dns config files
@@ -17,12 +41,15 @@
     block: |
       {{item.info}}
     marker: "# {mark} Ansible Input DNS {{item.name}}"
-  with_items: DNS_Server
+  with_items: "{{DNS_Server}}"
 
-# 配置主机名
-- name: set remote hostname
-  hostname:
-    name: "{{hostname}}"
+
+# 关闭 selinux
+- name: disabled selinux
+  selinux:
+    state: disabled
+
+
 
 # 配置定时任务 同步时间
 - name: install ntupdate sync time form 202.120.2.101
@@ -30,6 +57,8 @@
     name: ntpdate
     state: latest
     
+
+
 # 只有状态为改变的时候才会触发重启 action
 - name: Creates a cron for sync time
   cron:
@@ -37,9 +66,11 @@
     job: "/usr/sbin/ntpdate 202.120.2.101"
   notify:
     - restart crond
-# - name: restart machine
-#   shell: sleep 2 && shutdown -r now "Ansible updates triggered"
-#   async: 1
-#   poll: 0
-#   # sudo: true
-#   ignore_errors: true
+
+
+- name: restart machine
+  shell: sleep 2 && shutdown -r now "Ansible updates triggered"
+  async: 1
+  poll: 0
+  # sudo: true
+  ignore_errors: true
