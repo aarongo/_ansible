@@ -1,0 +1,29 @@
+---
+# install pip
+- name: install python pip
+  yum:
+    name: python-pip
+    state: latest
+
+# update pip
+- name: update python pip
+  shell: pip install --upgrade pip
+
+# 配置pip 源
+- name: creste pip directory
+  file:
+    dest: ~/.pip
+    state: directory
+    mode: 0644
+- name: creste pip config
+  file:
+    path: ~/.pip/pip.conf
+    state: touch
+    mode: 0644
+- name: Add mappings to ~/.pip/pip.conf
+  blockinfile:
+    dest: "~/.pip/pip.conf"
+    block: |
+      {{item.info}}
+    marker: "# {mark} ANSIBLE MANAGED BLOCK {{item.name}}"
+  with_items: "{{pip_global_url}}" 

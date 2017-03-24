@@ -1,4 +1,8 @@
 ---
+BASE_USER: tourk
+#password is v6flaKTsd#7n
+BASE_USER_PASSWORD: $6$rounds=656000$PFOfKkVRiLtr3xzO$rbDWrRzh4p5n0BNDb9imv1MQyh5x/1RCGBW5Q4pdv1R2XffXY0B8OTgMpWlTYdDPwAWBXsguE7EhPQjAHvnd2/
+BASE_GROUP: tourk
 limit_conf:
   - { name: soft, info: "*   soft    nofile  65535" }
   - { name: hard, info: "*   hard    nofile  65535" }

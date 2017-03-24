@@ -1,0 +1,71 @@
+---
+# 创建系统用户以及更改目录权限
+- name: Create a new group For System sudos
+  group: name={{ BASE_GROUP }} system=yes state=present
+
+
+- name: Create A New User For Login And Add sudos
+  user: name={{ BASE_USER }}
+        state=present
+        groups="{{ BASE_GROUP }}"
+        password={{ BASE_USER_PASSWORD }}
+        comment="Base User"
+        append=yes
+
+
+- name: configure sudoers
+  lineinfile: dest=/etc/sudoers backup=yes state=present regexp='^%{{ BASE_GROUP }}' insertafter="^# %wheel" line='%{{ BASE_GROUP }} ALL=(ALL) ALL'
+
+
+- name: change directory promiss
+  file:
+    dest: "/software"
+    owner: "{{ BASE_USER }}"
+    group: "{{ BASE_GROUP }}"
+    mode: 0644
+
+
+# 配置系统代开文件数
+- name: Add mappings to /etc/security/limits.conf
+  blockinfile:
+    dest: "/etc/security/limits.conf"
+    block: |
+      {{item.info}}
+    marker: "# {mark} ANSIBLE MANAGED BLOCK {{item.name}}"
+  with_items: "{{limit_conf}}"
+
+
+# 关闭 selinux
+- name: disabled selinux
+  selinux:
+    state: disabled
+
+
+# 配置 DNS
+- name: init Dns config files
+  copy: content="" dest="/etc/resolv.conf"
+- name: Add DNS Server
+  blockinfile:
+    dest: /etc/resolv.conf
+    block: |
+      {{item.info}}
+    marker: "# {mark} Ansible Input DNS {{item.name}}"
+  with_items: "{{DNS_Server}}"
+
+
+
+# 配置定时任务 同步时间
+- name: install ntupdate sync time form 202.120.2.101
+  yum: 
+    name: ntpdate
+    state: latest
+    
+
+
+# 只有状态为改变的时候才会触发重启 action
+- name: Creates a cron for sync time
+  cron:
+    name: "create crond sync time"
+    job: "/usr/sbin/ntpdate 202.120.2.101"
+  notify:
+    - restart crond

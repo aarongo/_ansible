@@ -14,12 +14,3 @@
     name: libselinux-python
     state: latest
 
-# install pip
-- name: install python pip
-  yum:
-    name: python-pip
-    state: latest
-
-# update pip
-- name: update python pip
-  shell: pip install --upgrade pip
