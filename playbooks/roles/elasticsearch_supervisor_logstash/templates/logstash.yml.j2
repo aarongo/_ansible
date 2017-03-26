@@ -1,0 +1,171 @@
+# Settings file in YAML
+#
+# Settings can be specified either in hierarchical form, e.g.:
+#
+#   pipeline:
+#     batch:
+#       size: 125
+#       delay: 5
+#
+# Or as flat keys:
+#
+#   pipeline.batch.size: 125
+#   pipeline.batch.delay: 5
+#
+# ------------  Node identity ------------
+#
+# Use a descriptive name for the node:
+# 节点名称
+node.name: {{ ansible_hostname }}
+#
+# If omitted the node name will default to the machine's host name
+#
+# ------------ Data path ------------------
+#
+# Which directory should be used by logstash and its plugins
+# for any persistent needs. Defaults to LOGSTASH_HOME/data
+# 数据存放目录
+path.data: {{ LOGSTASH_DATA_PATH }}
+#
+# ------------ Pipeline Settings --------------
+#
+# Set the number of workers that will, in parallel, execute the filters+outputs
+# stage of the pipeline.
+#
+# This defaults to the number of the host's CPU cores.
+# 根据cpu 格式进行配置
+# pipeline.workers: 2
+#
+# How many workers should be used per output plugin instance
+# 每个输出实例的工作线程
+# pipeline.output.workers: 1
+#
+# How many events to retrieve from inputs before sending to filters+workers
+# 配合 JVM 堆内存使用
+# pipeline.batch.size: 125
+#
+# How long to wait before dispatching an undersized batch to filters+workers
+# Value is in milliseconds.
+# 创建任务批次等待时间/毫秒
+# pipeline.batch.delay: 5
+#
+# Force Logstash to exit during shutdown even if there are still inflight
+# events in memory. By default, logstash will refuse to quit until all
+# received events have been pushed to the outputs.
+#
+# WARNING: enabling this can lead to data loss during shutdown
+# logstash 退出时是否等待在跑的进程处理完毕
+# pipeline.unsafe_shutdown: false
+#
+# ------------ Pipeline Configuration Settings --------------
+#
+# Where to fetch the pipeline configuration for the main pipeline
+# 数据传输管道配置文件位置
+# path.config:
+#
+# Pipeline configuration string for the main pipeline
+# 
+# config.string:
+#
+# At startup, test if the configuration is valid and exit (dry run)
+# 测试配置文件的正确性 请注意，使用此设置，不会检查grok图案的正确性。
+# Logstash可以从目录中读取多个配置文件。
+# 如果将此设置与log.level组合：debug，Logstash将记录组合​​的配置文件，并使用源文件对每个配置块进行注释
+# config.test_and_exit: false
+#
+# Periodically check if the configuration has changed and reload the pipeline
+# This can also be triggered manually through the SIGHUP signal
+# 当设置为true时，定期检查配置是否已更改，并在更改配置时重新加载配置。 也可以通过SIGHUP信号手动触发
+# config.reload.automatic: false
+#
+# How often to check if the pipeline configuration has changed (in seconds)
+# Logstash在几秒钟内检查配置文件以进行更改
+# config.reload.interval: 3
+#
+# Show fully compiled configuration as debug log message
+# NOTE: --log.level must be 'debug'
+# 当设置为true时，将完全编译的配置显示为调试日志消息。 您还必须设置log.level：debug。
+# 警告：日志消息将包含作为明文传递给插件配置的任何密码选项，并可能导致明文密码出现在您的日志中
+# config.debug: false
+#
+# ------------ Queuing Settings --------------
+#
+# Internal queuing model, "memory" for legacy in-memory based queuing and
+# "persisted" for disk-based acked queueing. Defaults is memory
+# 用于事件缓冲的内部排队模式 memory/persisted
+# queue.type: memory
+#
+# If using queue.type: persisted, the directory path where the data files will be stored.
+# Default is path.data/queue
+# 启用持久性队列时数据文件将被存储的目录路径（queue.type：persisted）
+# path.queue:
+#
+# If using queue.type: persisted, the page data files size. The queue data consists of
+# append-only data files separated into pages. Default is 250mb
+# 启用持久队列时使用的页面数据文件的大小（queue.type：persisted）
+# queue.page_capacity: 250mb
+#
+# If using queue.type: persisted, the maximum number of unread events in the queue.
+# Default is 0 (unlimited)
+# 启用持久队列时队列中未读事件的最大数量（queue.type：persisted）
+# queue.max_events: 0
+#
+# If using queue.type: persisted, the total capacity of the queue in number of bytes.
+# If you would like more unacked events to be buffered in Logstash, you can increase the 
+# capacity using this setting. Please make sure your disk drive has capacity greater than 
+# the size specified here. If both max_bytes and max_events are specified, Logstash will pick 
+# whichever criteria is reached first
+# Default is 1024mb or 1gb
+# 队列的总容量，以字节为单位。 确保磁盘驱动器的容量大于此处指定的值。
+# 如果同时指定了queue.max_events和queue.max_bytes，则Logstash将优先匹配达到峰值的指标
+# queue.max_bytes: 1024mb
+#
+# If using queue.type: persisted, the maximum number of acked events before forcing a checkpoint
+# Default is 1024, 0 for unlimited
+# 启用持久性队列时强制检查点的ACK事件的最大数量（queue.type：persisted）。
+# 指定queue.checkpoint.acks：0 将此值设置为unlimited(没有限制)
+# queue.checkpoint.acks: 1024
+#
+# If using queue.type: persisted, the maximum number of written events before forcing a checkpoint
+# Default is 1024, 0 for unlimited
+# 在启用持久队列时强制检查点的最大写入事件数（queue.type：persisted）。
+# 指定queue.checkpoint.writes：0将此值设置为unlimited
+# queue.checkpoint.writes: 1024
+#
+# If using queue.type: persisted, the interval in milliseconds when a checkpoint is forced on the head page
+# Default is 1000, 0 for no periodic checkpoint.
+# 当启用持久队列（queue.type：persisted）时，强制检查的间隔（以毫秒为单位）。
+# 指定queue.checkpoint.interval：0，不定期检查点
+# queue.checkpoint.interval: 1000
+#
+# 指标设置
+# ------------ Metrics Settings --------------
+# 
+# Bind address for the metrics REST endpoint
+# 调度REST端点的绑定地址
+# http.host: "127.0.0.1"
+#
+# Bind port for the metrics REST endpoint, this option also accept a range
+# (9600-9700) and logstash will pick up the first available ports.
+# 用于调度REST端点的绑定端口
+# http.port: 9600-9700
+#
+# ------------ Debugging Settings --------------
+# 日志级别设置
+# Options for log.level:
+#   * fatal
+#   * error
+#   * warn
+#   * info (default)
+#   * debug
+#   * trace
+#
+# log.level: info
+# 日志路径配置
+path.logs: {{ LOGSTASH_LOGS_PATH }}
+#
+# ------------ Other Settings --------------
+#
+# Where to find custom plugins
+# path.plugins: []
+xpack.monitoring.elasticsearch.url: "http://172.31.10.119:9200"

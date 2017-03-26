@@ -1,0 +1,62 @@
+---
+# This is for Install logstash
+
+
+# 创建 logstash 使用的用户
+- name: Create User  {{ LOSGTASH_USER }} For  Logstash process
+  user:
+    name: "{{ LOSGTASH_USER }}"
+    state: present
+    shell: /sbin/nologin
+    comment: "Logstash process info"
+    append: yes
+  sudo: true
+
+
+# 创建 logstash 使用的目录
+- name: Create logstash data logs directory
+  file:
+    dest: "{{ item }}"
+    state: directory
+    mode: 0755
+    owner: "{{ BASE_USER }}"
+    group: "{{ BASE_GROUP }}"
+  with_items:
+    - "{{ LOGSTASH_DATA_PATH }}"
+    - "{{ LOGSTASH_LOGS_PATH }}"
+
+
+# 传入logstash 安装文件
+- name: unarchive logstsh files to server
+  unarchive:
+    src: logstash-5.2.2.tar.gz
+    dest: "{{ BASE_PATH }}"
+    owner: "{{ BASE_USER }}"
+    group: "{{ BASE_GROUP }}"
+
+
+# 传入配置文件
+- name: transfer startup config for logstash 
+  template:
+    src: logstash.yml.j2
+    dest: "{{ LOSGTASH_START_CONFIG_PATH }}/logstash.yml"
+    owner: "{{ BASE_USER }}"
+    group: "{{ BASE_GROUP }}"
+    mode: 0644
+- name: transfer startup config for logstash jvm
+  template:
+    src: jvm.options.j2
+    dest: "{{ LOSGTASH_START_CONFIG_PATH }}/jvm.options"
+    owner: "{{ BASE_USER }}"
+    group: "{{ BASE_GROUP }}"
+    mode: 0644
+
+
+# 传入 logstash 启动调用的文件
+- name: transfer logstash start config files
+  template:
+    src: logstash_agent.conf.j2
+    dest: "{{ LOSGTASH_START_CONFIG_PATH }}/logstash_agent.conf"
+    owner: "{{ BASE_USER }}"
+    group: "{{ BASE_GROUP }}"
+    mode: 0644

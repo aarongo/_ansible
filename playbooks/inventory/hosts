@@ -10,9 +10,11 @@
 ansible_ssh_port=22
 
 [unknow]
-10.90.26.152
+172.31.10.119
+172.31.10.120
+172.31.10.121
 [unknow:vars]
-ansible_ssh_pass="PASSWORD"
+ansible_ssh_pass="11qq```"
 
 [tomcat]
 172.31.10.100
@@ -20,16 +22,41 @@ ansible_ssh_pass="PASSWORD"
 ansible_ssh_port=22
 
 [redis_master]
-172.31.10.100
+172.31.10.120
 [redis_master:vars]
 ansible_ssh_port=22
 
 [redis_slave]
-172.31.20.20
+172.31.10.120
+172.31.10.121
 [redis_slave:vars]
 ansible_ssh_port=22
 
 
+[elastic-cluster]
+172.31.10.119
+172.31.10.120
+172.31.10.121
+[elastic-cluster:vars]
+ansible_ssh_port=22
+
+[kibana]
+172.31.10.119
+[kibana:vars]
+ansible_ssh_port=22
+
+
+[logstash]
+172.31.10.123
+[logstash:vars]
+ansible_port=22
+ansible_user=tourk
+ansible_sudo_pass=v6flaKTsd#7n
+
+[mysql]
+172.31.10.120
+[mysql:vars]
+ansible_ssh_port=22
 
 [zabbix-agent]
 172.31.10.100

@@ -1,0 +1,47 @@
+---
+# This is for install supervisor
+## 因为使用的是 tourk 所以不需要再指定权限了 
+
+
+# 安装 supervisor
+- name: install supervisor from pip
+  pip:
+    name: supervisor
+    version: 3.3.1
+
+
+# 配置 supervisor
+- name: create supervisor config
+  file:
+    dest: "{{ item }}"
+    state: directory
+    group: "{{ BASE_GROUP }}"
+    mode: 0755
+  with_items: 
+    - "{{ SUPERVISOR_CONF_PATH }}"
+    - "{{ SUPERVISOR_LOGS_PATH }}"
+
+
+# 配置文件更新----supervisor 启动调用的文件
+- name: supervisor config transfer
+  template:
+    src: supervisord.conf.j2
+    dest: "{{ BASE_PATH }}/supervisor/supervisord.conf"
+    group: "{{ BASE_GROUP }}"
+    mode: 0744
+
+# 配置文件------自定义程序配置文件
+- name: supervisord program config
+  template:
+    src: supervisord_program.conf.j2
+    dest: "{{ SUPERVISOR_CONF_PATH }}/supervisord_program.conf"
+    group: "{{ BASE_GROUP }}"
+    mode: 0744
+
+# 配置脚本以及启动
+- name: transfer init script to server
+  template:
+    src: supervisord.sh.j2
+    dest: "~/supervisord.sh"
+    group: "{{ BASE_GROUP }}"
+    mode: 0755
