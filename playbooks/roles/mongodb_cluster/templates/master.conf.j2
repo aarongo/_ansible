@@ -1,0 +1,18 @@
+systemLog:
+    destination: file
+    path: "{{ LOGPATH }}{{ MASTER }}.log"
+    logAppend: true
+storage:
+    dbPath: "{{ MASTER_DBPATH }}"
+    directoryPerDB: true
+    journal:
+        enabled: true
+replication:  
+   oplogSizeMB: 64
+   replSetName: {{ REPLSET }}
+processManagement:
+    fork: true
+    pidFilePath: "{{ MASTER_PID_FILE_PATH }}"
+net:
+   bindIp: {{ BIND_IP }}
+   port: {{ PORT }}

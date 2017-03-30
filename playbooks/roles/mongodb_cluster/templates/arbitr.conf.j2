@@ -1,0 +1,18 @@
+systemLog:
+    destination: file
+    path: "{{ LOGPATH }}{{ ARBITR }}.log"
+    logAppend: true
+storage:
+    dbPath: "{{ ARBITR_DBPATH }}"
+    directoryPerDB: true
+    journal:
+        enabled: true
+replication:  
+   oplogSizeMB: 64
+   replSetName: {{ REPLSET }}
+processManagement:
+    fork: true
+    pidFilePath: "{{ ARBITR_PID_FILE_PATH }}"
+net:
+   bindIp: {{ BIND_IP }}
+   port: {{ PORT }}

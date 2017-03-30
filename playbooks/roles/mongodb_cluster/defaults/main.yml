@@ -1,0 +1,25 @@
+---
+# defaults file for roles/mongodb_cluster
+BASE_HOME: /software
+MONGODB_HOME: /software/mongodb-3.2
+MONGODB_CONF_PATH: /software/mongodb-3.2/etc
+MONGODB_OTHER_PATH: /software/mongodb
+# mongodb_cluster roles
+MASTER: master
+SLAVE: slave
+ARBITR: arbitr
+# 每台机器日志都存放---配置文件公用
+# 设置为true，启用操作日志，以确保写入持久性和数据的一致性，会在dbpath目录下创建journal目录
+REPLSET: tourk_demo
+BIND_IP: "{{ ansible_default_ipv4.address }}"
+PORT: 27017
+LOGPATH: /software/mongodb/log/
+# 配置文件公用 --end
+# 每台机器mongodb 数据存放目录
+MASTER_DBPATH: "/software/mongodb/data/{{ MASTER }}"
+SLAVE_DBPATH: "/software/mongodb/data/{{ SLAVE }}"
+ARBITR_DBPATH: "/software/mongodb/data/{{ ARBITR }}"
+# 每台机器的 PID 存放目录
+MASTER_PID_FILE_PATH: /software/mongodb/{{ MASTER }}.pid
+SLAVE_PID_FILE_PATH: /software/mongodb/{{ SLAVE }}.pid
+ARBITR_PID_FILE_PATH: /software/mongodb/{{ ARBITR }}.pid

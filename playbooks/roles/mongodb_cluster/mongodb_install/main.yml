@@ -1,0 +1,121 @@
+---
+# This is for install mongodb_cluster
+
+# 1. 判断基础目录是否存在
+- name: system base directory create
+  file:
+    dest: "{{ BASE_HOME }}"
+    state: directory
+
+
+# 2. 创建mongodb 所使用的目录
+# 创建日志存放目录--统一
+- name: Create mongodb logspath for master/slave/arbitr
+  file:
+    dest: "{{ LOGPATH }}"
+    state: directory
+
+
+- name: Create mongodb datapath  for master
+  file:
+    dest: "{{ MASTER_DBPATH }}"
+    state: directory
+  when: mongodb_role == "master"
+
+
+- name:  Creste mongodb datapath  for slave
+  file:
+    dest: "{{ SLAVE_DBPATH }}"
+    state: directory
+  when: mongodb_role == "slave"
+
+
+- name: Creste mongodb datapath  for arbitr
+  file:
+    dest: "{{ ARBITR_DBPATH }}"
+    state: directory
+  when: mongodb_role == "arbitr"
+
+
+# 3. 安装 mongodb 3.2.0 for all roles
+- name: unarchive mongodb to remote Server
+  unarchive:
+    src: mongodb-linux-x86_64-rhel70-3.2.0.tgz
+    dest: "{{ BASE_HOME }}"
+
+
+- name: change unarchive after directory name
+  command: "mv {{ BASE_HOME }}/mongodb-linux-x86_64-rhel70-3.2.0 {{ MONGODB_HOME }}"
+
+# 4. 创建配置文件
+- name: creates mongodb config
+  file:
+    dest: "{{ MONGODB_CONF_PATH }}"
+    state: directory
+
+
+# 5. 传送配置文件分环境
+- name: transfer config to master
+  template:
+    src: master.conf.j2
+    dest: "{{ MONGODB_CONF_PATH }}/master.conf"
+  when: mongodb_role == "master"
+
+
+- name: transfer config to slave
+  template:
+    src: slave.conf.j2
+    dest: "{{ MONGODB_CONF_PATH }}/slave.conf"
+  when: mongodb_role == "slave"
+
+- name: transfer config to arbitr
+  template:
+    src: arbitr.conf.j2
+    dest: "{{ MONGODB_CONF_PATH }}/arbitr.conf"
+  when: mongodb_role == "arbitr"
+
+
+# 6. 传送启动脚本
+- name: transfer init script
+  template:
+    src: action_mongodb.py.j2
+    dest: "{{ BASE_HOME }}/action_mongodb.py"
+    mode: 0755
+
+
+# 7. 启动 mongodb
+- name: start  mongodb master
+  shell: ./action_mongodb.py -C master -t restart
+  args:
+    chdir: "{{ BASE_HOME }}"
+  when: mongodb_role == "master"
+
+
+- name: start mongodb slave
+  shell: ./action_mongodb.py -C slave -t restart
+  args:
+    chdir: "{{ BASE_HOME }}"
+  when: mongodb_role == "slave"
+
+
+- name: start mongodb arbitr
+  shell: ./action_mongodb.py -C arbitr -t restart
+  args:
+    chdir: "{{ BASE_HOME }}"
+  when: mongodb_role == "arbitr"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
