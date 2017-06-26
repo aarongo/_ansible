@@ -1,0 +1,4 @@
+This sync ssh-key to remote server
+
+command line like:
+ansible-playbook authorized.yml --extra-vars "user=root"
