@@ -34,6 +34,19 @@
     marker: "# {mark} ANSIBLE MANAGED BLOCK {{item.name}}"
   with_items: "{{limit_conf}}"
 
+# 优化内核参数
+- name: Optimize the kernel parameters
+  blockinfile:
+    dest: "/etc/sysctl.conf"
+    block: |
+      {{ item.info }}
+    marker: "# {mark} ANSIBLE MANAGED BLOCK {{item.name}}"
+  with_items: "{{ kernel_parameters }}"
+
+# 生效内核优化参数
+- name: kernel parameters Optimize open
+  shell: "sysctl -p"
+
 
 # 关闭 selinux
 - name: disabled selinux
