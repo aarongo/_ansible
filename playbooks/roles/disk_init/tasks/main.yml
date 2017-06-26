@@ -1,0 +1,16 @@
+---
+# tasks file for disk_init
+- name: Yum Install
+  yum: name="{{ item }}" state=latest
+  with_items:
+    - libselinux-python
+
+- name: New Disk Partition
+  script: ../script/disk.sh "{{ disk }}"
+
+- name: New Disk Format(ext4)
+  filesystem: fstype=ext4 dev="{{ partition }}" opts="-cc"
+
+- name: New Disk Mount
+  mount: name="{{ mountDir }}" src="{{ partition }}" fstype=ext4 state=mounted
+
