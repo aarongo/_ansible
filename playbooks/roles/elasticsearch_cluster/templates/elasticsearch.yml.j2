@@ -66,7 +66,7 @@ http.port: {{ port }}
 # The default list of hosts is ["127.0.0.1", "[::1]"]
 #
 
-discovery.zen.ping.unicast.hosts: ["{{ groups['elastic-cluster'][0] }}:9300", "{{ groups['elastic-cluster'][1] }}:9300", "{{ groups['elastic-cluster'][2] }}:9300"]
+discovery.zen.ping.unicast.hosts: ["{{ groups['elastic-cluster'][0] }}:9300", "{{ groups['elastic-cluster'][1] }}:9300"]
 #
 # Prevent the "split brain" by configuring the majority of nodes (total number of master-eligible nodes / 2 + 1):
 #
