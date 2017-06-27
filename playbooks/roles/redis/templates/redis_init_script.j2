@@ -6,7 +6,7 @@
 REDISPORT=6379
 EXEC={{Redis_Home}}/bin/redis-server
 CLIEXEC={{Redis_Home}}/bin/redis-cli
-HOSTNAME={{ansible_eth0.ipv4.address}}
+HOSTNAME={{ansible_default_ipv4.address}}
 
 PIDFILE={{pid_path}}
 CONF="{{Redis_Config_Path}}/redis.conf"

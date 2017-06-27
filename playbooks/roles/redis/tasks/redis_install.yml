@@ -8,7 +8,7 @@
   unarchive:
     src: "{{Download_Address}}"
     dest: /tmp/
-    copy: no
+    # copy: no
 
 # 编译安装
 - name: Use shell build redis and install
