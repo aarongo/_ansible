@@ -1,0 +1,4 @@
+---
+- name: install psutil from pip
+  pip:
+    name: psutil

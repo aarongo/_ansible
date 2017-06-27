@@ -1,8 +1,13 @@
 ---
 # tasks file for memcached
+
+- name: include install_python_packages
+  include: install_python_packages/main.yml
+  
+  
 - name: Install Libaray
   yum: name={{item}} state=latest
-  with_items: library_list
+  with_items: "{{library_list}}"
   tags: install memcached
 
 - name: Set the max open file descriptors 
@@ -18,9 +23,10 @@
 
 - name: Download Memcached Packages and Unarchive
   unarchive: 
-    src=http://www.memcached.org/files/memcached-{{Version}}.tar.gz 
-    dest={{Tmp_Packages}} 
-    copy=no
+    # src=http://www.memcached.org/files/memcached-{{Version}}.tar.gz
+    src: memcached-{{Version}}.tar.gz 
+    dest: "{{Tmp_Packages}}"
+    #copy: no
   tags: install memcached
 
 - name: configure And install memcached {{Version}}
