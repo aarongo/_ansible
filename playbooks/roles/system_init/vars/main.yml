@@ -36,6 +36,11 @@ kernel_parameters:
   - { name: core.somaxconn, info: "net.core.somaxconn = 16384"}
   - { name: core.netdev_max_backlog, info: "net.core.netdev_max_backlog = 16384"}
 
+i18n:
+  - { name: lc_all, info: "export LC_ALL=en_US.UTF-8" }
+  - { name: lang, info: "export LANG=en_US.UTF-8" }
+  - { name: language, info: "export LANGUAGE=en_US.UTF-8"}
+
 # 内核参数优化
 # 对于一个新建连接，内核要发送多少个 SYN 连接请求才决定放弃。不应该大于255，默认值是5，对应于180秒左右时间。。(对于大负载而物理通信良好的网络而言,这个值偏高,可修改为2.这个值仅仅是针对对外的连接,对进来的连接,是由tcp_retries1决定的)
 # net.ipv4.tcp_syn_retries = 1
