@@ -1,9 +1,0 @@
----
-# tasks file for system_lang
-- name: Add mappings to /home/cdczhangg/.bashrc
-  blockinfile:
-    dest: /home/cdczhangg/.bashrc
-    block: |
-      {{item.info}}
-    marker: "# {mark} ANSIBLE MANAGED BLOCK {{item.name}}"
-  with_items: i18n
