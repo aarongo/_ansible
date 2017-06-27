@@ -15,7 +15,7 @@
   file:
     dest: "{{ item }}"
     state: directory
-    group: "{{ BASE_GROUP }}"
+    # group: "{{ BASE_GROUP }}"
     mode: 0755
   with_items: 
     - "{{ SUPERVISOR_CONF_PATH }}"
@@ -27,7 +27,7 @@
   template:
     src: supervisord.conf.j2
     dest: "{{ BASE_PATH }}/supervisor/supervisord.conf"
-    group: "{{ BASE_GROUP }}"
+    # group: "{{ BASE_GROUP }}"
     mode: 0744
 
 # 配置文件------自定义程序配置文件
@@ -35,7 +35,7 @@
   template:
     src: supervisord_program.conf.j2
     dest: "{{ SUPERVISOR_CONF_PATH }}/supervisord_program.conf"
-    group: "{{ BASE_GROUP }}"
+    # group: "{{ BASE_GROUP }}"
     mode: 0744
 
 # 配置脚本以及启动
@@ -43,5 +43,5 @@
   template:
     src: supervisord.sh.j2
     dest: "~/supervisord.sh"
-    group: "{{ BASE_GROUP }}"
+    # group: "{{ BASE_GROUP }}"
     mode: 0755

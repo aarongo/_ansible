@@ -1,5 +1,13 @@
 ---
 # 默认安装
+- name: clear yum 
+  shell: yum clean all
+
+
+- name: install cofnigure base packages
+  # yum: name=gcc state=present
+  shell: yum -y install gcc
+
 - name: unarchive zabbix_agent2.4.4
   unarchive:
     src: zabbix-2.4.4.tar.gz

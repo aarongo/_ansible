@@ -8,5 +8,5 @@ PidFile={{zabbix_agent_home}}/logs/zabbix_agentd.pid
 Server={{zabbix_server_addresss}}
 ListenPort={{port}}
 ServerActive={{zabbix_server_addresss}}
-Hostname={{ansible_hostname}}
+# Hostname={{ansible_default_ipv4.address}}
 Include={{zabbix_agent_home}}/etc/zabbix_agentd.conf.d/*.conf

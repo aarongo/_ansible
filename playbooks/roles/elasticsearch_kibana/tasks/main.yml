@@ -10,10 +10,10 @@
         append=yes
 
 # 安装 jdk
-- name: Install Java 8u51 for kibana
-  unarchive:
-    src: jdk-8u51-linux-x64.tar.gz
-    dest: "{{BASE_HOME}}"
+# - name: Install Java 8u51 for kibana
+#   unarchive:
+#     src: jdk-8u51-linux-x64.tar.gz
+#     dest: "{{BASE_HOME}}"
 
 
 # 安装 kibana

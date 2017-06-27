@@ -5,14 +5,14 @@
 - name: transfer x-pack to remote server
   copy:
     src: x-pack-5.2.2.zip
-    dest: "{{ BASE_HOME }}x-pack-5.2.2.zip"
+    dest: "{{ BASE_HOME }}/x-pack-5.2.2.zip"
     owner: "{{ user }}"
     group: "{{ user }}"
     mode: 0644
 
 
-# 安装插件
-- name: install x-pack 5.2.2
-  shell: "./kibana-plugin install file://{{ BASE_HOME }}x-pack-5.2.2.zip"
-  args:
-    chdir: "{{ BASE_HOME }}/{{ KIBANA_NAME }}/bin"
+# # 安装插件
+# - name: install x-pack 5.2.2
+#   shell: "./kibana-plugin install file://{{ BASE_HOME }}/x-pack-5.2.2.zip"
+#   args:
+#     chdir: "{{ BASE_HOME }}/{{ KIBANA_NAME }}/bin"
