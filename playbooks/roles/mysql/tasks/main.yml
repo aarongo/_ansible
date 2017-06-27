@@ -1,61 +1,15 @@
 ---
 # tasks file for mysql
-- name: Install library For Msyql.....
-  yum: name={{item}} state=latest
-  with_items: "{{Library}}"
-  tags: install mysql
-
-- name: Create New related user
-  group: name={{mysql_group}} system=yes state=present
-- name: Create user add To group
-  user: name={{mysql_user}} comment="Mysql User" group={{mysql_group}}
-  tags: install mysql
-
-- name: Create Packages Save Tmp Path 
-  file:
-    dest={{ Files_Tmp_Path }} 
-    mode=0644
-    state=directory
-  tags: create dir
-- name: unarchive Mysql Source Files To Remote Server
-  unarchive: src={{mysql_tar_name}} dest={{Files_Tmp_Path}}
-  tags: install mysql
-
-### send Fiels install script and Running
-- name: Transfer Install Script To Remote Server
-  template:
-    src=compile_mysql.sh.j2 dest="{{Files_Tmp_Path}}compile_mysql.sh"
-    mode=0755
-  tags: install mysql
-- name: Running Install Mysql Script
-  shell: "{{Files_Tmp_Path}}compile_mysql.sh"
-  args:
-    chdir: "{{Files_Tmp_Path}}"
-    executable: "/bin/bash"
-  tags: install mysql
-### ---end
+# include mysql_initialization
+- name: include mysql_initialization
+  include: mysql_initialization/main.yml
 
 
-- name: Enable Mysql Service 
-  template: src=mysql.server.j2 dest="/etc/init.d/mysqld" mode=0755
-  notify:
-    - enable mysqld
-  tags: enable mysqld
+- name: include mysql install
+  include: mysql_install/main.yml
 
 
-## init Mysql and change my.cnf
-- name: Change directory permissions Fro Mysql
-  file:
-    path={{item.path}} state=directory owner=mysql group=mysql
-  with_items:
-    - { path: "{{software_path}}"}
-    - { path: "{{mysql_data_path}}"}
-  tags: change permissions
-
-- name: Init Mysql Databases
-  command: "{{software_path}}/scripts/mysql_install_db --user={{mysql_user}} --defaults-file={{mysql_config}} --basedir={{software_path}} --datadir={{mysql_data_path}}"
-  tags: init mysql
-
+# 启动 mysql
 - name: Transfer Mysql Config To remove Server
   template:
     src=my.cnf.j2
@@ -64,5 +18,4 @@
   notify:
     - restart mysqld
   tags: change config
-## init mysql end
   

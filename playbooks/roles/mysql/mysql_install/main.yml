@@ -1,0 +1,37 @@
+---
+# send Fiels install script and Running
+- name: Transfer Install Script To Remote Server
+  template:
+    src=compile_mysql.sh.j2 dest="{{Files_Tmp_Path}}compile_mysql.sh"
+    mode=0755
+
+
+- name: Running Install Mysql Script
+  shell: "{{Files_Tmp_Path}}compile_mysql.sh"
+  args:
+    chdir: "{{Files_Tmp_Path}}"
+    executable: "/bin/bash"
+
+
+# 添加系统服务
+- name: Enable Mysql Service 
+  template: src=mysql.server.j2 dest="/etc/init.d/mysqld" mode=0755
+  notify:
+    - enable mysqld
+  tags: enable mysqld
+
+
+# 配置数据库
+- name: Change directory permissions Fro Mysql
+  file:
+    path={{item.path}} state=directory owner=mysql group=mysql
+  with_items:
+    - { path: "{{software_path}}"}
+    - { path: "{{mysql_data_path}}"}
+  tags: change permissions
+
+
+# 初始化数据库
+- name: Init Mysql Databases
+  command: "{{software_path}}/scripts/mysql_install_db --user={{mysql_user}} --defaults-file={{mysql_config}} --basedir={{software_path}} --datadir={{mysql_data_path}}"
+  tags: init mysql

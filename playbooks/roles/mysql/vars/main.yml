@@ -3,7 +3,7 @@
 # Mysql parameter List
 ## Mysql Verion
 mysql_service: mysqld
-mysql_version: 5.5.39
+mysql_version: "{{version}}"
 mysql_tar_name: mysql-{{mysql_version}}.tar.gz
 ## Mysql Files Tmp Save Path
 Files_Tmp_Path: /tmp/packages/
@@ -15,6 +15,7 @@ Library:
   - cmake
   - ncurses-devel
   - bison
+  - bison-devel
 
 ## Mysql User and Group
 mysql_user: mysql
