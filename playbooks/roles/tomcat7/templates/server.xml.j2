@@ -33,7 +33,7 @@
                resourceName="UserDatabase"/>
       </Realm>
 	<Host name="localhost"  appBase="webapps" unpackWARs="true" >
-	      <Context crossContext="true" docBase="{{TOMCAT_DOCBASE}}" allowLinking="true" path=""/>
+	      <Context crossContext="true" docBase="{{TOMCAT_DOCBASE}}" reloadable="true" allowLinking="true" path=""/>
         <!--
           %a - 远程IP地址
           %A - 本地IP地址

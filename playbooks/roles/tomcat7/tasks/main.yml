@@ -1,64 +1,75 @@
 ---
-# tasks file for tomcat7
-- name: Create a new group For System sudos
-  group: name={{sudoers_gorup}} system=yes state=present
+# 创建基础目录
+- name: create install INSTALL_HOME
+  file:
+    dest: "{{ INSTALL_HOME }}"
+    state: directory
+    mode: 0755
 
-- name: Create A New User For Login And Add sudos
-  user: name={{login_user}}
-        state=present
-        groups="{{sudoers_gorup}}"
-        password={{ login_user_password }}
-        comment="Comment"
-        append=yes
 
-- name: configure sudoers
-  lineinfile: dest=/etc/sudoers backup=yes state=present regexp='^%{{sudoers_gorup}}' insertafter="^# %wheel" line='%{{sudoers_gorup}} ALL=(ALL) ALL'
+# 进行判断 jdk 是否存在
+- name: JAVA_HOME is exist?
+  shell: "find {{ INSTALL_HOME }}  -name {{ JAVA_NAME }}  | wc -l"
+  register: stdout_result
+  ignore_errors: True
 
-# install java 7 or 8
-- name: Install Java 7u79
+
+# 配置 JDK
+- name: unarchive jdk to remote server
   unarchive:
     src: jdk-7u79-linux-x64.tar.gz
-    dest: "{{INSTALL_HOME}}"
+    dest: "{{ INSTALL_HOME }}"
+  when: (stdout_result.stdout == "0")
+
+
 
 - name: Install Tomcat 7
   unarchive:
-    src: apache-tomcat-7.0.75.tar.gz
+    src: apache-tomcat-7.0.76.tar.gz
     dest: "{{INSTALL_HOME}}"
-    owner: "{{login_user}}"
-    group: "{{sudoers_gorup}}"
+
+
+# 删除 webapps 下无用文件
+- name: delete remote serer tomcat7 webapps/*
+  shell: rm -rf *
+  args:
+    chdir: "{{INSTALL_HOME}}/apache-tomcat-7.0.76/webapps/"
 
 # Create init process path
 - name: Create tomcat process directory
   file:
     path: "{{TOMCAT_DOCBASE}}"
-    owner: "{{login_user}}"
-    group: "{{sudoers_gorup}}"
     state: directory
 
 - name: Create index.html to process path
   template:
     src: index.html.j2
     dest: "{{TOMCAT_DOCBASE}}/index.html"
-    owner: "{{login_user}}"
-    group: "{{sudoers_gorup}}"
     mode: 0600
 
 - name: Configure Tomcat 7
   template:
     src: server.xml.j2
     dest: "{{TOMCAT_SERVER_XML}}server.xml"
-    owner: "{{login_user}}"
-    group: "{{sudoers_gorup}}"
     mode: 0600
-  notify: restart tomcat
 
-# install tomcat script
-- name: transfer script for tomcat7
+- name: Configure Tomcat catalina.sh
   template:
-    src: tomcat_init_7.sh.j2
-    dest: /etc/init.d/tomcat
+    src: catalina.sh.j2
+    dest: "{{TOMCAT_SERVER_JVM}}catalina.sh"
     mode: 0755
 
-# Add Tomcat Into local
-- name: Start Tomcat
-  service: name=tomcat state=started enabled=yes
+- name: Configure tomcat.py
+  template:
+    src: tomcat.py.j2
+    dest: "{{TOMCAT_SERVER_JVM}}process_tomcat.py"
+    mode: 0755
+
+- name: change tomcat dir name
+  stat: path="{{ old_TOMCAT_PATH }}"
+  register: old_path
+
+
+- name: change tomcat process name
+  command: "mv {{ old_TOMCAT_PATH }} {{ TOMCAT_APP_PATH }}"
+  when: old_path.stat.exists
