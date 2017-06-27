@@ -2,15 +2,41 @@
 # tasks file for nginx_conf
 # copy conf to remote
 
-
 - name: Copy conf To {{ansible_hostname}}
-  template: 
+  template:
     src=nginx.conf.j2
     dest={{remote_conf_path}}nginx.conf
     mode=0644
+  tags: master-conf
+
+- name: Copy kibana auth to {{ansible_hostname}}
+  copy: src=passwd.db dest={{remote_conf_path}}passwd.db
+        mode=0644 backup=yes
+
+- name: split path exits
+  file:
+    path: "{{remote_conf_split_path}}"
+    state: directory
+    mode: 0755
+  tags: upstream
+
+- name: Copy conf upstream.conf To {{ansible_hostname}}
+  template:
+    src=upstream.conf.j2
+    dest={{remote_conf_split_path}}upstream.conf
+    mode=0644
+  tags: upstream
+
+- name: copy conf 20170421.conf to  {{ansible_hostname}}
+  template:
+    src=20170421.conf.j2
+    dest={{remote_conf_split_path}}20170421.conf
+    mode=0644
+
 
 - name: reload nginx conf
   shell: /software/nginx/sbin/nginx -s reload
   args:
     chdir: /software/nginx/sbin/
+  tags: reload nginx
   

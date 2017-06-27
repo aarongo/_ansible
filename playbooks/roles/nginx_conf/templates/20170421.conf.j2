@@ -1,0 +1,113 @@
+# add app6 request
+location ~* /mobile/api/global/sendAssembleVerificationCode {
+    proxy_pass http://activity-coupon;
+    limit_req zone=newtwo burst=40;
+}
+
+location ~* /mobile/api/activity/validateVoiceCodeForCoupon {
+    proxy_pass http://activity-coupon;
+    limit_req zone=newtwo burst=40;
+}
+
+location ~* /mobile/api/activity/validateAssembleCodeForCoupon {
+    proxy_pass http://activity-coupon;
+    limit_req zone=newtwo burst=40;
+}
+location ~* /mobile/api/activity/fetchCouponByBeiJingUserIdAndUnique {
+    proxy_pass http://activity-coupon;
+    limit_req zone=newtwo burst=40;
+}
+location ~* /mobile/api/activity/coupon/getActivityCoupon {
+    proxy_pass http://activity-coupon;
+    limit_req zone=newtwo burst=40;
+}
+location ~* /mobile/api/activity/coupon/bindCounponForPc {
+    proxy_pass http://activity-coupon;
+    limit_req zone=newtwo burst=40;
+}
+location ~* /mobile/api/activity/coupon/reloadCache {
+    proxy_pass http://activity-coupon;
+    limit_req zone=newtwo burst=40;
+}
+# add app6 request ---end
+# add app6 shouye requeest
+#location ~* /mobile/api/index/asyncTimelimitMoudle {
+#    proxy_pass http://activity-coupon;
+#    limit_req zone=newtwo burst=40;
+#}
+#location ~* /mobile/api/index/getComeIndex {
+#    proxy_pass http://activity-coupon;
+#    limit_req zone=newtwo burst=40;
+#}
+#location ~* /mobile/api/global/checkUpdate {
+#    proxy_pass http://activity-coupon;
+#    limit_req zone=newtwo burst=40;
+#}
+#location ~* /mobile/api/version/check {
+#    proxy_pass http://activity-coupon;
+#    limit_req zone=newtwo burst=40;
+#}
+#location ~* /mobile/api/activity/getLayerActivity {
+#    proxy_pass http://activity-coupon;
+#    limit_req zone=newtwo burst=40;
+#}
+# add app6 shouye request
+# product static
+location ~* /mobile/api/product/info {
+    set $flag 0;
+    set $id 0;
+    if ($query_string ~ "^param=%7B.*good.*%22productId%22%3A%22(\d*)%22%7D$") {
+       set $id $1;
+       set $flag 1;
+    }
+    if ($query_string ~ "^param=%7B%22productId%22%3A%22(\d*)%22%7D$") {
+       set $id $1;
+       set $flag 1;
+    }
+
+    if (-e "/data/www/productReaPath/$http_subsiteId/${id}/${id}-$http_language.json") {
+       set $flag 1$flag;
+    }
+
+    if ($flag = 11){
+        rewrite ^(.*)$ /productReaPath/${http_subsiteId}/${id}/${id}-${http_language}.json? last;
+    }
+    proxy_pass http://tomcat-app;
+}
+location ~* /productReaPath {
+        add_header Cache-Control no-store;
+        root /data/www/;
+}
+# product static --end
+# avtiry-cart
+location ~* /mobile/api/cart/ {
+	proxy_pass http://avtiry-cart;
+	limit_req zone=newtwo burst=40;
+}
+# avtiry-cart---end
+# avtiry-order
+location ~* /mobile/api/checkout/ {
+	proxy_pass http://checkout-order;
+	limit_req zone=newtwo burst=40;
+}
+# avtiry-order --end
+# deny requst
+location ~ ^/mobile/api/product/getGoodsMatch {
+	deny all;
+}
+location ~ ^/mobile/api/remark {
+	deny all;
+}
+location ~ ^/mobile/api/analytics/order {
+	deny all;
+}
+location ~ ^/mobile/api/analytics/product {
+	deny all;
+}
+location ~ ^/mobile/api/product/findListTagByGoodsld {
+	deny all;
+}
+location ~ ^/mobile/api/product/filterConditon {
+	deny all;
+}
+# deny requst---end

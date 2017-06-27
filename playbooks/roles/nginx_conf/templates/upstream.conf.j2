@@ -1,0 +1,70 @@
+upstream tomcat-web {
+    #cybershop front
+    server {{ ansible_hostname }}f.cdc.carrefour.com:8080 max_fails=0; 
+    keepalive 16;
+}
+upstream tomcat-web-pay {
+    #cybershop front
+    server CSLP80006f.cdc.carrefour.com:8080 max_fails=0; 
+    keepalive 16;
+}
+upstream pickup-web {
+    ##----Pickup-Server Node1-3 10.171.35.5 10.171.35.6 10.171.35.7
+    server cslp80029u.cdc.carrefour.com max_fails=0;
+}
+upstream piwik {
+    ##----monitor-node1: 10.171.35.15
+    server cslp80039u.cdc.carrefour.com max_fails=0;
+}
+upstream solr {
+    server cslp80032u.cdc.carrefour.com max_fails=0;
+}
+upstream question {
+    ###  pickup-node1: 10.171.35.5
+    server cslp80029u.cdc.carrefour.com  max_fails=0;
+}
+upstream tomcat-app {
+    ###  use App_server VIP
+    #server app.eco.cdc.carrefour.com max_fails=0;
+    ## use local DNS
+    #server cslp80025u.cdc.carrefour.com:8080 max_fails=0;
+    #server cslp80016u.cdc.carrefour.com:8080 max_fails=0;
+    server cslp80017u.cdc.carrefour.com:8080 max_fails=0;
+    server cslp80018u.cdc.carrefour.com:8080 max_fails=0;
+    server cslp80019u.cdc.carrefour.com:8080 max_fails=0;
+    #server cslp80020u.cdc.carrefour.com:8080 max_fails=0;
+    #server cslp80021u.cdc.carrefour.com:8080 max_fails=0;
+    #server cslp80022u.cdc.carrefour.com:8080 max_fails=0;
+    #server cslp80015u.cdc.carrefour.com:8080 max_fails=0;
+    keepalive 16;
+}
+#upstream cartandproduct {
+#    server cslp80018u.cdc.carrefour.com:8080 max_fails=0;
+#    server cslp80019u.cdc.carrefour.com:8080 max_fails=0;
+#    keepalive 16;
+#}
+#upstream checkoutandorder {
+#    server cslp80017u.cdc.carrefour.com:8080 max_fails=0;
+#    server cslp80022u.cdc.carrefour.com:8080 max_fails=0;
+#    keepalive 16;
+#}
+
+# add avtiry
+upstream eggs {
+    server cslp80020u.cdc.carrefour.com:8080 max_fails=0;
+}
+# 04-21 activity
+upstream avtiry-cart {
+    server cslp80019u.cdc.carrefour.com:8080 max_fails=0;
+    server cslp80016u.cdc.carrefour.com:8080 max_fails=0;
+}
+upstream checkout-order {
+    server cslp80021u.cdc.carrefour.com:8080 max_fails=0;
+    server cslp80022u.cdc.carrefour.com:8080 max_fails=0;
+}
+upstream activity-coupon {
+    server cslp80020u.cdc.carrefour.com:8080 max_fails=0;
+}
+# 04-21 activity--end
+
+
