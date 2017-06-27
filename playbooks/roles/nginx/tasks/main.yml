@@ -1,24 +1,4 @@
 ---
-- name: Create a new group For System sudos
-  group: name={{sudoers_gorup}} system=yes state=present
-  tags: crate group
-
-
-- name: Create A New User For Login And Add sudos
-  user: name={{login_user}}
-        state=present
-        groups="{{sudoers_gorup}}"
-        password={{ login_user_password }}
-        comment="Comment"
-        append=yes
-  tags: add_sudoers
-
-
-- name: configure sudoers
-  lineinfile: dest=/etc/sudoers backup=yes state=present regexp='^%{{sudoers_gorup}}' insertafter="^# %wheel" line='%{{sudoers_gorup}} ALL=(ALL) ALL'
-  tags: config-sudoers
-
-
 - name: At Remote Server Create Save Packeges Temp Dir
   file:
     dest={{ soft_dir }} 
@@ -36,8 +16,8 @@
 
 - name: Unzip Software File To Remote
   unarchive:
-    src={{ item }} dest={{ soft_dir }}
-  with_items: install_packages
+    src="{{ item }}" dest="{{ soft_dir }}"
+  with_items: "{{install_packages}}"
   tags: install nginx
 
 - name: After parse transfer files to remote........
