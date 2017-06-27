@@ -1,3 +1,0 @@
----
-# vars file for nginx_restart
-Nginx_Home: /software/nginx/sbin/

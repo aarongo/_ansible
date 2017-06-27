@@ -1,7 +1,0 @@
----
-# vars file for nginx_log_cut
-
-
-LOGS_PATH: /software/nginx/logs/
-SAVE_LOGS_PATH: /software/nginx_logs/
-REMOTE_SCRIPT_PATH: /software/script/
