@@ -1,0 +1,9 @@
+---
+# tasks file for roles/solrcloud
+- name: include solrcloud_init/main.yml
+  include: solrcloud_init/main.yml
+
+
+- name: include solrcloud_install/main.yml
+  include: solrcloud_install/main.yml
+

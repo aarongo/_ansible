@@ -1,0 +1,16 @@
+---
+# defaults file for roles/solrcloud
+TOMCAT_GROUP: tomcat
+TOMCAT_USER: tomcat
+#password is v6flaKTsd#7n
+TOMCAT_USER_PASSWORD: $6$rounds=656000$PFOfKkVRiLtr3xzO$rbDWrRzh4p5n0BNDb9imv1MQyh5x/1RCGBW5Q4pdv1R2XffXY0B8OTgMpWlTYdDP
+BASE_HOME: /software
+JAVA_NAME: jdk1.8.0_102
+JAVA_HOME: "{{ BASE_HOME }}/{{ JAVA_NAME }}"
+CATALINA_HOME: /software/tomcat-solr-8.5.6
+
+
+# tomcat 启动脚本参数
+ZOOKEEPER_ADDR_NODE1: 10.167.5.22
+ZOOKEEPER_ADDR_NODE2: 10.167.5.23
+ZOOKEEPER_ADDR_NODE3: 10.167.5.25

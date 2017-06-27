@@ -1,0 +1,29 @@
+---
+# 添加tomcat 组
+- name: Create a new group For System sudos
+  group: name={{ TOMCAT_GROUP }} system=yes state=present
+
+
+# 添加 tomcat 启动用户
+- name: Create tomcat user
+  user: 
+    name: "{{ TOMCAT_USER }}"
+    state: present
+    groups: "{{ TOMCAT_GROUP }}"
+    password: "{{ TOMCAT_USER_PASSWORD }}"
+    comment: "tomcatuser"
+    append: yes
+
+# 进行判断 jdk 是否存在
+- name: JAVA_HOME is exist?
+  shell: "find {{ BASE_HOME }}  -name {{ JAVA_NAME }}  | wc -l"
+  register: stdout_result
+  ignore_errors: True
+
+
+# 配置 JDK
+- name: unarchive jdk to remote server
+  unarchive:
+    src: jdk-8u102-linux-x64.tar.gz
+    dest: "{{ BASE_HOME }}"
+  when: (stdout_result.stdout == "0")
