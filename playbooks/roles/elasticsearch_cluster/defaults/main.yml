@@ -1,35 +1,29 @@
 ---
 # defaults file for roles/elasticsearch-cluster
 #外部传 java 版本
-BASE_HOME: /software
-JAVA_HOME: /software/jdk1.8.0_51
-profile:
-  - { name: JAVA_HOME, info: "export JAVA_HOME=/software/jdk1.8.0_51"}
-  - { name: PATH, info: "export PATH=${JAVA_HOME}/bin:$PATH"}
-  - { name: CLASSPATH, info: "export CLASSPATH=.$CLASSPATH:$JAVA_HOME/lib:$JAVA_HOME/jre/lib:$JAVA_HOME/lib/tools.jar"}
-limit:
-  - { name: soft, info: "*    soft nofile 65536"}
-  - { name: hard, info: "*    hard nofile 65536"}
-maxvirtualmemory:
-  - { name: vm, info: "vm.max_map_count=262144"}
-ELASTIC_HOME: elasticsearch-5.2.2
-# Create user for elasticserach 
+ES_Install_Path: /software
+JAVA_NAME: jdk1.8.0_51
+JAVA_HOME: "{{ ES_Install_Path }}/{{ JAVA_NAME }}"
+
+MAX_OPEN_FILES: 65536
+MAX_MAP_COUNT: 262144
+ES_HEAP_SIZE: "-Xms4g -Xmx4g"
+
+ELASTIC_HOME: /software/elasticsearch5.5
+CONF_DIR_BASE: /etc/elasticsearch
+ENV_DIR: "/etc/sysconfig/"
+# Create user for elasticserach
 user: elasticsearch
 #password is v6flaKTsd#7n
 user_password: $6$rounds=656000$PFOfKkVRiLtr3xzO$rbDWrRzh4p5n0BNDb9imv1MQyh5x/1RCGBW5Q4pdv1R2XffXY0B8OTgMpWlTYdDPwAWBXsguE7EhPQjAHvnd2/
 
-# elasticsearch-cluster data/logs
-top_dir: /software/data/elastic5/
-elasticsearch_cluster_directory:
-  - "{{ top_dir }}data"
-  - "{{ top_dir }}logs"
+# Es Data/logs path
+Es_Data_Path: /software/elasticsearch/data
+Es_Logs_Path: /software/elasticsearch/logs
 
 # elasticserach-cluster setup config
-clustername: elastic5-cluster
-port: 9200
-# 此处遗留一个问题
-# 将配置文件中discovery.zen.ping.unicast.hosts 写死了 
-# 后期根据discovery.zen.minimum_master_nodes 的数量进行更改
-# 配置文件的 jvm 参数需要调整, 在安装过程中根据实际的配置进行更改
+clustername: "{{ cluster_name }}"
+Es_Network: "0.0.0.0"
+Es_Node_Number: "{{ Es_Node_Number }}"
 
 

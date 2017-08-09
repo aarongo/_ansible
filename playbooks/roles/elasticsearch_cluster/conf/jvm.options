@@ -19,8 +19,8 @@
 # Xms represents the initial size of total heap space
 # Xmx represents the maximum size of total heap space
 
--Xms2g
--Xmx2g
+-Xms4g
+-Xmx4g
 
 ################################################################
 ## Expert settings
@@ -38,9 +38,6 @@
 -XX:+UseCMSInitiatingOccupancyOnly
 
 ## optimizations
-
-# disable calls to System#gc
--XX:+DisableExplicitGC
 
 # pre-touch memory pages used by the JVM during initialization
 -XX:+AlwaysPreTouch
@@ -97,6 +94,13 @@
 # log GC status to a file with time stamps
 # ensure the directory exists
 #-Xloggc:${loggc}
+
+# By default, the GC log file will not rotate.
+# By uncommenting the lines below, the GC log file
+# will be rotated every 128MB at most 32 times.
+#-XX:+UseGCLogFileRotation
+#-XX:NumberOfGCLogFiles=32
+#-XX:GCLogFileSize=128M
 
 # Elasticsearch 5.0.0 will throw an exception on unquoted field names in JSON.
 # If documents were already indexed with unquoted fields in a previous version

@@ -1,4 +1,20 @@
 ---
+
+# 进行判断 jdk 是否存在
+- name: JAVA_HOME is exist?
+  shell: "find {{ ES_Install_Path }}  -name {{ JAVA_NAME }}  | wc -l"
+  register: stdout_result
+  ignore_errors: True
+
+
+# 配置 JDK
+- name: unarchive jdk to remote server
+  unarchive:
+    src: jdk-8u51-linux-x64.tar.gz
+    dest: "{{ ES_Install_Path }}"
+  when: (stdout_result.stdout == "0")
+
+
 # 创建 elastic 使用的用户
 - name: Create User  {{ user }} For  elasticsearch-cluster
   user: name={{ user }}
@@ -15,34 +31,80 @@
     state: directory
     owner: "{{ user }}"
     group: "{{ user }}"
-  with_items: "{{elasticsearch_cluster_directory}}"
+  with_items: 
+    - "{{ Es_Data_Path }}"
+    - "{{ Es_Logs_Path }}"
+    - "{{ CONF_DIR_BASE }}"
+
+# 创建Elasticsearch配置文件目录
+- name: transfer elasticsearch-cluster config path
+  copy:
+    src: "conf/{{ item }}"
+    dest: "{{ CONF_DIR_BASE }}"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: 0660
+  with_items:
+    - "jvm.options"
+    - "log4j2.properties"
 
 
 # 解压 elastic 进行安装
 - name: unarchive elasticsearch-cluster fies to remote
   unarchive:
-    src: "{{ ELASTIC_HOME }}.tar.gz"
-    dest: "{{ BASE_HOME }}"
-    owner: "{{ user }}"
-    group:  "{{ user }}"
+    src: "elasticsearch-5.5.1.tar.gz"
+    dest: "{{ ES_Install_Path }}"
+
+
+# 更改elastic目录名称
+- name: change name for elasticsearch directory
+  shell: "mv elasticsearch-5.5.1 {{ ELASTIC_HOME }}"
+  args:
+    chdir: "{{ ES_Install_Path }}"
+
+
+# 删除 Elasticsearch 原有日志目录
+- name: delete old config for elasticsearch-cluster
+  file:
+    path: "{{ ELASTIC_HOME }}/config"
+    state: absent
+
 
 # 传送配置文件到远程
 - name: transfer elasticsearch-cluster config
   template:
     src: elasticsearch.yml.j2
-    dest: "{{ BASE_HOME }}/{{ ELASTIC_HOME }}/config/elasticsearch.yml"
-    owner: "{{ user }}"
-    group:  "{{ user }}"
-- name: transfer elasticsearch-cluster config
-  template:
-    src: jvm.options.j2
-    dest: "{{ BASE_HOME }}/{{ ELASTIC_HOME }}/config/jvm.options"
-    owner: "{{ user }}"
-    group:  "{{ user }}"
-- name: transfer elasticsearch-cluster script 
-  template:
-    src: elasticsearch_handle.sh.j2
-    dest: "{{ BASE_HOME }}/{{ ELASTIC_HOME }}/bin/elasticsearch_handle.sh"
+    dest: "{{ CONF_DIR_BASE }}/elasticsearch.yml"
     owner: "{{ user }}"
     group: "{{ user }}"
+    mode: 0660
+
+# 传送配置环境变量文件
+- name: transfer elasticsearch-cluster env config
+  template:
+    src: elasticsearch_env.j2
+    dest: "{{ ENV_DIR }}elasticsearch"
+
+
+# 配置启动脚本
+- name: transfer handle script for elasticsearch
+  template:
+    src: elasticsearch.j2
+    dest: "/etc/init.d/elasticsearch"
     mode: 0755
+
+
+# 开启系统服务 针对 centos7
+- name: Enable system service for centos 7 
+  systemd: 
+    name: elasticsearch
+    enabled: yes
+    masked: no
+
+# 启动 Elasticsearch
+- name: Make sure a service is running
+  systemd:
+    name: elasticsearch
+    state: started
+
+

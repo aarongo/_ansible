@@ -30,17 +30,17 @@ node.name: {{ ansible_hostname }}
 #
 # Path to directory where to store the data (separate multiple locations by comma):
 #
-path.data: {{ top_dir }}data
+path.data: {{ Es_Data_Path }}
 #
 # Path to log files:
 #
-path.logs: {{ top_dir }}logs
+path.logs: {{ Es_Logs_Path }}
 #
 # ----------------------------------- Memory -----------------------------------
 #
 # Lock the memory on startup:
-# 关闭锁定内存
-bootstrap.memory_lock: false
+#
+#bootstrap.memory_lock: true
 #
 # Make sure that the heap size is set to about half the memory available
 # on the system and that the owner of the process is allowed to use this
@@ -52,11 +52,11 @@ bootstrap.memory_lock: false
 #
 # Set the bind address to a specific IP (IPv4 or IPv6):
 #
-network.host: {{ ansible_eth0.ipv4.address }}
+network.host: {{ Es_Network }}
 #
 # Set a custom port for HTTP:
 #
-http.port: {{ port }}
+#http.port: 9200
 #
 # For more information, consult the network module documentation.
 #
@@ -65,12 +65,11 @@ http.port: {{ port }}
 # Pass an initial list of hosts to perform discovery when new node is started:
 # The default list of hosts is ["127.0.0.1", "[::1]"]
 #
-
 discovery.zen.ping.unicast.hosts: ["{{ groups['elastic-cluster'][0] }}:9300", "{{ groups['elastic-cluster'][1] }}:9300"]
 #
 # Prevent the "split brain" by configuring the majority of nodes (total number of master-eligible nodes / 2 + 1):
 #
-discovery.zen.minimum_master_nodes: 3
+discovery.zen.minimum_master_nodes: {{ Es_Node_Number }}
 #
 # For more information, consult the zen discovery module documentation.
 #
@@ -87,8 +86,6 @@ discovery.zen.minimum_master_nodes: 3
 # Require explicit names when deleting indices:
 #
 #action.destructive_requires_name: true
-# 增加跨域
+# this is for head
 http.cors.enabled: true
 http.cors.allow-origin: "*"
-# 如果你在Elasticsearch已禁用自动索引的创建，在elasticsearch.yml配置action.auto_create_index允许X-pack创造以下指标：
-action.auto_create_index: .security,.monitoring*,.watches,.triggered_watches,.watcher-history*
