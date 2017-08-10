@@ -1,0 +1,89 @@
+---
+- name: empty directory
+  shell: "rm -rf {{ TOMCAT_LOGS_HOME }}/*"
+# 1. 删除原有日志配置
+- name: delete logging.properties from {{ TOMCAT_CONF_HOME }}
+  file:
+    path: "{{ TOMCAT_CONF_HOME }}/logging.properties"
+    state: absent
+
+
+# 2. 传送相关 jar 到 tomcat
+- name: transfer jar to remote tomcat_{{ project_name }}
+  copy:
+    src: "{{ item }}"
+    dest: "{{ TOMCAT_LIB_HOME }}/"
+    mode: 0755
+  with_items:
+    - log4j.jar
+    - tomcat-juli-adapters.jar
+- name: transfer jar to {{ TOMCAT_BIN_HOME }}
+  copy:
+    src: tomcat-juli.jar
+    dest: "{{ TOMCAT_BIN_HOME }}"
+    mode: 0755
+- name: transfer context.xml to tomcat_{{ project_name }}
+  template:
+    src: context.xml.j2
+    dest: "{{ TOMCAT_CONF_HOME }}/context.xml"
+    mode: 0755
+
+
+# 3 创建使用 log4j配置文件
+- name: create log4j configure
+  template:
+    src: log4j.properties.j2
+    dest: "{{ TOMCAT_LIB_HOME }}/log4j.properties"
+    mode: 0755
+
+# 停止服务
+- name: stop tomcat {{ project_name }}
+  shell: "nohup ./{{ project_name }}.py -d stop"
+  args:
+    chdir: "{{ SCRIPT_DIRECTORY }}"
+
+- name: wait for stop tomcat {{ project_name }}
+  pause:
+    seconds: 15
+
+# 删除所有日志
+# - name: find all files
+#   find: 
+#     path: "{{ TOMCAT_LOGS_HOME }}"
+#     file_type: file
+#   register: files
+# - name: find all dir
+#   find: 
+#     path: "{{ TOMCAT_LOGS_HOME }}" 
+#     file_type: directory
+#   register: directories
+
+# - name: empty directory
+#   file: 
+#     path: "{{ item.path }}"
+#     state: absent 
+#   with_items: 
+#     - "{{ files }}"
+#     - "{{ directories }}"
+
+
+
+# 启动服务
+- name: start tomcat {{ project_name }}
+  shell: "nohup ./{{ project_name }}.py -d start"
+  args:
+    chdir: "{{ SCRIPT_DIRECTORY }}"
+
+# 创建定时任务
+- name: transfer crond script to remote server
+  template:
+    src: tomcat_logs_crond.sh.j2
+    dest: "{{ SCRIPT_DIRECTORY }}/tomcat_logs_crond.sh"
+    mode: 0755
+
+- name: create crond 
+  cron:
+    name: "tomcat logs crond"
+    minute: "0"
+    hour: "0"
+    job: "{{ SCRIPT_DIRECTORY }}/tomcat_logs_crond.sh"

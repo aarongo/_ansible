@@ -1,0 +1,6 @@
+#!/bin/bash
+TOMCATHO_HOME={{ TOMCAT_LOGS_HOME }}/
+
+# delete tomcat 7 days old
+/usr/bin/find ${TOMCATHO_HOME} -mtime +7 -name "*.log" -exec rm -rf {} \;
+/usr/bin/find ${TOMCATHO_HOME} -mtime +7 -name "*.txt" -exec rm -rf {} \;
