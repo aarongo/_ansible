@@ -1,0 +1,82 @@
+---
+# 安装 logstash
+- name: unarchive logstash 
+  unarchive:
+    src: logstash-5.5.1.tar.gz
+    dest: "{{ LOGSTASH_HOME_BASE }}"
+    owner: "{{ LOGSTASH_USER }}"
+    group: "{{ LOGSTASH_GROUP }}"
+
+
+# 进行判断 jdk 是否存在
+- name: JAVA_HOME is exist?
+  shell: "find {{ LOGSTASH_HOME_BASE }}  -name {{ JAVA_NAME }}  | wc -l"
+  register: stdout_result
+  ignore_errors: True
+
+
+# 配置 JDK
+- name: unarchive jdk to remote server
+  unarchive:
+    src: jdk-8u51-linux-x64.tar.gz
+    dest: "{{ LOGSTASH_HOME_BASE }}"
+  when: (stdout_result.stdout == "0")
+
+
+
+- name: Create User  {{ LOGSTASH_USER }} For  logstsah
+  user: name={{ LOGSTASH_USER }}
+        state=present
+        password={{ LOGSTASH_USER_PASSWORD }}
+        comment="user for logstsah"
+        append=yes
+
+
+# 创建所需目录
+- name: create logstsah {data,logs,conf}
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ LOGSTASH_USER }}"
+    group: "{{ LOGSTASH_GROUP }}"
+    mode: 0755
+  with_items:
+    - "{{ LOGSTASH_DATA_DIR }}"
+    - "{{ LOGSTASH_LOGS_DIR }}"
+
+
+# 传送配置文件
+- name: send logstash cofnig 
+  copy:
+    src: "conf/{{ item }}"
+    dest: "{{ LOGSTASH_CONF_DIR }}/"
+    owner: "{{ LOGSTASH_USER }}"
+    group: "{{ LOGSTASH_GROUP }}"
+    mode: 0660
+  with_items:
+    - "jvm.options"
+    - "log4j2.properties"
+
+
+- name: send starup.options to logstash config dir
+  template:
+    src: "logstash.yml.j2"
+    dest: "{{ LOGSTASH_CONF_DIR }}/logstash.yml"
+    owner: "{{ LOGSTASH_USER }}"
+    group: "{{ LOGSTASH_GROUP }}"
+    mode: 0660
+
+
+- name: transfer logstash agent conf to supervisor  {{ LOGSTASH_CONF_DIR }}
+  template:
+    src: logstash_agent.conf.j2
+    dest: "{{ LOGSTASH_CONF_DIR }}/{{ LOGSTASH_CONF_NAME }}"
+    mode: 0755
+
+- name: transfer logstash script to logstash-{{ logstash_version }}/bin
+  template:
+    src: logstash.j2
+    dest: "{{ LOGSTASH_HOME }}/bin/logstash"
+    owner: "{{ LOGSTASH_USER }}"
+    group: "{{ LOGSTASH_GROUP }}"
+    mode: 0755

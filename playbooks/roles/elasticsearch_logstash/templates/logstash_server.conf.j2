@@ -1,0 +1,15 @@
+input {
+    redis{
+        host => "10.200.200.74"
+        type => "nginx-access"
+        data_type => "list"
+        key => "wap_nginx"
+        codec=>"json"
+    }
+}
+output {
+    elasticsearch {
+      hosts => "10.200.200.77"
+      index => "logstash-wapnginx-access-%{+YYYY.MM.dd}"
+  }
+}

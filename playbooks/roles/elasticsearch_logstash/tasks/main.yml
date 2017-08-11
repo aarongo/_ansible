@@ -1,0 +1,6 @@
+---
+- name: include supervisor 
+  include: supervisord/main.yml
+
+- name: include logstash
+  include: logstash/main.yml

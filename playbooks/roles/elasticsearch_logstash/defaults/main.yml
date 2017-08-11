@@ -1,0 +1,25 @@
+---
+# For base setup
+LOGSTASH_HOME_BASE: /software
+JAVA_NAME: jdk1.8.0_51
+JAVA_HOME: "{{ LOGSTASH_HOME_BASE }}/{{ JAVA_NAME }}"
+# For logstash
+LOGSTASH_HOME: "/software/logstash-{{ logstash_version }}"
+LOGSTASH_CONF_DIR: "{{ LOGSTASH_HOME }}/config"
+LOGSTASH_DATA_DIR: "/software/logstash/data"
+LOGSTASH_LOGS_DIR: "/software/logstash/logs"
+LOGSTASH_USER: logstash
+LOGSTASH_GROUP: logstash
+LOGSTASH_USER_PASSWORD: $6$rounds=656000$PFOfKkVRiLtr3xzO$rbDWrRzh4p5n0BNDb9imv1MQyh5x/1RCGBW5Q4pdv1R2XffXY0B8OTgMpWlTYdDPwAWBXsguE7EhPQjAHvnd2/
+# logstash config used
+LOGSTASH_CONF_PARAMETER_LOGS_TYPE: "{{ logs_type }} "
+LOGSTASH_CONF_PARAMETER_LOGS_PATH: "{{ logs_path }}"
+LOGSTASH_CONF_PARAMETER_REDIS_HOST: "{{ redis_hosts }}"
+LOGSTASH_CONF_PARAMETER_REDIS_KEY: "{{ redis_key }}"
+LOGSTASH_CONF_NAME: "logstash_{{ project_name }}.conf"
+
+# For supervisor
+SUPERVISOR_HOME: "/software/supervisor-{{ supervisor_version}}"
+SUPERVISOR_CONF_BASE: /software/supervisor
+SUPERVISOR_CONF_DIR: /software/supervisor/conf
+SUPERVISOR_LOGS: /software/supervisor/logs
