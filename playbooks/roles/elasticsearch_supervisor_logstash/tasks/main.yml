@@ -1,9 +1,0 @@
----
-# tasks file for roles/elasticsearch_supervisor_logstash
-
-- name: include supervisor
-  include: install_supervisor/main.yml
-
-
-- name: include logstsh
-  include: install_logstash/main.yml
