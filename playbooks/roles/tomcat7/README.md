@@ -10,20 +10,19 @@ Requirements
 Role Variables
 --------------
 
-运行时需要填入 tomcat 版本 例如: "tomcat_version=7.0.75" 或者 "tomcat_version=8.5.11"
+运行时需要填入 tomcat version
 
 Dependencies
 ------------
-"tomcat_version=7.0.75" 依赖 jdk1.7
-"tomcat_version=8.5.11" 依赖 jdk1.8
+1. jdk1.7
+2. 定制远端服务器文件源
 
 Example Playbook
 ----------------
 
-	- hosts: tomcat
-	  roles:
-	    - { role: tomcat7, when: "tomcat_version=='7.0.75'"}
-	    - { role: tomcat8, when: "tomcat_version=='8.5.11'"}
+- hosts: "{{ hosts_name }}"
+  roles:
+    - tomcat7
 
 License
 -------
