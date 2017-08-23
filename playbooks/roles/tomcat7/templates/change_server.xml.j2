@@ -17,6 +17,8 @@
      <Connector   port="{{TOMCAT_START_PORT}}" 
                   protocol="HTTP/1.1"
                   maxThreads="1000"
+                  minProcessors="100"
+                  maxProcessors="1000"
                   acceptCount="500"
                   maxHttpHeaderSize="8192"
                   connectionTimeout="20000"
@@ -31,7 +33,7 @@
                resourceName="UserDatabase"/>
       </Realm>
 	<Host name="localhost"  appBase="webapps" unpackWARs="true" >
-	      <Context crossContext="true" docBase="{{TOMCAT_DOCBASE}}" reloadable="true" allowLinking="true" path=""/>
+	      <Context crossContext="true" docBase="{{project_docbase}}" reloadable="true" allowLinking="true" path=""/>
         <!--
           %a - 远程IP地址
           %A - 本地IP地址
@@ -63,7 +65,7 @@
                 prefix="localhost_access_log." 
                 suffix=".txt"
                 encoding="utf8"
-                pattern='{"localhost":"%A","remoteORlbIP":"%a","remoteIP":"%a","logTime":"%t","uri":"%U","status":%s,"responseBytes":%B,"responseTime":%T,"referer":"%{Referer}i","userAgent":"%{User-Agent}i"}' />
+                pattern='{"remoteORlbIP":"%a","remoteIP":"%a","logTime":"%t","uri":"%U","status":%s,"responseBytes":%B,"responseTime":%T,"referer":"%{Referer}i","userAgent":"%{User-Agent}i"}' />
       </Host>
     </Engine>
   </Service>

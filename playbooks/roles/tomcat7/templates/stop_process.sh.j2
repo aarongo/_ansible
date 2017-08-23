@@ -1,0 +1,13 @@
+#!/bin/bash
+
+
+# get pid
+pid=`ps aux | grep java | grep {{ project_name }} | awk '{print $2}'`
+
+if [ -n "$pid" ]
+then
+   kill -9 ${pid}
+   echo "OK"
+else
+	echo "Failed"
+fi

@@ -100,18 +100,19 @@ class Tomcat(object):
             print 'ctrl+d or z'
 
     def tomcat_status(self):
+         headers = {'apiVersion': '2.0'}
         status_code = ""
         sleep_number = 0
         try:
             while sleep_number <= 10:
                 try:
-                    r = requests.get(self.url)
+                    r = requests.get(self.url, headers=headers)
                     status_code = r.status_code
                 except ConnectionError as e:
                     pass
                 sleep_number += 1
                 time.sleep(1)
-                if status_code == 200:
+                if status_code == 201:
                     status_code = "200 OK"
                     break
         except KeyboardInterrupt:
