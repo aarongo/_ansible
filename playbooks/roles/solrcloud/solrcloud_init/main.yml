@@ -24,6 +24,6 @@
 # 配置 JDK
 - name: unarchive jdk to remote server
   unarchive:
-    src: jdk-8u102-linux-x64.tar.gz
+    src: "../../../source_files/jdk-8u102-linux-x64.tar.gz"
     dest: "{{ BASE_HOME }}"
   when: (stdout_result.stdout == "0")

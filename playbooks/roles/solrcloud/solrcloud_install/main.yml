@@ -3,7 +3,7 @@
 # 传送已经配置好的 solrcloud 配置文件和目录结构
 - name: unarchive solrcloud files to remote server
   unarchive:
-    src: solrcloud_home.tar.gz
+    src: "../../../source_files/solrcloud4.10/solrcloud_home.tar.gz"
     dest: "{{ BASE_HOME }}"
     owner: "{{ TOMCAT_USER }}"
     group: "{{ TOMCAT_GROUP }}"
@@ -12,7 +12,7 @@
 # 传送配置好的 tomcat 
 - name: unarchive tomcat files to remote server
   unarchive:
-    src: solrcloud_tomcat.tar.gz
+    src: "../../../source_files/solrcloud4.10/solrcloud_tomcat.tar.gz"
     dest: "{{ BASE_HOME }}"
     owner: "{{ TOMCAT_USER }}"
     group: "{{ TOMCAT_GROUP }}"
