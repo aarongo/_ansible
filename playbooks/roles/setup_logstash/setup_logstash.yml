@@ -1,5 +1,0 @@
----
-- hosts: logstash
-  sudo: True
-  roles:
-    - setup_logstash

@@ -1,0 +1,6 @@
+---
+- name: install reation for mfs clients
+  yum: 
+    name: "{{item}}"
+    state: latest
+  with_items: "{{ relation }}"

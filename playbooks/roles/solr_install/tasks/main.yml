@@ -1,0 +1,133 @@
+---
+# 解压 solr war 包
+- name: install unzip
+  yum:
+    name: unzip
+    state: latest
+
+# 创建solr 程序目录
+- name: create solr web path
+  file:
+    path: "{{ solr_deploy_path }}"
+    state: directory
+
+- name: unarchive solr 4.8.0 war
+  unarchive:
+    src: "../../../source_files/solrcloud/solr-{{ solr_version }}.war"
+    dest: "{{ solr_deploy_path }}"
+
+
+# 创建 solrcloud 基础使用目录
+- name: Create solr base path
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+  with_items:
+    - "{{ solrcloud_path }}"
+
+
+# 传送solr jar 到 solr 项目
+- name: transfer files to remote server
+  copy:
+    src: "{{ item }}"
+    dest: "{{ solr_libs_path }}"
+    mode: 0755
+  with_fileglob:
+    - "../../../source_files/solrcloud/ext/*"
+
+# 传送solr jar 到 tomcat 程序 libs
+- name: transfer files to remote server
+  copy:
+    src: "{{ item }}"
+    dest: "{{ tomcat_home }}/lib/"
+    mode: 0755
+  with_fileglob:
+    - "../../../source_files/solrcloud/ext/*"
+
+# 拷贝 solrcloud 配置文件
+- name: transfer config files to remote
+  unarchive:
+    src: ../../../source_files/solrcloud/conf.tar.gz
+    dest: "{{ solrcloud_config_path }}"
+    owner: root
+    mode: 0644
+
+# 拷贝 solr Jar 包到 solrcloud jar 包存放位置
+- name: copy solr jar to solrcloud_libs
+  shell: "cp {{solr_libs_path}}* {{ solrcloud_libs_path }}"
+
+# 拷贝 solr 项目包里 jar 到 solrcloud 调用位置
+- name: unarchive libs to solrcloud
+  unarchive:
+    src: ../../../source_files/solrcloud/solrlibs.tar.gz
+    dest: "{{ solrcloud_libs_path }}"
+
+
+# 拷贝 log4j配置到 tomcat 记录日志使用
+- name: transfer log4j to tomcat process
+  template:
+    src: log4j.properties
+    dest: "{{ tomcat_home }}/lib/"
+    mode: 0644
+
+
+# 拷贝solrcloud 核心配置文件到 solrhome
+- name: transfer solrcloud config to solrhome
+  template:
+    src: solr.xml.j2
+    dest: "{{ solrcloud_home }}/solr.xml"
+    mode: 0644
+- name: transfer solrcloud config to solrhome
+  template:
+    src: zoo.cfg
+    dest: "{{ solrcloud_home }}/zoo.cfg"
+    mode: 0644
+
+# 配置 solrhome
+- name: configure solrhome
+  template:
+    src: web.xml.j2
+    dest: "{{ solr_deploy_path }}WEB-INF/web.xml"
+    mode: 0644
+
+
+# 更改 tomcat 启动参数
+- name: change tomcat start parameter
+  template:
+    src: catalina.sh.j2
+    dest: "{{ tomcat_home }}/bin/catalina.sh"
+    mode: 0755
+
+# 配置 tomcat 配置文件
+- name: change tomcat server.xml
+  template:
+    src: server.xml.j2
+    dest: "{{ tomcat_home }}/conf/server.xml"
+    mode: 0644
+
+# 进行判断 jdk 是否存在
+- name: JAVA_HOME is exist?
+  shell: "find {{ INSTALL_HOME }}  -name {{ JAVA_NAME }}  | wc -l"
+  register: stdout_result
+  ignore_errors: True
+
+
+# 配置 JDK
+- name: unarchive jdk to remote server
+  unarchive:
+    src: jdk-7u79-linux-x64.tar.gz
+    dest: "{{ INSTALL_HOME }}"
+  when: (stdout_result.stdout == "0")
+
+
+# 配置启动脚本
+- name: script path is exist?
+  file:
+    path: "{{ script_path }}"
+    state: directory
+- name: transfer start script
+  template:
+    src: tomcat-solr.py.j2
+    dest: "{{ script_path }}/tomcat-solr.py"
+    mode: 0755

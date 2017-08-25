@@ -40,7 +40,8 @@
 # 3. 安装 mongodb 3.2.0 for all roles
 - name: unarchive mongodb to remote Server
   unarchive:
-    src: mongodb-linux-x86_64-rhel70-3.2.0.tgz
+    src: "../../../source_files/mongodb-linux-x86_64-rhel70-3.2.0.tgz"
+    # src: mongodb-linux-x86_64-3.0.8.tgz
     dest: "{{ BASE_HOME }}"
 
 
@@ -103,19 +104,3 @@
   args:
     chdir: "{{ BASE_HOME }}"
   when: mongodb_role == "arbitr"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

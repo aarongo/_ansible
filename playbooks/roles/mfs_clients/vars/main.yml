@@ -1,0 +1,13 @@
+---
+# 安装依赖
+relation:
+  - fuse 
+  - fuse-devel
+  - gcc
+  - gcc-c++
+user: mfs
+tmp_path: /tmp/
+host_conf:
+  - { name: mfsmaster, info: "10.200.200.85    mfsmaster" }
+
+mount_static_path: "/software/syzm_static"

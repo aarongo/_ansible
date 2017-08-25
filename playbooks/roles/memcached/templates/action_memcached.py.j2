@@ -75,7 +75,7 @@ def select_start(parameter):
         if port in process_id().keys():
             print "\033[32mThis Port Is Started\033[0m"
         else:
-            start_memcached = "%smemcached -c 512 -d -u %s -m 512 -p %s" % (memcached_home, user, port)
+            start_memcached = "%smemcached -c 512 -d -u %s -m 28672 -p %s" % (memcached_home, user, port)
             code = subprocess.Popen(start_memcached, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
             out, sherr = code.communicate()
             if code.returncode != 0:
@@ -91,7 +91,7 @@ def select_start(parameter):
                 print "\033[32mStart Memcached All Port [11211-11215]\033[0m"
                 port_list = ['11211', '11212', '11213', '11214', '11215','11216','11217','11218']
                 for i in port_list:
-                    start_memcached = "%smemcached -c 512 -d -u %s -m 512 -p %s" % (memcached_home, user, i)
+                    start_memcached = "%smemcached -c 512 -d -u %s -m 28672 -p %s" % (memcached_home, user, i)
                     code = subprocess.Popen(start_memcached, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
                     out, err = code.communicate()
                     if code.returncode != 0:

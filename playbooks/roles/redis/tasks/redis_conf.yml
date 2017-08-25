@@ -17,14 +17,14 @@
 - name: transfer redis-conf to remote server--master
   template:
     src: redis_master.conf.j2
-    dest: "{{Redis_Config_Path}}/redis.conf"
+    dest: "{{Redis_Config_Path}}/redis_{{ port }}.conf"
   when: ("{{roles}}" == "master")
 
 # 传送文件到远程-----slave
 - name: transfer redis-conf to remote server---slave
   template:
     src: redis_slave.conf.j2
-    dest: "{{Redis_Config_Path}}/redis.conf"
+    dest: "{{Redis_Config_Path}}/redis_{{ port }}.conf"
   when: ("{{roles}}" == "slave")
 
 - name: start redis......

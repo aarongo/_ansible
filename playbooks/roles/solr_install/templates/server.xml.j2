@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<Server port="8007" shutdown="SHUTDOWN">
+<Server port="8005" shutdown="SHUTDOWN">
   <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="off" />
   <Listener className="org.apache.catalina.core.JasperListener" />
   <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
@@ -17,6 +17,8 @@
      <Connector   port="{{TOMCAT_START_PORT}}" 
                   protocol="HTTP/1.1"
                   maxThreads="1000"
+                  minProcessors="100"
+                  maxProcessors="1000"
                   acceptCount="500"
                   maxHttpHeaderSize="8192"
                   connectionTimeout="20000"
@@ -24,14 +26,14 @@
                   enableLookups="false"
                   URIEncoding="UTF-8" />
 
-    <Connector port="8011" protocol="AJP/1.3" redirectPort="8443" />
+    <Connector port="8009" protocol="AJP/1.3" redirectPort="8443" />
     <Engine name="Catalina" defaultHost="localhost">
       <Realm className="org.apache.catalina.realm.LockOutRealm">
         <Realm className="org.apache.catalina.realm.UserDatabaseRealm"
                resourceName="UserDatabase"/>
       </Realm>
 	<Host name="localhost"  appBase="webapps" unpackWARs="true" >
-	      <Context crossContext="true" docBase="{{TOMCAT_DOCBASE}}" reloadable="true" allowLinking="true" path=""/>
+	      <Context crossContext="true" docBase="{{solr_deploy_path}}" reloadable="true" allowLinking="true" path="/solr"/>
         <!--
           %a - 远程IP地址
           %A - 本地IP地址
@@ -63,7 +65,7 @@
                 prefix="localhost_access_log." 
                 suffix=".txt"
                 encoding="utf8"
-                pattern='{"localhost":"%A","remoteORlbIP":"%a","remoteIP":"%a","logTime":"%t","uri":"%U","status":%s,"responseBytes":%B,"responseTime":%T,"referer":"%{Referer}i","userAgent":"%{User-Agent}i"}' />
+                pattern='{"remoteORlbIP":"%a","remoteIP":"%a","logTime":"%t","uri":"%U","status":%s,"responseBytes":%B,"responseTime":%T,"referer":"%{Referer}i","userAgent":"%{User-Agent}i"}' />
       </Host>
     </Engine>
   </Service>

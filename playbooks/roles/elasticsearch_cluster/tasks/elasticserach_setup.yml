@@ -10,7 +10,7 @@
 # 配置 JDK
 - name: unarchive jdk to remote server
   unarchive:
-    src: jdk-8u51-linux-x64.tar.gz
+    src: "../../../source_files/jdk-8u51-linux-x64.tar.gz"
     dest: "{{ ES_Install_Path }}"
   when: (stdout_result.stdout == "0")
 
@@ -52,7 +52,7 @@
 # 解压 elastic 进行安装
 - name: unarchive elasticsearch-cluster fies to remote
   unarchive:
-    src: "elasticsearch-5.5.1.tar.gz"
+    src: "../../../source_files/elasticsearch-5.5.1.tar.gz"
     dest: "{{ ES_Install_Path }}"
 
 

@@ -16,14 +16,14 @@ filter {
   }
 }
 output {
-    #redis {
-    #  host => "{{ LOGSTASH_CONF_PARAMETER_REDIS_HOST}}"
-    #  port => "6379"
-    #  db => "0"
-    #  data_type => "list"
-    #  key => "{{ LOGSTASH_CONF_PARAMETER_REDIS_KEY }}"
-    #}
-    stdout { codec => rubydebug }
+    redis {
+      host => "{{ LOGSTASH_CONF_PARAMETER_REDIS_HOST }}"
+      port => "6379"
+      db => "0"
+      data_type => "list"
+      key => "{{ LOGSTASH_CONF_PARAMETER_REDIS_KEY }}"
+    }
+    # stdout { codec => rubydebug }
 }
 
 ## server

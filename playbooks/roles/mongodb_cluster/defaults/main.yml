@@ -1,25 +1,25 @@
 ---
 # defaults file for roles/mongodb_cluster
-BASE_HOME: /home/software
-MONGODB_HOME: /home/software/mongodb-3.2
-MONGODB_CONF_PATH: /home/software/mongodb-3.2/etc
-MONGODB_OTHER_PATH: /home/software/mongodb
+BASE_HOME: /software
+MONGODB_HOME: /software/mongodb-3.2
+MONGODB_CONF_PATH: /software/mongodb-3.2/etc
+MONGODB_OTHER_PATH: /software/mongodb_arbitr
 # mongodb_cluster roles
 MASTER: master
 SLAVE: slave
 ARBITR: arbitr
 # 每台机器日志都存放---配置文件公用
 # 设置为true，启用操作日志，以确保写入持久性和数据的一致性，会在dbpath目录下创建journal目录
-REPLSET: tourk_demo
+REPLSET: syzm_pro
 BIND_IP: "{{ ansible_default_ipv4.address }}"
-PORT: 27017
-LOGPATH: /home/software/mongodb/log/
+PORT: 27019
+LOGPATH: "{{MONGODB_OTHER_PATH}}/log/"
 # 配置文件公用 --end
 # 每台机器mongodb 数据存放目录
-MASTER_DBPATH: "/home/software/mongodb/data/{{ MASTER }}"
-SLAVE_DBPATH: "/home/software/mongodb/data/{{ SLAVE }}"
-ARBITR_DBPATH: "/home/software/mongodb/data/{{ ARBITR }}"
+MASTER_DBPATH: "{{MONGODB_OTHER_PATH}}/data/{{ MASTER }}"
+SLAVE_DBPATH: "{{MONGODB_OTHER_PATH}}/data/{{ SLAVE }}"
+ARBITR_DBPATH: "{{MONGODB_OTHER_PATH}}/data/{{ ARBITR }}"
 # 每台机器的 PID 存放目录
-MASTER_PID_FILE_PATH: /home/software/mongodb/{{ MASTER }}.pid
-SLAVE_PID_FILE_PATH: /home/software/mongodb/{{ SLAVE }}.pid
-ARBITR_PID_FILE_PATH: /home/software/mongodb/{{ ARBITR }}.pid
+MASTER_PID_FILE_PATH: "{{MONGODB_OTHER_PATH}}/{{ MASTER }}.pid"
+SLAVE_PID_FILE_PATH: "{{MONGODB_OTHER_PATH}}/{{ SLAVE }}.pid"
+ARBITR_PID_FILE_PATH: "{{MONGODB_OTHER_PATH}}/{{ ARBITR }}.pid"

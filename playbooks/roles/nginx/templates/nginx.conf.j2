@@ -42,13 +42,21 @@ http {
     proxy_hide_header X-Powered-By;
     add_header Via $Hit_Host;
 
-    log_format  Ansible_install '$http_host '
-                                '$remote_addr [$time_local] '
-                                '"$request" $status $body_bytes_sent '
-                                '"$http_referer" "$http_user_agent" '
-                                '$request_time '
-                                '$upstream_response_time';
-    access_log  {{ nginx_log_dir}}{{ ansible_hostname }}-{{ nginx_access_log_name }} Ansible_install;
+    log_format project_log '{"@timestamp":"$time_iso8601",'
+                 '"host":"$server_addr",'
+                 '"clientip":"$remote_addr",'
+                 '"size":$body_bytes_sent,'
+                 '"responsetime":$request_time,'
+                 '"upstreamtime":"$upstream_response_time",'
+                 '"upstreamhost":"$upstream_addr",'
+                 '"server_host":"$host",'
+                 '"url":"$uri",'
+                 '"url-info":"$request_uri",'
+                 '"xff":"$http_x_forwarded_for",'
+                 '"referer":"$http_referer",'
+                 '"agent":"$http_user_agent",'
+                 '"status":"$status"}';
+    access_log  {{ nginx_log_dir}}{{ ansible_hostname }}-{{ nginx_access_log_name }} project_log;
     error_log  {{ nginx_log_dir}}{{ ansible_hostname }}-{{ nginx_error_log_name}};
 
 server {

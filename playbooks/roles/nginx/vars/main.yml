@@ -27,10 +27,10 @@ nginx_pid_path: /software/nginx/logs/nginx.pid
 ###End
 
 #Send Software Files Name
-file1: pcre-8.39.tar.gz
-file2: zlib-1.2.8.tar.gz
-file3: openssl-1.0.2f.tar.gz
-file4: nginx-1.8.0.tar.gz
+file1: ../../../source_files/pcre-8.39.tar.gz
+file2: ../../../source_files/zlib-1.2.8.tar.gz
+file3: ../../../source_files/openssl-1.0.2f.tar.gz
+file4: ../../../source_files/nginx-1.8.0.tar.gz
 # Send Software Files Name End
 ## Loops Start Files
 install_packages:

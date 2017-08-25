@@ -1,0 +1,19 @@
+---
+# solr 基础配置
+script_path: "/software/script"
+JAVA_HOME: /software/jdk1.7.0_79
+solr_deploy_path: "/software/deploy_solrcloud/solrcloud/"
+solr_version: "{{ verison }}"
+solrcloud_config_path: "/software/solrcloud/config_files/"
+solrcloud_libs_path: "/software/solrcloud/solrcloud_libs/"
+solrcloud_home: "/software/solrcloud/solrcloud_home"
+solrcloud_path:
+  - "/software/solrcloud/config_files"
+  - "/software/solrcloud/solrcloud_libs"
+  - "/software/solrcloud/solrcloud_home"
+tomcat_home: "/software/tomcat_solrcloud"
+solr_libs_path: "{{ solr_deploy_path }}WEB-INF/lib/"
+
+solrcloud_port: 8080
+TOMCAT_START_PORT: 8080
+JVM_OPTINOS: "$JAVA_OPTS -Xmx16384m -Xms16384m -Xmn4g -Xss1024k -DzkHost=10.200.200.63:2181,10.200.200.65:2181,10.200.200.68:2181 -Djava.security.egd=file:/dev/./urandom"

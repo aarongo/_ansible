@@ -24,5 +24,6 @@ config =
     ]
 }
 rs.initiate(config)
+rs.status()
 
 systemctl stop firewalld.service&&systemctl disable firewalld.service

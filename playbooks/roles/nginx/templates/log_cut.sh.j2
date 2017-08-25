@@ -7,6 +7,11 @@
 SAVE_LOGS_PATH={{nginx_cutlog_save_path}}
 Nginx_Pid=`cat {{nginx_pid_path}}`
 
+
+if [ ! -d "${SAVE_LOGS_PATH}" ]; then
+  mkdir ${SAVE_LOGS_PATH}
+fi
+
 ## get date
 YESTERDAY=$(date -d "yesterday" +%Y-%m-%d)
 

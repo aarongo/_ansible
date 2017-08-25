@@ -1,7 +1,7 @@
 ---
 # 配置 epel 安装 libselinux-python
-- name: include update module
-  include: update_epel/main.yml
+# - name: include update module
+#   include: update_epel/main.yml
 
 
 - name: include system_setup

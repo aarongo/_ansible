@@ -2,8 +2,7 @@
 # vars file for tomcat
 #外部传 java 版本,Tomcat 版本
 INSTALL_HOME: /software
-PACKAGES_URL: "http://10.200.200.49:8010/"
-PACKAGES_HOME: /software/packages
+PACKAGES_HOME: "../../../source_files"
 JAVA_PACKAGES_NAME: jdk-7u79-linux-x64.tar.gz
 TOMCAT_PACKAGES_NAME: apache-tomcat-{{tomcat_version}}.tar.gz
 JAVA_NAME: jdk1.7.0_79
@@ -16,7 +15,7 @@ UNARCHIVED_TOMCAT_PATH: /software/apache-tomcat-{{tomcat_version}}
 # 配置文件调用
 TOMCAT_SERVER_XML: "{{UNARCHIVED_TOMCAT_PATH}}/conf/"
 TOMCAT_SERVER_JVM: "{{UNARCHIVED_TOMCAT_PATH}}/bin/"
-TOMCAT_START_PORT: 8090
+TOMCAT_START_PORT: 8810
 TOMCAT_DOCBASE: "/software/deploy_{{ project_name }}/{{ deploy_name }}"
 project_docbase: "{{ TOMCAT_DOCBASE }}/cybershop-{{ project_name }}"
 URL: "{{ parameter }}"

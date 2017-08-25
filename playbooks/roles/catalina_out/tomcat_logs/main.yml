@@ -15,11 +15,11 @@
     dest: "{{ TOMCAT_LIB_HOME }}/"
     mode: 0755
   with_items:
-    - log4j.jar
-    - tomcat-juli-adapters.jar
+    - "../../../source_files/log4j.jar"
+    - "../../../source_files/tomcat-juli-adapters.jar"
 - name: transfer jar to {{ TOMCAT_BIN_HOME }}
   copy:
-    src: tomcat-juli.jar
+    src: "../../../source_files/tomcat-juli.jar"
     dest: "{{ TOMCAT_BIN_HOME }}"
     mode: 0755
 - name: transfer context.xml to tomcat_{{ project_name }}

@@ -10,7 +10,7 @@
 
 - name: unarchive zabbix_agent2.4.4
   unarchive:
-    src: zabbix-2.4.4.tar.gz
+    src: "../../../source_files/zabbix-2.4.4.tar.gz"
     dest: /tmp/
 
 - name: zabbix_agent install zabbix_agent2.4.4

@@ -6,3 +6,13 @@ nginx_log_path: /software/nginx/logs/
 static1_path: /software/deploy_front/cybershop-front-0.0.1-SNAPSHOT/www/$1
 static2_path: /software/deploy_front/cybershop-front-0.0.1-SNAPSHOT/www/$1/$2
 pic_path: /software/deploy_front/cybershop-front-0.0.1-SNAPSHOT
+
+
+
+
+# vars for syzm_config Management
+NGINX_SOURCE_CONF_PATH: "/software/workspace/config_data/config_hooks/nginx"
+NGINX_SOURCE_CONF_NAME: "nginx.conf.j2"
+NGINX_DEST_CONF_PATH: "/software/nginx/conf"
+NGINX_DEST_CONF_NAME: "nginx.conf"
+

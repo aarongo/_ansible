@@ -1,10 +1,5 @@
 ---
 # tasks file for memcached
-
-- name: include install_python_packages
-  include: install_python_packages/main.yml
-  
-  
 - name: Install Libaray
   yum: name={{item}} state=latest
   with_items: "{{library_list}}"
@@ -24,7 +19,7 @@
 - name: Download Memcached Packages and Unarchive
   unarchive: 
     # src=http://www.memcached.org/files/memcached-{{Version}}.tar.gz
-    src: memcached-{{Version}}.tar.gz 
+    src: "../../../source_files/memcached-{{Version}}.tar.gz"
     dest: "{{Tmp_Packages}}"
     #copy: no
   tags: install memcached
@@ -37,6 +32,9 @@
 #配置memcached操作脚本
 - name: Transfer Memcached Script To Remote Server
   template: src=action_memcached.py.j2 dest={{script_path}}action_memcached mode=0755
+
+- name: include install_python_packages
+  include: install_python_packages/main.yml
 
 - name: Remove Tmp_Packages
   file:

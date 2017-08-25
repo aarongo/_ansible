@@ -1,8 +1,17 @@
 ---
 # 安装 logstash
+
+- name: Create User  {{ LOGSTASH_USER }} For  logstsah
+  user: name={{ LOGSTASH_USER }}
+        state=present
+        password={{ LOGSTASH_USER_PASSWORD }}
+        comment="user for logstsah"
+        append=yes
+
+
 - name: unarchive logstash 
   unarchive:
-    src: logstash-5.5.1.tar.gz
+    src: "../../../source_files/logstash-5.5.1.tar.gz"
     dest: "{{ LOGSTASH_HOME_BASE }}"
     owner: "{{ LOGSTASH_USER }}"
     group: "{{ LOGSTASH_GROUP }}"
@@ -18,18 +27,11 @@
 # 配置 JDK
 - name: unarchive jdk to remote server
   unarchive:
-    src: jdk-8u51-linux-x64.tar.gz
+    src: "../../../source_files/jdk-8u51-linux-x64.tar.gz"
     dest: "{{ LOGSTASH_HOME_BASE }}"
   when: (stdout_result.stdout == "0")
 
 
-
-- name: Create User  {{ LOGSTASH_USER }} For  logstsah
-  user: name={{ LOGSTASH_USER }}
-        state=present
-        password={{ LOGSTASH_USER_PASSWORD }}
-        comment="user for logstsah"
-        append=yes
 
 
 # 创建所需目录

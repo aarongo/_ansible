@@ -3,13 +3,13 @@
 # Simple Redis init.d script conceived to work on Linux systems
 # as it does use of the /proc filesystem.
 
-REDISPORT=6379
+REDISPORT={{port}}
 EXEC={{Redis_Home}}/bin/redis-server
 CLIEXEC={{Redis_Home}}/bin/redis-cli
 HOSTNAME={{ansible_default_ipv4.address}}
 
 PIDFILE={{pid_path}}
-CONF="{{Redis_Config_Path}}/redis.conf"
+CONF="{{Redis_Config_Path}}/redis_{{port}}.conf"
 
 case "$1" in
     start)

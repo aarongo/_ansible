@@ -4,7 +4,7 @@
 ## Mysql Verion
 mysql_service: mysqld
 mysql_version: "{{version}}"
-mysql_tar_name: mysql-{{mysql_version}}.tar.gz
+mysql_tar_name: "../../../source_files/mysql-{{mysql_version}}.tar.gz"
 ## Mysql Files Tmp Save Path
 Files_Tmp_Path: /tmp/packages/
 

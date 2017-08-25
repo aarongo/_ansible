@@ -1,11 +1,5 @@
 ---
 # tasks file for catalina_out
-catalina_path: /software/tomcat_front/logs/
-catalina_backup_path: /software/catalina_logs/
-cutting_script_path: /software/script/
-
-
-
 TOMCAT_HOME: "/software/tomcat_{{ project_name }}"
 TOMCAT_LIB_HOME: "{{ TOMCAT_HOME }}/lib"
 TOMCAT_BIN_HOME: "{{ TOMCAT_HOME }}/bin"

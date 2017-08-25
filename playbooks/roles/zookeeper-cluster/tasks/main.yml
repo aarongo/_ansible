@@ -13,7 +13,7 @@
 # 安装 JAVA_HOME
 - name: Install Java 8u102
   unarchive:
-    src: jdk-8u102-linux-x64.tar.gz
+    src: "../../../source_files/jdk-8u102-linux-x64.tar.gz"
     dest: "{{INSTALL_HOME}}/"
 
 # 更新系统环境变量 JAVA_HOME
@@ -23,18 +23,17 @@
     block: |
       {{item.info}}
     marker: "# {mark} ANSIBLE MANAGED BLOCK {{item.name}}"
-  with_items: profile
+  with_items: "{{profile}}"
 
 
 
 # 直接网络下载安装 zookeeper
 - name: Download zookeeper {{zookeeper_version}}
   unarchive:
-    src: http://apache.org/dist/zookeeper/zookeeper-{{zookeeper_version}}/zookeeper-{{zookeeper_version}}.tar.gz
+    src: "../../../source_files/zookeeper-{{zookeeper_version}}.tar.gz"
     dest: "{{INSTALL_HOME}}/"
     owner: root
     group: root
-    copy: no
 
 # 传送配置文件到远程服务器
 - name: transfer config to remote server

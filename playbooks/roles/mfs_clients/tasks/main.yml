@@ -1,0 +1,45 @@
+---
+# 安装依赖
+- name: install relation
+  include: relation/main.yml
+
+# 创建用户
+- name: create user for mfs
+  user:
+    name: mfs
+    shell: /sbin/nologin
+    append: yes
+
+# 解压源文件
+- name: unarchive mfs source files
+  unarchive:
+    src: "../../../source_files/moosefs-3.0.88-1.tar.gz"
+    dest: "{{ tmp_path }}"
+
+# 编译安装 mfs
+- name: build install mfs clients
+  script: templates/build.sh
+
+
+# 更改 hosts 文件
+- name: Add mappings to /etc/hosts
+  blockinfile:
+    dest: "/etc/hosts"
+    block: |
+      {{item.info}}
+    marker: "# {mark} ANSIBLE MANAGED BLOCK {{item.name}}"
+  with_items: "{{host_conf}}"
+
+
+# 判断是否有目录
+# 执行挂载
+- name: mount director exist?
+  file:
+    dest: "{{ mount_static_path }}"
+    mode: 0755
+    state: directory
+
+- name: mount use shell
+  shell: "./mount.moosefs -H mfsmaster {{ mount_static_path }}"
+  args:
+    chdir: /usr/local/mfs/sbin/

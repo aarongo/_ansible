@@ -6,7 +6,6 @@
     state: directory
     mode: 0755
   with_items:
-    - "{{ PACKAGES_HOME }}"
     - "{{ INSTALL_HOME }}"
     - "{{ SCRIPT_HOME }}"
     - "{{ gc_logs }}"
@@ -18,23 +17,12 @@
   register: stdout_result
   ignore_errors: True
 
-- name: Download jdk  and tomcat 
-  get_url:
-    url: "{{ PACKAGES_URL }}/{{ item }}"
-    dest: "{{ PACKAGES_HOME }}/{{ item }}"
-    mode: 0440
-  with_items:
-    - "{{ JAVA_PACKAGES_NAME }}"
-    - "{{ TOMCAT_PACKAGES_NAME }}"
-  when: (stdout_result.stdout == "0")
-
 
 # 配置 JDK
 - name: unarchive jdk to remote server
   unarchive:
     src: "{{ PACKAGES_HOME }}/{{ JAVA_PACKAGES_NAME }}"
     dest: "{{ INSTALL_HOME }}"
-    remote_src: yes
   when: (stdout_result.stdout == "0")
 
 
@@ -43,7 +31,6 @@
   unarchive:
     src: "{{ PACKAGES_HOME }}/{{ TOMCAT_PACKAGES_NAME }}"
     dest: "{{INSTALL_HOME}}"
-    remote_src: yes
 
 
 # 删除 webapps 下无用文件

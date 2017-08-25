@@ -2,10 +2,10 @@
 # defaults file for disk_init
 # 进行分区的硬盘
 # disk: /dev/vdb
-disk: {{ disk }}
+disk: "{{ disk }}"
 # 进行格式化的分区
 # partition: /dev/vdb1
-partition: {{ partition }}
+partition: "{{ partition }}"
 # 挂载的目录
 # mountDir: /software
-mountDir: {{ mountDir }}
+mountDir: "{{ mountDir }}"

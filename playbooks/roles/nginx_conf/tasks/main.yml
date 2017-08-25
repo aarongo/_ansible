@@ -40,3 +40,16 @@
     chdir: /software/nginx/sbin/
   tags: reload nginx
   
+
+# # for syzm aliyun config  Management
+# - name: syzm config update
+#   template:
+#     src: "{{ NGINX_SOURCE_CONF_PATH }}/{{ NGINX_SOURCE_CONF_NAME }}"
+#     dest: "{{ NGINX_DEST_CONF_PATH }}/{{ NGINX_DEST_CONF_NAME }}"
+#     mode: 0600
+
+
+# - name: reload nginx conf
+#   shell: /software/nginx/sbin/nginx -s reload
+#   args:
+#     chdir: /software/nginx/sbin/

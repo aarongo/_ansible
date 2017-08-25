@@ -1,79 +1,79 @@
 ---
-# 创建系统用户以及更改目录权限
-- name: Create a new group For System sudos
-  group: name={{ BASE_GROUP }} system=yes state=present
-  when: (open_user == "yes")
+# # 创建系统用户以及更改目录权限
+# - name: Create a new group For System sudos
+#   group: name={{ BASE_GROUP }} system=yes state=present
+#   when: (open_user == "yes")
 
-- name: Create A New User For Login And Add sudos
-  user: name={{ BASE_USER }}
-        state=present
-        groups="{{ BASE_GROUP }}"
-        password={{ BASE_USER_PASSWORD }}
-        comment="Base User"
-        append=yes
-  when: (open_user == "yes")
+# - name: Create A New User For Login And Add sudos
+#   user: name={{ BASE_USER }}
+#         state=present
+#         groups="{{ BASE_GROUP }}"
+#         password={{ BASE_USER_PASSWORD }}
+#         comment="Base User"
+#         append=yes
+#   when: (open_user == "yes")
 
-- name: configure sudoers
-  lineinfile: dest=/etc/sudoers backup=yes state=present regexp='^%{{ BASE_GROUP }}' insertafter="^# %wheel" line='%{{ BASE_GROUP }} ALL=(ALL) ALL'
-  when: (open_user == "yes")
+# - name: configure sudoers
+#   lineinfile: dest=/etc/sudoers backup=yes state=present regexp='^%{{ BASE_GROUP }}' insertafter="^# %wheel" line='%{{ BASE_GROUP }} ALL=(ALL) ALL'
+#   when: (open_user == "yes")
 
-- name: change directory promiss
-  file:
-    dest: "/software"
-    owner: "{{ BASE_USER }}"
-    group: "{{ BASE_GROUP }}"
-    mode: 0644
-  when: (open_user == "yes")
+# - name: change directory promiss
+#   file:
+#     dest: "/software"
+#     owner: "{{ BASE_USER }}"
+#     group: "{{ BASE_GROUP }}"
+#     mode: 0644
+#   when: (open_user == "yes")
 
-# 配置系统代开文件数
-- name: Add mappings to /etc/security/limits.conf
-  blockinfile:
-    dest: "/etc/security/limits.conf"
-    block: |
-      {{item.info}}
-    marker: "# {mark} ANSIBLE MANAGED BLOCK {{item.name}}"
-  with_items: "{{limit_conf}}"
+# # 配置系统代开文件数
+# - name: Add mappings to /etc/security/limits.conf
+#   blockinfile:
+#     dest: "/etc/security/limits.conf"
+#     block: |
+#       {{item.info}}
+#     marker: "# {mark} ANSIBLE MANAGED BLOCK {{item.name}}"
+#   with_items: "{{limit_conf}}"
 
-# 优化内核参数
-- name: Optimize the kernel parameters
-  blockinfile:
-    dest: "/etc/sysctl.conf"
-    block: |
-      {{ item.info }}
-    marker: "# {mark} ANSIBLE MANAGED BLOCK {{item.name}}"
-  with_items: "{{ kernel_parameters }}"
+# # 优化内核参数
+# - name: Optimize the kernel parameters
+#   blockinfile:
+#     dest: "/etc/sysctl.conf"
+#     block: |
+#       {{ item.info }}
+#     marker: "# {mark} ANSIBLE MANAGED BLOCK {{item.name}}"
+#   with_items: "{{ kernel_parameters }}"
 
-# 生效内核优化参数
-- name: kernel parameters Optimize open
-  shell: "sysctl -p"
-
-
-# 配置系统字符集
-- name: Add mappings to /home/cdczhangg/.bashrc
-  blockinfile:
-    dest: /home/cdczhangg/.bashrc
-    block: |
-      {{item.info}}
-    marker: "# {mark} ANSIBLE MANAGED BLOCK {{item.name}}"
-  with_items: i18n
+# # 生效内核优化参数
+# - name: kernel parameters Optimize open
+#   shell: "sysctl -p"
 
 
-# 关闭 selinux
-- name: disabled selinux
-  selinux:
-    state: disabled
+# # 配置系统字符集
+# - name: Add mappings to /home/cdczhangg/.bashrc
+#   blockinfile:
+#     dest: /home/cdczhangg/.bashrc
+#     block: |
+#       {{item.info}}
+#     marker: "# {mark} ANSIBLE MANAGED BLOCK {{item.name}}"
+#   with_items: i18n
 
 
-# 配置 DNS
-- name: init Dns config files
-  copy: content="" dest="/etc/resolv.conf"
-- name: Add DNS Server
-  blockinfile:
-    dest: /etc/resolv.conf
-    block: |
-      {{item.info}}
-    marker: "# {mark} Ansible Input DNS {{item.name}}"
-  with_items: "{{DNS_Server}}"
+# # 关闭 selinux
+# - name: disabled selinux
+#   selinux:
+#     state: disabled
+
+
+# # 配置 DNS
+# - name: init Dns config files
+#   copy: content="" dest="/etc/resolv.conf"
+# - name: Add DNS Server
+#   blockinfile:
+#     dest: /etc/resolv.conf
+#     block: |
+#       {{item.info}}
+#     marker: "# {mark} Ansible Input DNS {{item.name}}"
+#   with_items: "{{DNS_Server}}"
 
 
 
