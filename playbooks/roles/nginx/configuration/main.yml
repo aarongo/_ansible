@@ -1,0 +1,17 @@
+---
+# 配置文件处理
+- name: Transfer Nginx configuration To Remote server
+  template:
+    src=nginx.conf.j2
+    dest={{ nginx_dir }}conf/nginx.conf
+    mode=0644
+
+- name: Copy(Index) Template Index To Remote Server   
+  template:
+    src=index.html.j2
+    dest={{ nginx_dir }}html/index.html
+    owner={{user}}
+    group={{group}}
+    mode=0755
+  notify:
+    - start nginx

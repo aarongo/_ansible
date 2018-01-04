@@ -1,0 +1,12 @@
+---
+# 运行脚本安装 Nginx
+- name: Running Remote Script Install Nginx
+  shell: "{{soft_dir}}nginx_install.sh"
+  args:
+    chdir: "{{soft_dir}}"
+    executable: "/bin/bash"
+
+- name: Remove Remote Packages Dir
+  file:
+    dest={{ soft_dir }}
+    state=absent

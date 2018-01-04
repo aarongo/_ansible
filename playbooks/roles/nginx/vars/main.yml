@@ -2,37 +2,36 @@
 # defaults file for nginx
 #Create Script Dir
 script_path: /software/script/
-###For Nginx Started Script Vars
+# For Nginx Started Script Vars
 nginx_bin_path: /software/nginx/sbin/nginx
 nginx_config_path: /software/nginx/conf/nginx.conf
-###End
-###For Nginx Install Path
+
+# For Nginx Install Path
 nginx_dir: /software/nginx/
-###End
-###Send Files To Remote Path
+
+# Send Files To Remote Path
 soft_dir: /software/packages/
-###End
-###Nginx Config Site
+
+# Nginx Config Site
 nginx_cutlog_save_path: /software/nginx_everday_logs/
 nginx_log_dir: /software/logs/
 nginx_access_log_name: access.log
 nginx_error_log_name: error.log
 nginx_pid_path: /software/nginx/logs/nginx.pid
-###End
 
-#Send Software Files Name
+# Send Software Files Name
 file1: ../../../source_files/pcre-8.39.tar.gz
 file2: ../../../source_files/zlib-1.2.8.tar.gz
 file3: ../../../source_files/openssl-1.0.2f.tar.gz
-file4: ../../../source_files/nginx-1.12.0.tar.gz
-# Send Software Files Name End
-## Loops Start Files
+file4: ../../../source_files/nginx-{{ nginx_version }}.tar.gz
+
+# Loops Start Files
 install_packages:
   - "{{file1}}"
   - "{{file2}}"
   - "{{file3}}"
   - "{{file4}}"
-## Loops Start Files --End
+
 # For Install Nginx Script
 user: nginx
 group: nginx
@@ -43,11 +42,6 @@ install_libary:
   - gcc
   - gcc-c++
 pcre_version: 8.39
-nginx_version: 1.12.0
 zlib_version: 1.2.8
 openssl_version: 1.0.2f
 nginx_Build_parameters: --prefix={{nginx_dir}} --with-pcre={{soft_dir}}pcre-{{pcre_version}} --with-zlib={{soft_dir}}zlib-{{zlib_version}} --user={{user}} --group={{group}} --with-http_stub_status_module --with-http_gzip_static_module --with-http_sub_module --with-http_ssl_module --with-stream
-pcre_Build_parameters: --prefix=/usr/pcre-8
-zlib_Build_parameters: --prefix=/usr/zlib-1.2
-openssl_Build_parameters: --prefix=/usr
-# End

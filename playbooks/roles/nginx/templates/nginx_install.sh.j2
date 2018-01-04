@@ -9,23 +9,20 @@ sudo echo "export LC_ALL=C" >> /etc/profile;source /etc/profile
 groupadd -r {{user}}
 useradd -s /sbin/nologin -g {{group}} -r {{user}}
 
-##Install Pcre
-#cd {{soft_dir}}pcre-{{pcre_version}}
-#./configure \
-#{{pcre_Build_parameters}}
-#make && make install
-#
-##Install zlib
-#cd {{soft_dir}}zlib-{{zlib_version}}
-#./configure \
-#{{zlib_Build_parameters}}
-#make && make install
-#
-##Install openssl
-#cd {{soft_dir}}openssl-{{openssl_version}}
-#./config \
-#{{openssl_Build_parameters}}
-#make && make install
+#Install Pcre
+cd {{soft_dir}}pcre-{{pcre_version}}
+./configure
+make && make install
+
+#Install zlib
+cd {{soft_dir}}zlib-{{zlib_version}}
+./configure
+make && make install
+
+#Install openssl
+cd {{soft_dir}}openssl-{{openssl_version}}
+./config
+make && make install
 
 #Install Nginx
 cd {{soft_dir}}nginx-{{nginx_version}}

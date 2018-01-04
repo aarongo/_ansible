@@ -1,85 +1,12 @@
 ---
-- name: At Remote Server Create Save Packeges Temp Dir
-  file:
-    dest={{ soft_dir }} 
-    mode=755
-    state=directory
-  tags: install nginx
+- name: Installation Preparation
+  include: Installation_Preparation/main.yml
 
-- name: At Remote Server Create Nginx Logs Save_Path
-  file:
-    dest={{ nginx_log_dir }}
-    mode=0644
-    state=directory
+- name: Installation
+  include: Installation/main.yml
 
-- name: At Remote Server Create Script Save Save_Path
-  file:
-    dest={{script_path}}
-    mode=0644
-    state=directory
-  tags: install nginx
+- name: configuration nginx
+  include: configuration/main.yml
 
-- name: Unzip Software File To Remote
-  unarchive:
-    src="{{ item }}" dest="{{ soft_dir }}"
-  with_items: "{{install_packages}}"
-  tags: install nginx
-
-- name: After parse transfer files to remote........
-  template: 
-    src=nginx_install.sh.j2
-    dest={{soft_dir}}nginx_install.sh
-    mode=0755
-  tags: install nginx
-  
-
-- name: Running Remote Script Install Nginx.......
-  shell: "{{soft_dir}}nginx_install.sh"
-  args:
-    chdir: "{{soft_dir}}"
-    executable: "/bin/bash"
-  tags: install nginx
-
-- name: Remove Remote Packages Dir
-  file:
-    dest={{ soft_dir }}
-    state=absent
-  tags: install nginx
-    
-- name: Transfer Nginx configuration To Remote server....
-  template:
-    src=nginx.conf.j2
-    dest={{ nginx_dir }}conf/nginx.conf
-    mode=0644
-  tags: nginx reload
-
-
-- name: Copy(Index) Template Index To Remote Server   
-  template:
-    src=index.html.j2
-    dest={{ nginx_dir }}html/index.html
-    owner={{user}}
-    group={{group}}
-    mode=0755
-
-- name: After parse Transfer Files For cront nginx cut logs.....
-  template:
-    src=log_cut.sh.j2
-    dest={{script_path}}log_cut.sh
-    mode=0755
-  
-
-- name: Crontab Create For Nginx Logs Cutting At Every 00:00
-  cron:
-    name="Nginx Cut logs" minute="0" hour="0" job="{{script_path}}log_cut.sh"
-  notify:
-    - restart crond centos 7
-  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == "7"
-
-
-- name: Crontab Create For Nginx Logs Cutting At Every 00:00
-  cron:
-    name="Nginx Cut logs" minute="0" hour="0" job="{{script_path}}log_cut.sh"
-  notify:
-    - restart crond centos 6
-  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == "6"
+- name: management_cron
+  include: management_cron/main.yml

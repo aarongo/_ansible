@@ -1,0 +1,30 @@
+---
+# 安装准备 Installation Preparation
+- name: At Remote Server Create Save Packeges Temp Dir
+  file:
+    dest={{ soft_dir }} 
+    mode=755
+    state=directory
+
+- name: At Remote Server Create Nginx Logs Save_Path
+  file:
+    dest={{ nginx_log_dir }}
+    mode=0644
+    state=directory
+
+- name: At Remote Server Create Script Save Save_Path
+  file:
+    dest={{script_path}}
+    mode=0644
+    state=directory
+
+- name: Unzip Software File To Remote
+  unarchive:
+    src="{{ item }}" dest="{{ soft_dir }}"
+  with_items: "{{install_packages}}"
+
+- name: After parse transfer files to remote
+  template: 
+    src=nginx_install.sh.j2
+    dest={{soft_dir}}nginx_install.sh
+    mode=0755

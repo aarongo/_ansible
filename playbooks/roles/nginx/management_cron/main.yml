@@ -1,0 +1,23 @@
+---
+# 定时任务管理
+- name: After parse Transfer Files For cront nginx cut logs
+  template:
+    src=log_cut.sh.j2
+    dest={{script_path}}log_cut.sh
+    mode=0755
+  
+
+- name: Crontab Create For Nginx Logs Cutting At Every 00:00 system version  CentOS 7
+  cron:
+    name="Nginx Cut logs" minute="0" hour="0" job="{{script_path}}log_cut.sh"
+  notify:
+    - restart crond centos 7
+  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == "7"
+
+
+- name: Crontab Create For Nginx Logs Cutting At Every 00:00 system version  CentOS 6
+  cron:
+    name="Nginx Cut logs" minute="0" hour="0" job="{{script_path}}log_cut.sh"
+  notify:
+    - restart crond centos 6
+  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == "6"
