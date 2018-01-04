@@ -1,14 +1,15 @@
 <html>
   <head>
-    <title>Ansible Home</title>
+    <title>Nginx</title>
   </head>
   <body>
-  <h1>Welcome To EdwardLiu Ansible Nginx Home</h1>
-  <h2>Ansible Install Nginx Test Pages</h2>
-  <p>主机名:{{ ansible_hostname }}</p>
-
-  <p>主机地址:{{ ansible_default_ipv4.address }}</p>
-  	<strong>{{ inventory_hostname }}</strong>
+    <div class="center" style="width: 300px; height: 200px; padding: 10px; border: 1px solid #ccc; background:#FCFFF5; color:#000000; margin: 20px auto; display: -webkit-box; -webkit-box-orient: horizontal; -webkit-box-pack: center; -webkit-box-align: center; display: -moz-box; -moz-box-orient: horizontal; -moz-box-pack: center; -moz-box-align: center; display: -o-box; -o-box-orient: horizontal; -o-box-pack: center; -o-box-align: center; display: -ms-box; -ms-box-orient: horizontal; -ms-box-pack: center; -ms-box-align: center; display: box; box-orient: horizontal; box-pack: center; box-align: center;">
+    <div class="text">
+      <p>主机地址:    {{ ansible_default_ipv4.address }}</p>
+      <p>主机名:    {{ inventory_hostname }}</p>
+      <p>Nginx版本:    {{ nginx_version }}</p>
+    </div>
+  </div>
   </body>
 </html>
 
