@@ -1,0 +1,18 @@
+---
+# 安装 supervisor 版本及依赖包版本
+supervisor_version: 3.3.3
+setuptools_version: 38.2.5
+meld3_version: 1.0.2
+
+# 安装文件临时存放位置
+packages_path: /software/packages_tmp
+
+# supervisor 配置文件路径
+supervisor_home: /software/supervisor
+supervisor_program: /software/supervisor/conf
+supervisor_log: /software/supervisor/log
+supervisor_pid: /software/supervisor/supervisor.pid
+supervisor_listen: "*"
+supervisor_http_port: 9001
+supervisor_user: admin
+supervisor_passw: admin

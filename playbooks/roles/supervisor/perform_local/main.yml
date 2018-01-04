@@ -1,0 +1,29 @@
+---
+# 解压安装文件
+- name: Unzip the installation files
+  unarchive:
+    src: "{{ item }}"
+    dest: "{{ packages_path }}"
+  with_items:
+    - "../../../source_files/setuptools-{{ setuptools_version }}.zip"
+    - "../../../source_files/meld3-{{ meld3_version }}.tar.gz"
+    - "../../../source_files/supervisor-{{ supervisor_version }}.tar.gz"
+
+# 安装 meld3
+- name: install meld3/setuptools/supervisor for supervisor
+  shell: python setup.py install
+  args:
+    chdir: "{{ item }}"
+  with_items:
+    - "{{ packages_path }}/meld3-1.0.2"
+    - "{{ packages_path }}/setuptools-38.2.5"
+    - "{{ packages_path }}/supervisor-3.3.3"
+
+# 检测是否安装成功
+- name: Check whether the installation is successful
+  shell: supervisord --version
+  register: supervisor_version
+
+- debug:
+    msg: "System {{ inventory_hostname }} has supervisord installed!!!"
+  when: supervisor_version == "3.3.3"

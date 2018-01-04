@@ -1,0 +1,14 @@
+---
+# 安装 pip
+- name: install epel-release
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - epel-release
+    - python-pip
+# 联网安装 supervisor
+- name: install supervisor with internet
+  pip:
+    name: supervisor
+    version: 3.3.3
