@@ -1,6 +1,0 @@
----
-- name: change tomcat config
-  template:
-    src: change_server.xml.j2
-    dest: "{{TOMCAT_APP_PATH}}/conf/server.xml"
-    mode: 0600
