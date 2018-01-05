@@ -4,6 +4,7 @@ BASE_HOME: /software
 MONGODB_HOME: /software/mongodb-3.2
 MONGODB_CONF_PATH: /software/mongodb-3.2/etc
 MONGODB_OTHER_PATH: /software/mongodb_data
+SCRIPT_PATH: /software/script
 # mongodb_cluster roles
 MASTER: master
 SLAVE: slave
