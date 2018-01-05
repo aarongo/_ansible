@@ -2,6 +2,7 @@
 
 function change_files(){
 	# change php.ini
+	echo "change_files"
 	sed -i "s/max_execution_time = 30/max_execution_time = 300/g" /etc/php.ini
 	sed -i "s/;date.timezone =/date.timezone = Asia\/Shanghai/g" /etc/php.ini
 	sed -i "s/;always_populate_raw_post_data = On/always_populate_raw_post_data = On/g" /etc/php.ini
@@ -10,28 +11,33 @@ function change_files(){
 }
 
 function handle_databases(){
+	echo "handle_databases"
+	# set root password
+	# mysqladmin -u root password "123456"
 	# crate databases
-	mysql -h{{ DB_HOST}} -uroot -pgkwc2017 -e"create database zabbix character set utf8 collate utf8_bin;";
-	mysql -h{{ DB_HOST}} -uroot -pgkwc2017 -e"grant all privileges on zabbix.* to zabbix@localhost identified by 'zabbix';";
-	mysql -h{{ DB_HOST}} -uroot -pgkwc2017 -e"grant all privileges on zabbix.* to zabbix@'%' identified by 'zabbix';";
-	mysql -h{{ DB_HOST}} -uroot -pgkwc2017 -e"FLUSH PRIVILEGES;";
+	mysql -h {{ DB_HOST}} -uroot -p"123456" -e"create database zabbix character set utf8 collate utf8_bin;";
+	mysql -h {{ DB_HOST}} -uroot -p"123456" -e"grant all privileges on zabbix.* to zabbix@'localhost' identified by 'zabbix';";
+	mysql -h {{ DB_HOST}} -uroot -p"123456" -e"grant all privileges on zabbix.* to zabbix@'%' identified by 'zabbix';";
+	mysql -h {{ DB_HOST}} -uroot -p"123456" -e"FLUSH PRIVILEGES;";
 }
 
 
 function import_data(){
+	echo "import_data"
 	# import databases
-	mysql -h{{ DB_HOST}} -uzabbix -pzabbix zabbix < {{ZABBIX_TMP}}{{ZABBIX_PACKAGES_NAME}}/database/mysql/schema.sql
-	mysql -h{{ DB_HOST}} -uzabbix -pzabbix zabbix < {{ZABBIX_TMP}}{{ZABBIX_PACKAGES_NAME}}/database/mysql/images.sql
-	mysql -h{{ DB_HOST}} -uzabbix -pzabbix zabbix < {{ZABBIX_TMP}}{{ZABBIX_PACKAGES_NAME}}/database/mysql/data.sql
+	mysql -h {{ DB_HOST}} -uzabbix -pzabbix zabbix < {{ZABBIX_TMP}}{{ZABBIX_PACKAGES_NAME}}/database/mysql/schema.sql
+	mysql -h {{ DB_HOST}} -uzabbix -pzabbix zabbix < {{ZABBIX_TMP}}{{ZABBIX_PACKAGES_NAME}}/database/mysql/images.sql
+	mysql -h {{ DB_HOST}} -uzabbix -pzabbix zabbix < {{ZABBIX_TMP}}{{ZABBIX_PACKAGES_NAME}}/database/mysql/data.sql
 }
 
 function handle_server(){
+	echo "handle_server"
 	# restart php-fpm
 	/usr/bin/systemctl restart php-fpm
 	/usr/bin/systemctl enable php-fpm
 }
 
-change_files()
-handle_databases()
-import_data()
-handle_server()
+change_files
+handle_databases
+import_data
+handle_server

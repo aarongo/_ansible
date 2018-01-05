@@ -5,9 +5,14 @@
     name: "{{ item }}"
     state: latest
   with_items: "{{ Package_Dependency }}"
-
-- name: stop firewalld
+  
+- name: restart mysql
   systemd: 
-    name: firewalld
-    state: stopped
-    enabled: no
+    name: mariadb
+    state: restarted
+    enabled: yes
+# - name: stop firewalld
+#   systemd: 
+#     name: firewalld
+#     state: stopped
+#     enabled: no

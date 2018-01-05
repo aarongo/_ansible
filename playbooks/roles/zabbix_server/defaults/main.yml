@@ -16,13 +16,14 @@ Package_Dependency:
   - net-snmp
   - net-snmp-devel
   - perl-DBI
-  - mariadb*
+  - mariadb-server
+  - mariadb
   - mysql-devel
   - libxml2-devel
   - curl-devel
   - unixODBC-devel
   - net-snmp-devel
-  - OpenIPMI-deve
+  - OpenIPMI-devel
   - openssl
   - openssl-devel
 script_path: /software/script
@@ -50,5 +51,5 @@ ZABBIX_DB_PASSWORD: zabbix
 DB_NAME: zabbix
 DB_USER: zabbix
 DB_PASSWORD: zabbix
-ZABBIX_SERVER_ADDRESS: {{ansible_default_ipv4.address}}
+ZABBIX_SERVER_ADDRESS: "{{ansible_default_ipv4.address}}"
 ZABBIX_SERVER_NAME: gkwc-zabbix_server

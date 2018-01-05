@@ -9,7 +9,6 @@
   user:
     name: "{{ COMALL_USER }}"
     comment: "zabbix user"
-    uid: 1001
     shell: "/sbin/nologin"
     group: "{{ GROUP_NAME }}"
 
@@ -35,6 +34,11 @@
     - "{{ ZABBIX_LOGS_PATH }}"
     - "{{ ZABBIX_AlertScriptsPath }}"
     - "{{ ZABBIX_WEB_PATH }}"
+    
+- name: move zabbix source files to nginx
+  shell: "cp -rf frontends/php/* {{ ZABBIX_WEB_PATH }}"
+  args:
+    chdir: "{{ ZABBIX_TMP }}{{ ZABBIX_PACKAGES_NAME }}"
 
 - name: zabbix server config setup
   template:
