@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# 程序名称
+app="{{ mongodb_role }}.conf"
+
+# 日志存放路径
+logfile=/software/mongodb/log
+
+# 保留日志天数
+days=7
+
+# 程序PID
+mongodb_pid=`ps aux | grep mongodb | grep ${app} | awk '{print $2}'`
+
+# 切割日志
+/bin/kill -SIGUSR1 ${mongodb_pid}
+
+# 删除几天前的日志
+find $logfile/ -mtime +${days} -delete

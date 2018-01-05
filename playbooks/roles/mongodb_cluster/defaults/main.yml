@@ -3,7 +3,7 @@
 BASE_HOME: /software
 MONGODB_HOME: /software/mongodb-3.2
 MONGODB_CONF_PATH: /software/mongodb-3.2/etc
-MONGODB_OTHER_PATH: /software/mongodb_arbitr
+MONGODB_OTHER_PATH: /software/mongodb_data
 # mongodb_cluster roles
 MASTER: master
 SLAVE: slave
@@ -16,9 +16,9 @@ PORT: 27019
 LOGPATH: "{{MONGODB_OTHER_PATH}}/log/"
 # 配置文件公用 --end
 # 每台机器mongodb 数据存放目录
-MASTER_DBPATH: "{{MONGODB_OTHER_PATH}}/data/{{ MASTER }}"
-SLAVE_DBPATH: "{{MONGODB_OTHER_PATH}}/data/{{ SLAVE }}"
-ARBITR_DBPATH: "{{MONGODB_OTHER_PATH}}/data/{{ ARBITR }}"
+MASTER_DBPATH: "{{MONGODB_OTHER_PATH}}/{{ MASTER }}"
+SLAVE_DBPATH: "{{MONGODB_OTHER_PATH}}/{{ SLAVE }}"
+ARBITR_DBPATH: "{{MONGODB_OTHER_PATH}}/{{ ARBITR }}"
 # 每台机器的 PID 存放目录
 MASTER_PID_FILE_PATH: "{{MONGODB_OTHER_PATH}}/{{ MASTER }}.pid"
 SLAVE_PID_FILE_PATH: "{{MONGODB_OTHER_PATH}}/{{ SLAVE }}.pid"
