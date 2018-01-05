@@ -1,0 +1,10 @@
+---
+- name: config mysql and php
+  shell: "./change_files.sh"
+  args:
+    chdir: /software/script
+
+- name: send nginx config
+  template:
+    src: nginx.conf.j2
+    dest: /software/nginx/conf/nginx.conf

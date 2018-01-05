@@ -1,0 +1,58 @@
+---
+# 安装 zabbix server 3.4.4
+- name: create group for zabbix
+  group:
+    name: "{{ GROUP_NAME }}"
+    state: present
+
+- name: create user for zabbix
+  user:
+    name: "{{ COMALL_USER }}"
+    comment: "zabbix user"
+    uid: 1001
+    shell: "/sbin/nologin"
+    group: "{{ GROUP_NAME }}"
+
+- name: unarchive zabbix packages
+  unarchive:
+    src: "../../../source_files/{{ ZABBIX_PACKAGES_NAME }}{{ZABBIX_PACKAGES_TYPE}}"
+    dest: "{{ ZABBIX_TMP }}"
+
+- name: zabbix packages install
+  shell: "{{ ZABBIX_BUILD_OPTIONS }};make&&make install"
+  args:
+    chdir: "{{ ZABBIX_TMP }}{{ ZABBIX_PACKAGES_NAME }}"
+
+# 检查 zabbix 使用目录创建
+- name: zabbix dependeny directory create
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ COMALL_USER }}"
+    group: "{{ GROUP_NAME }}"
+    mode: 0755
+  with_items:
+    - "{{ ZABBIX_LOGS_PATH }}"
+    - "{{ ZABBIX_AlertScriptsPath }}"
+    - "{{ ZABBIX_WEB_PATH }}"
+
+- name: zabbix server config setup
+  template:
+    src: zabbix_server.conf.j2
+    dest: "{{ ZABBIX_CONFIG_PATH }}zabbix_server.conf"
+
+- name: zabbix conf php transfer
+  template:
+    src: zabbix.conf.php.j2
+    dest: "{{ ZABBIX_WEB_PATH }}/conf/zabbix.conf.php"
+
+- name: transfer config files script
+  template:
+    src: change_files.sh.j2
+    dest: "{{ script_path }}/change_files.sh"
+    mode: 0755
+
+- name: move zabbix source files to nginx
+  shell: "cp -rf frontends/php/* {{ ZABBIX_WEB_PATH }}"
+  args:
+    chdir: "{{ ZABBIX_TMP }}{{ ZABBIX_PACKAGES_NAME }}"

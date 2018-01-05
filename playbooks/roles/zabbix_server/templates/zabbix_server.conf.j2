@@ -1,0 +1,9 @@
+LogFile={{ ZABBIX_LOGS_PATH }}{{ ZABBIX_LOGS_NAME }}
+DBHost={{ansible_default_ipv4.address}}
+DBName={{ ZABBIX_DB_NAME }}
+DBUser={{ ZABBIX_DB_USER }}
+DBPassword={{ ZABBIX_DB_PASSWORD }}
+ListenIP=0.0.0.0
+Timeout=4
+AlertScriptsPath={{ ZABBIX_AlertScriptsPath }}
+LogSlowQueries=3000

@@ -1,4 +1,4 @@
 ---
-- hosts: tomcat
+- hosts: tomcat-host
   roles:
     - nginx

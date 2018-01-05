@@ -1,0 +1,54 @@
+---
+# centos 7 install zabbix server for ansible
+Package_Dependency:
+  - gcc
+  - gcc-c++
+  - make
+  - php
+  - php-gd
+  - php-mysql
+  - php-bcmath
+  - php-mbstring
+  - php-xml
+  - php-fpm
+  - curl
+  - curl-devel
+  - net-snmp
+  - net-snmp-devel
+  - perl-DBI
+  - mariadb*
+  - mysql-devel
+  - libxml2-devel
+  - curl-devel
+  - unixODBC-devel
+  - net-snmp-devel
+  - OpenIPMI-deve
+  - openssl
+  - openssl-devel
+script_path: /software/script
+
+# zabbix 安装使用
+GROUP_NAME: zabbix
+COMALL_USER: zabbix
+ZABBIX_TMP: /tmp/
+ZABBIX_VERSION: 3.4.4
+ZABBIX_PACKAGES_NAME: zabbix-{{ ZABBIX_VERSION }}
+ZABBIX_PACKAGES_TYPE: .tar.gz
+ZABBIX_HOME: /software/zabbix_server
+ZABBIX_LOGS_PATH: /software/zabbix_server/logs/
+ZABBIX_LOGS_NAME: zabbix_server.log
+ZABBIX_AlertScriptsPath: /software/script/zabbix_alertscripts
+ZABBIX_CONFIG_PATH: /software/zabbix_server/etc/
+ZABBIX_WEB_PATH: /software/zabbix_web
+ZABBIX_BUILD_OPTIONS: ./configure --prefix={{ ZABBIX_HOME }} --enable-server --enable-agent --with-mysql --enable-ipv6 --with-net-snmp --with-libcurl --with-libxml2 --with-openipmi
+ZABBIX_DB_NAME: zabbix
+ZABBIX_DB_USER: zabbix
+ZABBIX_DB_PASSWORD: zabbix
+# zabbix 页面配置服务器对应配置
+# DB_HOST: localhost
+# DB_PORT: 0
+DB_NAME: zabbix
+DB_USER: zabbix
+DB_PASSWORD: zabbix
+ZABBIX_SERVER_ADDRESS: {{ansible_default_ipv4.address}}
+ZABBIX_SERVER_NAME: gkwc-zabbix_server

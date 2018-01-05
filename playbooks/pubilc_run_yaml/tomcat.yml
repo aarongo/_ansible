@@ -1,5 +1,4 @@
 ---
-- hosts: tomcat
+- hosts:  "{{ hosts_name }}"
   roles:
-    - { role: tomcat7, when: "tomcat_version=='7.0.75'"}
-    - { role: tomcat8, when: "tomcat_version=='8.5.11'"}
+    - tomcat

@@ -1,0 +1,13 @@
+---
+# 编译安装 zabbix server; Nginx ; 所需依赖包
+- name: install dependency for Zabbix and Nginx
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items: "{{ Package_Dependency }}"
+
+- name: stop firewalld
+  systemd: 
+    name: firewalld
+    state: stopped
+    enabled: no

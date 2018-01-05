@@ -1,0 +1,9 @@
+---
+- name: zabbix dependency
+  include: dependency/main.yml
+
+- name: zabbix install
+  include: install/main.yml
+
+- name: config zabbix
+  include: config_end/main.yml

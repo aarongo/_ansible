@@ -1,0 +1,5 @@
+---
+- hosts: zabbix
+  roles:
+    - nginx
+    - zabbix_server
