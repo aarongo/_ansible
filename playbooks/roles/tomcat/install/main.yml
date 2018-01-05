@@ -1,0 +1,86 @@
+---
+# 创建基础目录
+- name: create install INSTALL_HOME
+  file:
+    dest: "{{ item }}"
+    state: directory
+    mode: 0755
+  with_items:
+    - "{{ INSTALL_HOME }}"
+    - "{{ SCRIPT_HOME }}"
+    - "{{ gc_logs }}"
+
+
+# 进行判断 jdk 是否存在
+- name: JAVA_HOME is exist?
+  shell: "find {{ INSTALL_HOME }}  -name {{ JAVA_NAME }}  | wc -l"
+  register: stdout_result
+  ignore_errors: True
+
+
+# 配置 JDK
+- name: unarchive jdk to remote server
+  unarchive:
+    src: "{{ PACKAGES_HOME }}/{{ JAVA_PACKAGES_NAME }}"
+    dest: "{{ INSTALL_HOME }}"
+  when: (stdout_result.stdout == "0")
+
+
+
+- name: Install Tomcat 7
+  unarchive:
+    src: "{{ PACKAGES_HOME }}/{{ TOMCAT_PACKAGES_NAME }}"
+    dest: "{{INSTALL_HOME}}"
+
+
+# 删除 webapps 下无用文件
+- name: delete remote serer tomcat7 webapps/*
+  shell: rm -rf *
+  args:
+    chdir: "{{ UNARCHIVED_TOMCAT_PATH }}/webapps/"
+
+# Create init process path 
+# 增加更新不改变原部署文件内容或目录
+- name: Create tomcat process directory
+  file:
+    path: "{{TOMCAT_DOCBASE}}"
+    state: directory
+  when: run_way == "install"
+
+- name: Create index.html to process path
+  template:
+    src: index.html.j2
+    dest: "{{TOMCAT_DOCBASE}}/index.html"
+    mode: 0600
+  when: run_way == "install"
+
+- name: Configure Tomcat 7
+  template:
+    src: server.xml.j2
+    dest: "{{TOMCAT_SERVER_XML}}server.xml"
+    mode: 0600
+
+
+- name: Configure Tomcat catalina.sh
+  template:
+    src: catalina.sh.j2
+    dest: "{{TOMCAT_SERVER_JVM}}catalina.sh"
+    mode: 0755
+
+
+- name: Configure tomcat.py
+  template:
+    src: tomcat.py.j2
+    dest: "{{SCRIPT_HOME}}{{project_name}}.py"
+    mode: 0755
+
+- name: Configure tomcat script for {{ project_name }}
+  template:
+    src: tomcat-restapi.py.j2
+    dest: "{{SCRIPT_HOME}}{{project_name}}.py"
+    mode: 0755
+  when: project_name == "rest-api"
+
+
+- name: change tomcat process name
+  command: "mv {{ UNARCHIVED_TOMCAT_PATH }} {{ TOMCAT_APP_PATH }}"

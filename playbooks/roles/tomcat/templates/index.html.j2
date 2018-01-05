@@ -1,0 +1,14 @@
+<html>
+  <head>
+    <title>Nginx</title>
+  </head>
+  <body>
+    <div class="center" style="width: 300px; height: 200px; padding: 10px; border: 1px solid #ccc; background:#FCFFF5; color:#000000; margin: 20px auto; display: -webkit-box; -webkit-box-orient: horizontal; -webkit-box-pack: center; -webkit-box-align: center; display: -moz-box; -moz-box-orient: horizontal; -moz-box-pack: center; -moz-box-align: center; display: -o-box; -o-box-orient: horizontal; -o-box-pack: center; -o-box-align: center; display: -ms-box; -ms-box-orient: horizontal; -ms-box-pack: center; -ms-box-align: center; display: box; box-orient: horizontal; box-pack: center; box-align: center;">
+    <div class="text">
+      <p>主机地址:    {{ ansible_default_ipv4.address }}</p>
+      <p>主机名:    {{ inventory_hostname }}</p>
+      <p>Tomcat Vsersion:    {{ tomcat_version }}</p>
+    </div>
+  </div>
+  </body>
+</html>
