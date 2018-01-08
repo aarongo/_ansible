@@ -1,0 +1,4 @@
+---
+- hosts: mongodb-cluster
+  roles:
+    - mongodb_cluster

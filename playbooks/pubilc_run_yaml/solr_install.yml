@@ -1,0 +1,4 @@
+---
+- hosts: solrcloud
+  roles:
+    - solr_install

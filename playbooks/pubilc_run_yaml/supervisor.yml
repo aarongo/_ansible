@@ -1,0 +1,4 @@
+---
+- hosts: tomcat-host
+  roles:
+    - supervisor

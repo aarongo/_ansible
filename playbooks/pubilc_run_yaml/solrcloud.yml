@@ -1,0 +1,4 @@
+---
+- hosts: syzm-solrcloud
+  roles:
+    - solrcloud

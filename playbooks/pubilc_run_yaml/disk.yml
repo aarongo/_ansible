@@ -1,0 +1,4 @@
+---
+- hosts: gkwc
+  roles:
+    - disk_init

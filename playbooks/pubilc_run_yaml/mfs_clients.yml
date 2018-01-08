@@ -1,0 +1,4 @@
+---
+- hosts: "{{ mfs_clients_hosts }}"
+  roles:
+    - mfs_clients
