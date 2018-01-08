@@ -1,0 +1,27 @@
+#[tomcat]
+#180.76.175.16 ansible_port=8012
+#[tomcat:vars]
+#ansible_ssh_pass='root/kupu@2017'
+[group1]
+172.31.4.123
+
+#[app_group]
+#别名 ansible_ssh_host=主机地址 ansible_ssh_port=ssh端口
+#[app_greoup:vars]主机组变量
+#ansible_sudo_pass='76132fbbe6'设置sudo 密码
+#nginx_server2 ansible_ssh_host=127.0.0.1 ansible_ssh_port=2200
+#nginx_server3 ansible_ssh_host=127.0.0.1 ansible_ssh_port=2201
+[syzm]
+10.167.5.21
+10.167.5.22
+10.167.5.23
+10.167.5.24
+10.167.5.25
+10.167.5.26
+10.167.5.27
+10.167.5.31
+10.167.5.32
+10.167.5.33
+
+[syzm:vars]
+ansible_ssh_port=22

@@ -11,6 +11,7 @@
   user: name={{ BASE_USER }}
         state=present
         groups="{{ BASE_GROUP }}"
+        uid: 1000
         password="{{ BASE_USER_PASSWORD }}"
         comment="Ecommerce User"
         append=yes
