@@ -1,4 +1,4 @@
 ---
-- hosts: "{{hosts}}"
+- hosts: "{{hosts_list}}"
   roles:
     - system_init

@@ -1,4 +1,11 @@
 ---
 # handlers file for crond
-- name: restart crond
+- name: restart crond centos 6
   service: name=crond state=restarted
+  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == "6"
+
+- name: restart crond centos 7
+  systemd:
+    name: crond
+    state: restarted
+  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == "7"
