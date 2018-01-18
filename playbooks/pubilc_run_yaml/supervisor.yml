@@ -1,4 +1,5 @@
 ---
-- hosts: tomcat-host
+- hosts: gkwc
   roles:
     - supervisor
+  # remote_user: comall

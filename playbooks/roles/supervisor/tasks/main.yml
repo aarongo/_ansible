@@ -1,13 +1,4 @@
 ---
-# 判断是否有外网
-- name: Check network connection
-  shell: ping -c 4 -i 0.1 www.baidu.com
-  register: results_code
-
-- debug:
-    msg: "System {{ inventory_hostname }} has Connection internet!!!"
-  when: results_code.rc == 0
-
 # 基础公用检测目录
 - name: Check that the directory exists
   file:
@@ -22,11 +13,6 @@
 
 - name: Install supervisor form Local
   include: perform_local/main.yml
-  when: results_code.rc != 0
-
-- name: Install Supervisor form internet
-  include: perform_internet/main.yml
-  when: results_code.rc == 0
 
 - name: Transfer configuration files for the supervisor
   template:

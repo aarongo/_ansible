@@ -8,11 +8,13 @@
 . /etc/rc.d/init.d/functions
 
 set -a
-{% if results_code.rc == 0 %}
+{# {% if results_code.rc == 0 %}
 PREFIX=/usr/local
 {% elif results_code.rc != 0 %}
 PREFIX=/usr/local
-{% endif %}
+{% endif %} #}
+
+PREFIX=/usr
 
 SUPERVISORD=$PREFIX/bin/supervisord
 SUPERVISORCTL=$PREFIX/bin/supervisorctl

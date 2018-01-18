@@ -1,4 +1,4 @@
 ---
-- hosts: logstash
+- hosts: gkwc
   roles:
-    - elasticsearch_supervisor_logstash
+    - elasticsearch_logstash

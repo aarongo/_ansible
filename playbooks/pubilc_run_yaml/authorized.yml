@@ -1,4 +1,4 @@
 ---
-- hosts: unknow
+- hosts: team-3
   roles:
     - authorized

@@ -7,7 +7,7 @@
         password={{ LOGSTASH_USER_PASSWORD }}
         comment="user for logstsah"
         append=yes
-
+  
 
 - name: unarchive logstash 
   unarchive:
@@ -81,4 +81,11 @@
     dest: "{{ LOGSTASH_HOME }}/bin/logstash"
     owner: "{{ LOGSTASH_USER }}"
     group: "{{ LOGSTASH_GROUP }}"
+    mode: 0755
+
+
+- name: transfer supervisor program config
+  template:
+    src: supervisord_program.conf.j2
+    dest: "{{ supervisor_program }}/supervisord_program.conf"
     mode: 0755

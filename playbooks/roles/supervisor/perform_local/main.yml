@@ -18,6 +18,7 @@
     - "{{ packages_path }}/meld3-1.0.2"
     - "{{ packages_path }}/setuptools-38.2.5"
     - "{{ packages_path }}/supervisor-3.3.3"
+  # sudo: yes
 
 # 检测是否安装成功
 - name: Check whether the installation is successful

@@ -1,4 +1,2 @@
-[tomcat-host]
-192.168.0.200
-[tomcat-host:vars]
-ansible_ssh_port=22
+[gkwc]
+192.168.0.18

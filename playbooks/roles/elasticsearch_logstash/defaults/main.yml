@@ -16,10 +16,7 @@ LOGSTASH_CONF_PARAMETER_LOGS_TYPE: "{{ logs_type }} "
 LOGSTASH_CONF_PARAMETER_LOGS_PATH: "{{ logs_path }}"
 LOGSTASH_CONF_PARAMETER_REDIS_HOST: "{{ redis_hosts }}"
 LOGSTASH_CONF_PARAMETER_REDIS_KEY: "{{ redis_key }}"
-LOGSTASH_CONF_NAME: "logstash_{{ project_name }}.conf"
+LOGSTASH_CONF_NAME: "logstash_collect.conf"
 
 # For supervisor
-SUPERVISOR_HOME: "/software/supervisor-{{ supervisor_version}}"
-SUPERVISOR_CONF_BASE: /software/supervisor
-SUPERVISOR_CONF_DIR: /software/supervisor/conf
-SUPERVISOR_LOGS: /software/supervisor/logs
+supervisor_program: /software/supervisor/conf
