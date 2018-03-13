@@ -1,16 +1,21 @@
 ---
 # 判断是否有外网
-- name: Check network connection
-  shell: ping -c 4 -i 0.1 www.baidu.com
-  register: results_code
+- name: checkne internet connection
+  checknetwork: url={{ check_url }}
+  register: result
 
 - debug:
     msg: "System {{ inventory_hostname }} has Connection internet!!!"
-  when: results_code.rc == 0
+  when: result.stdotut == 'Connection'
 
-# 配置 epel 安装 libselinux-python
+# 配置 epel
 - name: include update module
-  include: update_epel/main.yml
+  include: update_epel/internet.yml
+  when: result.stdotut == 'Connection'
+
+- name: include epel for local
+  include: update_epel/local.yml
+  when: result.stdotut == 'Failed'
 
 
 - name: include system_setup
@@ -18,5 +23,8 @@
 
 
 - name: include install_pip
-  include: install_pip/main.yml
-  when: results_code.rc == 0
+  include: install_pip/internet.yml
+
+
+- name: include trash-cli install
+  include: alias_rm/main.yml

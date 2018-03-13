@@ -1,0 +1,55 @@
+---
+- name: checkout trash-cli
+  git:
+    repo: "https://github.com/andreafrancia/trash-cli.git"
+    dest: /tmp/trash-cli
+
+- name: download setuptools
+  unarchive:
+    src: "../../../source_files/setuptools-38.2.5.zip"
+    dest: /tmp/
+
+- name: install setuptools
+  shell: "python setup.py install"
+  args:
+    chdir: /tmp/setuptools-38.2.5
+
+
+- name: install trash-cli
+  shell: "python setup.py install"
+  args:
+    chdir: /tmp/trash-cli
+
+
+- name: setup trash-cli alias for rm
+  blockinfile:
+    dest: "~/.bashrc"
+    block: |
+      {{item.info}}
+    marker: "# {mark} ANSIBLE MANAGED BLOCK {{item.name}}"
+  with_items: "{{ alias_rm }}"
+
+
+- name: source env
+  shell: "source ~/.bashrc"
+
+
+- name: Add crond for clean trash
+  crond:
+
+# 只有状态为改变的时候才会触发重启 action
+- name: Add crond for clean trash centos6
+  cron:
+    name: "clean up trash"
+    day: "*/7"
+    job: "/usr/bin/trash-empty"
+  notify:
+    - restart crond centos 6
+
+- name: Creates a cron for sync time system is 7
+  cron:
+    name: "clean up trash"
+    day: "*/7"
+    job: "/usr/bin/trash-empty"
+  notify:
+    - restart crond centos 7

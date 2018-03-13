@@ -1,0 +1,8 @@
+---
+# This is update epel for centos 7
+
+# update epel
+- name: update epel
+  yum:
+    name: epel-release
+    state: latest

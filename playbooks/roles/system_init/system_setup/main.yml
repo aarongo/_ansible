@@ -8,13 +8,14 @@
   when: (open_user == "yes")
 
 - name: Create A New User For Login And Add sudos
-  user: name={{ BASE_USER }}
-        state=present
-        groups="{{ BASE_GROUP }}"
-        uid: 1000
-        password="{{ BASE_USER_PASSWORD }}"
-        comment="Ecommerce User"
-        append=yes
+  user:
+    name: "{{ BASE_USER }}"
+    state: present
+    groups: "{{ BASE_GROUP }}"
+    uid: 1000
+    password: "{{ BASE_USER_PASSWORD }}"
+    comment: "Ecommerce User"
+    append: yes
   when: (open_user == "yes")
 
 # 配置系统用户组 sudo 权限
@@ -57,12 +58,6 @@
 # 生效内核优化参数
 - name: kernel parameters Optimize open
   shell: "sysctl -p"
-
-
-# 关闭 selinux
-- name: disabled selinux
-  selinux:
-    state: disabled
 
 
 # 配置定时任务 同步时间
