@@ -1,5 +1,5 @@
 ---
-- hosts: tomcat-host
+- hosts: "{{ host_name }}"
   roles:
-    - nginx
+    # - nginx
     - zabbix_server

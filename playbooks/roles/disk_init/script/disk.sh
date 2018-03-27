@@ -85,7 +85,7 @@ fi
 # check disk partition
 check_disk() {
   > $LOCKfile
-  for i in `fdisk -l | grep -oE 'Disk /dev/x?[sv]d[b-z]' | awk '{print $2}'`
+  for i in `fdisk -l | grep -oE '磁盘 /dev/x?[sv]d[b-z]' | awk '{print $2}'`
   do
     if [ -z "$(blkid | grep -v 'PTTYPE="dos"' | grep -w "$i")" ];then
       if [ -z "$(mount | grep "$i")" -a ! -e "${i}1" ]; then

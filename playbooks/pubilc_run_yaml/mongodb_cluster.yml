@@ -1,4 +1,4 @@
 ---
-- hosts: mongodb-cluster
+- hosts: "{{ hosts_name }}"
   roles:
     - mongodb_cluster

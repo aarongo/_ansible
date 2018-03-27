@@ -1,0 +1,9 @@
+---
+- hosts: pipeline
+
+  tasks:
+    - name: check date time
+      timezone:
+      register: result
+
+    - debug: msg="{{ result.stdotut }}"

@@ -64,6 +64,7 @@ server {
     server_name  {{ansible_default_ipv4.address}};
     error_page  404 /404.html;
     error_page  500 501 502 503 504 /500.html;
+    charset utf-8;
 
     set $http_carrefour_client_ip $proxy_add_x_forwarded_for;
     set $Hit_Host SH-P-Z-24-6-M-1;

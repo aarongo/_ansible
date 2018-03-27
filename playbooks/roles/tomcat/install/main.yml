@@ -6,14 +6,14 @@
     state: directory
     mode: 0755
   with_items:
-    - "{{ INSTALL_HOME }}"
+    # - "{{ INSTALL_HOME }}"
     - "{{ SCRIPT_HOME }}"
     - "{{ gc_logs }}"
 
 
 # 进行判断 jdk 是否存在
 - name: JAVA_HOME is exist?
-  shell: "find {{ INSTALL_HOME }}  -name {{ JAVA_NAME }}  | wc -l"
+  shell: "find {{ INSTALL_HOME }}/  -name {{ JAVA_NAME }}  | wc -l"
   register: stdout_result
   ignore_errors: True
 

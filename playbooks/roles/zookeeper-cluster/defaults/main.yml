@@ -11,7 +11,8 @@ log_dir: /software/zookeeper/log
 zookeeper_home: /software/zookeeper-{{zookeeper_version}}/
 zookeeper_config_path: /software/zookeeper-{{zookeeper_version}}/conf
 INSTALL_HOME: /software
-JAVA_HOME: /software/jdk1.8.0_102
+JAVA_NAME: jdk1.8.0_102
+JAVA_HOME: "/software/{{JAVA_NAME}}"
 
 
 profile:

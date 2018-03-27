@@ -7,7 +7,7 @@
     dest: "{{ item }}"
     state: directory
   with_items:
-    - "{{ BASE_HOME }}"
+    # - "{{ BASE_HOME }}"
     - "{{ SCRIPT_PATH }}"
     - "{{ LOGPATH }}"
     - "{{ MONGODB_CONF_PATH }}"
@@ -43,7 +43,10 @@
 
 
 - name: change unarchive after directory name
-  command: "mv {{ BASE_HOME }}/mongodb-linux-x86_64-rhel70-3.2.0 {{ MONGODB_HOME }}"
+  shell: "mv {{ BASE_HOME }}/mongodb-linux-x86_64-rhel70-3.2.0/* {{ MONGODB_HOME }}"
+
+- name: remove unarchive directory
+  shell: "rm -rf {{ BASE_HOME }}/mongodb-linux-x86_64-rhel70-3.2.0"
 
 
 # 5. 传送配置文件分环境
@@ -101,13 +104,13 @@
 - name: After parse Transfer Files For cront mongodb cut logs
   template:
     src=logrotate.sh.j2
-    dest={{SCRIPT_PATH}}logrotate.sh
+    dest={{SCRIPT_PATH}}/logrotate.sh
     mode=0755
   
 
 - name: Crontab Create For Nginx Logs Cutting At Every 00:00 system version  CentOS 7
   cron:
-    name="Nginx Cut logs" minute="0" hour="0" job="{{SCRIPT_PATH}}logrotate.sh"
+    name="Nginx Cut logs" minute="0" hour="0" job="{{SCRIPT_PATH}}/logrotate.sh"
   notify:
     - restart crond centos 7
   when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == "7"
@@ -115,7 +118,7 @@
 
 - name: Crontab Create For Nginx Logs Cutting At Every 00:00 system version  CentOS 6
   cron:
-    name="Nginx Cut logs" minute="0" hour="0" job="{{SCRIPT_PATH}}logrotate.sh"
+    name="Nginx Cut logs" minute="0" hour="0" job="{{SCRIPT_PATH}}/logrotate.sh"
   notify:
     - restart crond centos 6
   when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == "6"

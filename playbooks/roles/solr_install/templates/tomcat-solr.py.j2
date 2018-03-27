@@ -35,9 +35,8 @@ def start_tomcat():
         print "\033[32m %s Is Started \033[0m".center(100, '-') % tomcat_name
         print "end".center(100, '-')
     else:
-                command_start_tomcat = "%sbin/startup.sh" % tocmat_home
-        p = subprocess.Popen(command_start_tomcat, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                             stderr=subprocess.PIPE, shell=True)
+        command_start_tomcat = "%s/bin/startup.sh" % tocmat_home
+        p = subprocess.Popen(command_start_tomcat, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         stdout, stderr = p.communicate()
         print stdout, stderr
 
@@ -47,7 +46,7 @@ def stop_tomcat():
     if get_tomcat_pid() is None:
         print "\033[32m %s is Not Running\033[0m".center(50, '-') % tomcat_name
     else:
-        command_stop_tomcat = "%sbin/shutdown.sh" % tocmat_home
+        command_stop_tomcat = "%s/bin/shutdown.sh" % tocmat_home
         p = subprocess.Popen(command_stop_tomcat, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE, shell=True)
         stdout, stderr = p.communicate()

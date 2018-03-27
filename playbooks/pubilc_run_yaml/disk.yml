@@ -1,4 +1,4 @@
 ---
-- hosts: gkwc
+- hosts: ejl
   roles:
     - disk_init

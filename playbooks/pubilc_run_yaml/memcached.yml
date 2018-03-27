@@ -1,4 +1,4 @@
 ---
-- hosts: tomcat
+- hosts: "{{ host_name }}"
   roles:
     - memcached

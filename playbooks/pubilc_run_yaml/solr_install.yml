@@ -1,4 +1,4 @@
 ---
-- hosts: solrcloud
+- hosts: "{{ hosts_name }}"
   roles:
     - solr_install

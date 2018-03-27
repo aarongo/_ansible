@@ -26,6 +26,8 @@ Package_Dependency:
   - OpenIPMI-devel
   - openssl
   - openssl-devel
+  - libevent
+  - libevent-devel
 script_path: /software/script
 
 # zabbix 安装使用

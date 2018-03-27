@@ -7,7 +7,15 @@
     path: "{{INSTALL_HOME}}"
     state: directory
     owner: root
-    group: root 
+    group: root
+  when: (base_home == 'no')
+
+
+# 进行判断 jdk 是否存在
+- name: JAVA_HOME is exist?
+  shell: "find {{ INSTALL_HOME }}  -name {{ JAVA_NAME }}  | wc -l"
+  register: stdout_result
+  ignore_errors: True
 
 
 # 安装 JAVA_HOME
@@ -15,6 +23,8 @@
   unarchive:
     src: "../../../source_files/jdk-8u102-linux-x64.tar.gz"
     dest: "{{INSTALL_HOME}}/"
+  when: (stdout_result.stdout != "0")
+
 
 # 更新系统环境变量 JAVA_HOME
 - name: Add mappings to /etc/profile

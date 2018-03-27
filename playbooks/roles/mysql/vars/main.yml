@@ -12,6 +12,8 @@ Files_Tmp_Path: /tmp/packages/
 Library:
   - gcc
   - gcc-c++
+  - wget
+  - make
   - cmake
   - ncurses-devel
   - bison
@@ -30,4 +32,4 @@ mysql_pid_path: "{{software_path}}/mysql.pid"
 mysql_port: 3306
 mysql_config: /etc/my.cnf
 ## Compile parameter
-compile:  CFLAGS="-O3" CXX=gcc CXXFLAGS="-O3 -felide-constructors -fno-exceptions -fno-rtti" cmake -DMYSQL_USER={{mysql_user}} -DCMAKE_INSTALL_PREFIX={{software_path}} -DMYSQL_DATADIR={{mysql_data_path}} -DMYSQL_UNIX_ADDR={{sock_path}} -DEXTRA_CHARSETS=all -DDEFAULT_CHARSET=utf8 -DDEFAULT_COLLATION=utf8_general_ci -DWITH_INNOBASE_STORAGE_ENGINE=1 -DENABLED_LOCAL_INFILE=1 -DWITH_EMBEDDED_SERVER=1 -DSERVER-SUFFIX=EMTXDotCom -DWITH_DEBUG=0
+compile:  cmake -DMYSQL_USER={{mysql_user}} -DCMAKE_INSTALL_PREFIX={{software_path}} -DMYSQL_DATADIR={{mysql_data_path}} -DMYSQL_UNIX_ADDR={{sock_path}} -DEXTRA_CHARSETS=all -DDEFAULT_CHARSET=utf8 -DDEFAULT_COLLATION=utf8_general_ci -DWITH_INNOBASE_STORAGE_ENGINE=1 -DENABLED_LOCAL_INFILE=1 -DWITH_EMBEDDED_SERVER=1 -DSERVER-SUFFIX=EMTXDotCom -DWITH_DEBUG=0

@@ -1,4 +1,4 @@
 ---
-- hosts: team-3
+- hosts: ejl
   roles:
     - authorized

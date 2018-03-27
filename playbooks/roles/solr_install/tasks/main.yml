@@ -1,9 +1,9 @@
 ---
 # 解压 solr war 包
-- name: install unzip
-  yum:
-    name: unzip
-    state: latest
+# - name: install unzip
+#   yum:
+#     name: unzip
+#     state: latest
 
 # 创建solr 程序目录
 - name: create solr web path
@@ -105,20 +105,6 @@
     src: server.xml.j2
     dest: "{{ tomcat_home }}/conf/server.xml"
     mode: 0644
-
-# 进行判断 jdk 是否存在
-- name: JAVA_HOME is exist?
-  shell: "find {{ INSTALL_HOME }}  -name {{ JAVA_NAME }}  | wc -l"
-  register: stdout_result
-  ignore_errors: True
-
-
-# 配置 JDK
-- name: unarchive jdk to remote server
-  unarchive:
-    src: jdk-7u79-linux-x64.tar.gz
-    dest: "{{ INSTALL_HOME }}"
-  when: (stdout_result.stdout == "0")
 
 
 # 配置启动脚本

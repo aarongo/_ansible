@@ -1,0 +1,9 @@
+---
+- hosts: pipeline
+
+  tasks:
+    - name: check crontab
+      checkcrond:
+      register: result
+
+    - debug: msg="{{ result.stdotut }}"

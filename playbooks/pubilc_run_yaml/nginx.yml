@@ -1,4 +1,4 @@
 ---
-- hosts: tomcat-host
+- hosts: restapi
   roles:
     - nginx

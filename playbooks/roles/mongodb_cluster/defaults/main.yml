@@ -11,9 +11,9 @@ SLAVE: slave
 ARBITR: arbitr
 # 每台机器日志都存放---配置文件公用
 # 设置为true，启用操作日志，以确保写入持久性和数据的一致性，会在dbpath目录下创建journal目录
-REPLSET: syzm_pro
+REPLSET: "{{ replset }}"
 BIND_IP: "{{ ansible_default_ipv4.address }}"
-PORT: 27019
+PORT: 27017
 LOGPATH: "{{MONGODB_OTHER_PATH}}/log/"
 # 配置文件公用 --end
 # 每台机器mongodb 数据存放目录

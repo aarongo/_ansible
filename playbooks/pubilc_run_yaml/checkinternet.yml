@@ -1,0 +1,9 @@
+---
+- hosts: pipeline
+
+  tasks:
+    - name: checkne internet connection
+      checknetwork: url={{ check_url }}
+      register: result
+
+    - debug: msg="{{ result.stdotut }}"

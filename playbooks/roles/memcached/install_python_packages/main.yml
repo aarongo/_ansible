@@ -1,4 +1,10 @@
 ---
-- name: install psutil from pip
-  pip:
-    name: psutil
+- name: download psutil
+  unarchive:
+    src: "../../../source_files/psutil-5.4.3.tar.gz"
+    dest: /tmp/
+
+- name: install setuptools
+  shell: "python setup.py install"
+  args:
+    chdir: /tmp/psutil-5.4.3
