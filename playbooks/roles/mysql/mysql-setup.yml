@@ -1,0 +1,18 @@
+---
+- name: check mysql rpm packages
+  checkmysql:
+    name: install
+
+- name: install mysql  base
+  include: mysql-base.yml
+
+- name: install mysql packages
+  include: mysql-install-centos6.yml
+  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == "6"
+
+- name: install mysql packages
+  include: mysql-install-centos7.yml
+  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == "7"
+
+- name: init mysql
+  include: mysql-init.yml

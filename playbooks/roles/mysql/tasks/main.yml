@@ -1,21 +1,9 @@
 ---
-# tasks file for mysql
-# include mysql_initialization
-- name: include mysql_initialization
-  include: mysql_initialization/main.yml
+- name: install mysql
+  include: mysql-setup.yml
+  when: method == "install"
 
 
-- name: include mysql install
-  include: mysql_install/main.yml
-
-
-# 启动 mysql
-- name: Transfer Mysql Config To remove Server
-  template:
-    src=my.cnf.j2
-    dest={{mysql_config}}
-    mode=0755
-  notify:
-    - restart mysqld
-  tags: change config
-  
+- name: delete mysql
+  include: mysql-delete.yml
+  when: method == "delete"

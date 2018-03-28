@@ -1,0 +1,11 @@
+---
+# mysql rpm 方式安装
+- name: mysql rpm packages
+  unarchive:
+    src: ../../source_files/mysql/el7.tar.gz
+    dest: /tmp/
+
+- name: The install mysql rpm for centos 7
+  shell: "rpm -ivh MySQL-*"
+  args:
+    chdir: /tmp

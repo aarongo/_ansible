@@ -1,0 +1,26 @@
+---
+# 卸载 mysql
+- name: stoped mysql for centos6
+  service: 
+    name: mysqld
+    state: stopped
+  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == "6"
+
+- name: stoped mysql centos7
+  systemd:
+    state: stopped
+    daemon_reload: yes
+    name: mysql
+  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == "7"
+
+- name: delete mysql rpm packages
+  checkmysql:
+    name: delete
+
+- name: delete mysql data dir
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ DATADIR }}"
+    - "/etc/my.cnf"

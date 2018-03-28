@@ -1,0 +1,39 @@
+---
+
+- name: mysql datadir
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ USER }}"
+    group: "{{ GROUP }}"
+  with_items:
+    - "{{ DATADIR }}"
+    - "{{ LOGSDIR }}"
+    - "{{ PIDSOCK }}"
+
+- name: setup mysql cnf
+  template:
+    src: my.cnf.j2
+    dest: /etc/my.cnf
+    owner: "{{ USER }}"
+    group: "{{ GROUP }}"
+
+- name: init mysql databses
+  shell: "mysql_install_db --user={{ USER }} --defaults-file=/etc/my.cnf --datadir={{ DATADIR }}"
+
+- name: restart mysql for centos6
+  service: 
+    name: mysqld
+    state: restarted
+  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == "6"
+
+- name: restart mysql centos7
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: mysql
+  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == "7"
+
+
+- name: change mysql root password
+  shell: "mysqladmin -u root password '{{ PASSWORD }}'"

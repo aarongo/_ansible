@@ -1,0 +1,20 @@
+---
+- name: create mysql group
+  group:
+    name: "{{ GROUP }}"
+    gid: 1000
+    state: present
+
+- name: create mysql user
+  user:
+    name: "{{ USER }}"
+    comment: "Mysql user"
+    shell: /usr/sbin/nologin
+    uid: 1000
+    group: "{{ GROUP }}"
+
+- name: Installation dependencies
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items: "{{ packages }}"

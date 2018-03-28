@@ -1,96 +1,59 @@
-# The following options will be passed to all MySQL clients
 [client]
-port		= {{mysql_port}}
-socket		= {{sock_path}}
-
-# The MySQL server
-[mysqld]
-port		= {{mysql_port}}
-socket		= {{sock_path}}
-
-log-error       = mysql_err.log
-pid-file        = {{mysql_pid_path}}
-basedir         = {{software_path}}
-datadir         = {{mysql_data_path}}
-
-
-
-[mysqld]
-wait_timeout=31536000
-interactive_timeout=31536000
-
-
-
-skip-external-locking
-skip-name-resolve
-
-max_allowed_packet = 10000M
-key_buffer_size = 256M
-join_buffer_size= 256M
-table_open_cache = 8000
-tmp_table_size = 256M
-sort_buffer_size = 256M
-read_buffer_size = 256M
-read_rnd_buffer_size = 64M
-myisam_sort_buffer_size = 512M
-thread_cache_size = 512
-thread_concurrency = 16
-
-query_cache_size= 64M
-query_cache_limit = 16M
-query_cache_min_res_unit = 32M
-max_connections = 4000
-max_connect_errors = 6000
-
-innodb_buffer_pool_size = 3192M
-innodb_file_io_threads = 4
-innodb_thread_concurrency = 8
-innodb_flush_log_at_trx_commit = 2
-innodb_log_buffer_size = 32M 
-innodb_log_file_size = 64M
-innodb_log_files_in_group = 4
-innodb_file_per_table = 0
-lower_case_table_names = 1
-log_bin_trust_function_creators = 1
-
-
-default-storage-engine=InnoDB
-
-character_set_server=utf8
-
-#log_slow_queries = mysql-slow.log
-#slow-query-log
-slow-query-log-file = mysql-slow.log
-long_query_time = 1
-log_slow_queries=1
-
-log-bin=mysql-bin
-binlog_format=mixed
-server-id	= 1
-
-
-
-
-
-[mysqldump]
-quick
-max_allowed_packet = 64M
+port = 3306
+socket = {{ PIDSOCK }}/mysql.sock
+default-character-set = utf8
 
 [mysql]
 no-auto-rehash
-prompt=(\\u@\\h--\\p) [\\d]>\\_
-
-[myisamchk]
-key_buffer_size = 32M
-sort_buffer_size = 16M
-read_buffer = 2M
-write_buffer = 2M
-
-[mysqlhotcopy]
-interactive-timeout
+default-character-set = utf8
 
 
+[mysqld]
+user = {{ USER }}
+port = {{ PORT }}
+socket = {{ PIDSOCK }}/mysql.sock
+basedir = /usr/
+datadir = {{ DATADIR }}
+open_files_limit = 65536
 
-log_slave_updates = 1
-replicate-ignore-db = mysql
+back_log = 600
+max_connections = 3000
+max_connect_errors = 6000
+external-locking = FALSE
+max_allowed_packet = 32M
+thread_cache_size = 300
+thread_concurrency = {{ THREAD_CONCURRENCY }}
+query_cache_limit = 4M
+query_cache_min_res_unit = 2k
+default-storage-engine = InnoDB
+transaction_isolation = READ-COMMITTED  
+tmp_table_size = 256M  
+max_heap_table_size = 256M
+expire_logs_days = 7  
+key_buffer_size = 2048M  
+read_rnd_buffer_size = 16M  
+bulk_insert_buffer_size = 64M  
+myisam_sort_buffer_size = 128M  
+myisam_max_sort_file_size = 10G  
+myisam_recover  
+skip-name-resolve  
+lower_case_table_names = 1  
+server-id = 1
+innodb_additional_mem_pool_size = 16M  
+innodb_buffer_pool_size = 2048M  
+innodb_thread_concurrency = 8  
+innodb_flush_log_at_trx_commit = 2  
+innodb_lock_wait_timeout = 120  
+innodb_file_per_table = 0 
+init_connect='SET collation_connection = utf8_general_ci'
+init_connect='SET NAMES utf8'
+character-set-server=utf8
+collation-server=utf8_general_ci
+lower_case_table_names=1
+[mysqldump]
+quick  
+[mysqld_safe]
+log-error={{ LOGSDIR }}/{{ LOGERRNAME }}
+pid-file={{ PIDSOCK }}/mysqld.pid
 
+sql_mode=NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES 
