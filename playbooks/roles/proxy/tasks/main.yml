@@ -1,0 +1,30 @@
+# 设置主机名称
+- name: change hostname
+  hostname:
+    name: "{{ hostname }}"
+
+# 判断是否有外网
+- name: checkne internet connection
+  checknetwork: url={{ check_url }}
+  register: result
+
+- debug:
+    msg: "System {{ inventory_hostname }} has Connection internet!!!"
+  when: result.stdotut == 'Connection'
+
+- name: add proxy to system
+  blockinfile:
+    dest: "/etc/profile"
+    block: |
+      {{item.info}}
+    marker: "# {mark} ANSIBLE MANAGED BLOCK {{item.name}}"
+  with_items: "{{ CONF_SETUP }}"
+  when: result.stdotut == 'Failed'
+
+- name: Application configuration
+  shell: source /etc/profile
+  when: result.stdotut == 'Failed'
+
+#- name: delete config
+#  shell: sed -i '/\# BEGIN ANSIBLE MANAGED BLOCK/,$d'  /etc/profile
+#  when: result.stdotut == 'Failed'

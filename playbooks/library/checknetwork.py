@@ -4,6 +4,7 @@
 
 """
 检测是否可以连通外网, 使用 url方式, url 为可变参数
+检测网络不应该有 task 失败退出的情况, 只是获取输出结果做判断即可
 """
 
 
@@ -43,12 +44,6 @@ if __name__ == '__main__':
 
     url = "http://" + refactor_module.params['url']
 
-    if internet_on(url)['status'] == 0:
+    result = dict(module='timezone', stdotut=internet_on(url)['messages'], changed=False, rc=0)
 
-        result = dict(module='timezone', stdotut=internet_on(url)['messages'], changed=False, rc=0)
-
-        refactor_module.exit_json(**result)
-
-    else:
-
-        result = dict(msg='execute failed', rc=internet_on(url)['status'])
+    refactor_module.exit_json(**result)

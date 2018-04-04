@@ -15,7 +15,7 @@ UNARCHIVED_TOMCAT_PATH: /software/apache-tomcat-{{tomcat_version}}
 # 配置文件调用
 TOMCAT_SERVER_XML: "{{UNARCHIVED_TOMCAT_PATH}}/conf/"
 TOMCAT_SERVER_JVM: "{{UNARCHIVED_TOMCAT_PATH}}/bin/"
-TOMCAT_START_PORT: 8090
+TOMCAT_START_PORT: 8080
 TOMCAT_DOCBASE: "/software/deploy_{{ project_name }}/{{ deploy_name }}"
 project_docbase: "{{ TOMCAT_DOCBASE }}/cybershop-{{ project_name }}"
 URL: "{{ parameter }}"

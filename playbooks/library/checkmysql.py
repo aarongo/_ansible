@@ -154,3 +154,5 @@ if __name__ == '__main__':
     else:
 
         result = dict(msg='params illegal', rc=1)
+
+        refactor_module.fail_json(**result)

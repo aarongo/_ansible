@@ -1,5 +1,5 @@
 ---
-BASE_USER: comall
+BASE_USER: comall-ejl
 #password is v6flaKTsd#7n
 BASE_USER_PASSWORD: $6$rounds=656000$PFOfKkVRiLtr3xzO$rbDWrRzh4p5n0BNDb9imv1MQyh5x/1RCGBW5Q4pdv1R2XffXY0B8OTgMpWlTYdDPwAWBXsguE7EhPQjAHvnd2/
 BASE_GROUP: ecommerce
@@ -12,55 +12,29 @@ pip_global_url:
   - { name: host, info: "trusted-host =  mirrors.aliyun.com"}
   - { name: conf, info: "index-url = http://mirrors.aliyun.com/pypi/simple"}
 
-kernel_parameters:
-  - {name: default, info: "net.ipv6.conf.all.disable_ipv6 = 1"}
-  - {name: all, info: "net.ipv6.conf.default.disable_ipv6 = 1"}
-  - {name: icmp_echo_ignore_broadcasts, info: "net.ipv4.icmp_echo_ignore_broadcasts = 1"}
-  - {name: icmp_ignore_bogus_error_responses, info: "net.ipv4.icmp_ignore_bogus_error_responses = 1"}
-  - {name: ip_forward, info: "net.ipv4.ip_forward = 1"}
-  - {name: send_redirects, info: "net.ipv4.conf.all.send_redirects = 1"}
-  - {name: default_send_redirects, info: "net.ipv4.conf.default.send_redirects = 1"}
-  - {name: msgmnb, info: "kernel.msgmnb = 65536"}
-  - {name: msgmax, info: "kernel.msgmax = 65536"}
-  - {name: tcp_max_tw_buckets, info: "net.ipv4.tcp_max_tw_buckets = 6000"}
-  - {name: tcp_sack, info: "net.ipv4.tcp_sack = 1"}
-  - {name: tcp_window_scaling, info: "net.ipv4.tcp_window_scaling = 1"}
-  - {name: tcp_rmem, info: "net.ipv4.tcp_rmem = 4096        87380   4194304"}
-  - {name: tcp_wmem, info: "net.ipv4.tcp_wmem = 4096        16384   4194304"}
-  - {name: wmem_default, info: "net.core.wmem_default = 8388608"}
-  - {name: rmem_default, info: "net.core.rmem_default = 8388608"}
-  - {name: rmem_max, info: "net.core.rmem_max = 16777216"}
-  - {name: tcp_max_orphans, info: "net.ipv4.tcp_max_orphans = 3276800"}
-  - {name: tcp_tw_recycle, info: "net.ipv4.tcp_tw_recycle = 1"}
-  - {name: tcp_tw_reuse, info: "net.ipv4.tcp_mem = 94500000 915000000 927000000"}
-  - {name: tcp_fin_timeout, info: "net.ipv4.tcp_fin_timeout = 1"}
-
 alias_rm:
   - { name: alias, info: "alias rm='trash-put'"}
 
-# kernel_parameters:
-#   - { name: tcp_syn_retries, info: "net.ipv4.tcp_syn_retries = 1"}
-#   - { name: tcp_synack_retries, info: "net.ipv4.tcp_synack_retries = 1"}
-#   - { name: tcp_keepalive_time, info: "net.ipv4.tcp_keepalive_time = 600"}
-#   - { name: tcp_keepalive_probes, info: "net.ipv4.tcp_keepalive_probes = 3"}
-#   - { name: tcp_keepalive_intvl, info: "net.ipv4.tcp_keepalive_intvl =15"}
-#   - { name: tcp_retries2, info: "net.ipv4.tcp_retries2 = 5"}
-#   - { name: tcp_fin_timeout, info: "net.ipv4.tcp_fin_timeout = 2"}
-#   - { name: tcp_max_tw_buckets, info: "net.ipv4.tcp_max_tw_buckets = 36000"}
-#   - { name: tcp_tw_reuse, info: "net.ipv4.tcp_tw_reuse = 1"}
-#   - { name: tcp_max_orphans, info: "net.ipv4.tcp_max_orphans = 32768"}
-#   - { name: tcp_syncookies, info: "net.ipv4.tcp_syncookies = 1"}
-#   - { name: tcp_max_syn_backlog, info: "net.ipv4.tcp_max_syn_backlog = 16384"}
-#   - { name: tcp_wmem, info: "net.ipv4.tcp_wmem = 8192 131072 16777216"}
-#   - { name: tcp_rmem, info: "net.ipv4.tcp_rmem = 32768 131072 16777216"}
-#   - { name: tcp_mem, info: "net.ipv4.tcp_mem = 786432 1048576 1572864"}
-#   - { name: ip_local_port_range, info: "net.ipv4.ip_local_port_range = 1024 65000"}
-#   - { name: ip_conntrack_max, info: "net.ipv4.ip_conntrack_max = 65536"}
-#   - { name: netfilter.ip_conntrack_max, info: "net.ipv4.netfilter.ip_conntrack_max=65536"}
-#   - { name: core.somaxconn, info: "net.core.somaxconn = 16384"}
-#   - { name: core.netdev_max_backlog, info: "net.core.netdev_max_backlog = 16384"}
+kernel_parameters:
+  - {name: default, info: "net.ipv6.conf.all.disable_ipv6 = 1"}
+  - {name: all, info: "net.ipv6.conf.default.disable_ipv6 = 1"}
+  - { name: tcp_syn_retries, info: "net.ipv4.tcp_syn_retries = 1"}
+  - { name: tcp_synack_retries, info: "net.ipv4.tcp_synack_retries = 1"}
+  - { name: tcp_keepalive_time, info: "net.ipv4.tcp_keepalive_time = 600"}
+  - { name: tcp_keepalive_probes, info: "net.ipv4.tcp_keepalive_probes = 3"}
+  - { name: tcp_keepalive_intvl, info: "net.ipv4.tcp_keepalive_intvl =15"}
+  - { name: tcp_retries2, info: "net.ipv4.tcp_retries2 = 5"}
+  - { name: tcp_fin_timeout, info: "net.ipv4.tcp_fin_timeout = 2"}
+  - { name: tcp_max_tw_buckets, info: "net.ipv4.tcp_max_tw_buckets = 36000"}
+  - { name: tcp_tw_reuse, info: "net.ipv4.tcp_tw_reuse = 1"}
+  - { name: tcp_max_orphans, info: "net.ipv4.tcp_max_orphans = 32768"}
+  - { name: tcp_syncookies, info: "net.ipv4.tcp_syncookies = 1"}
+  - { name: tcp_wmem, info: "net.ipv4.tcp_wmem = 8192 131072 16777216"}
+  - { name: tcp_rmem, info: "net.ipv4.tcp_rmem = 32768 131072 16777216"}
+  - { name: tcp_mem, info: "net.ipv4.tcp_mem = 786432 1048576 1572864"}
+  - { name: ip_local_port_range, info: "net.ipv4.ip_local_port_range = 1024 65000"}
 
-# 内核参数优化
+# 内核参数优化tcp_keepalive_probes
 # 对于一个新建连接，内核要发送多少个 SYN 连接请求才决定放弃。不应该大于255，默认值是5，对应于180秒左右时间。。(对于大负载而物理通信良好的网络而言,这个值偏高,可修改为2.这个值仅仅是针对对外的连接,对进来的连接,是由tcp_retries1决定的)
 # net.ipv4.tcp_syn_retries = 1
 # 对于远端的连接请求SYN，内核会发送SYN ＋ ACK数据报，以确认收到上一个 SYN连接请求包。这是所谓的三次握手( threeway handshake)机制的第二个步骤。这里决定内核在放弃连接之前所送出的 SYN+ACK 数目。不应该大于255，默认值是5，对应于180秒左右时间。

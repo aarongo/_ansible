@@ -1,4 +1,9 @@
 ---
+- name: install git
+  yum:
+    name: git
+    state: latest
+
 - name: checkout trash-cli
   git:
     repo: "https://github.com/andreafrancia/trash-cli.git"
@@ -32,10 +37,6 @@
 
 - name: source env
   shell: "source ~/.bashrc"
-
-
-- name: Add crond for clean trash
-  crond:
 
 # 只有状态为改变的时候才会触发重启 action
 - name: Add crond for clean trash centos6

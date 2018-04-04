@@ -52,3 +52,5 @@ if __name__ == '__main__':
     else:
 
         result = dict(msg='execute failed', rc=data['status'])
+
+        refactor_module.fail_json(**result)

@@ -1,4 +1,4 @@
 ---
-- hosts: ejl
+- hosts: ejl_pro
   roles:
     - authorized

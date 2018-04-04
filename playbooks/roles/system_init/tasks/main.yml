@@ -24,7 +24,3 @@
 
 - name: include install_pip
   include: install_pip/internet.yml
-
-
-- name: include trash-cli install
-  include: alias_rm/main.yml

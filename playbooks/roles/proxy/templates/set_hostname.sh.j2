@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+EXEC=/usr/bin/hostnamectl
+
+set_hostname(){
+    ${EXEC} set-hostname
+}
+
+{% for gname in hosts_group %}
+ejl-pro-{{ gname }}-
+{% endfor %}

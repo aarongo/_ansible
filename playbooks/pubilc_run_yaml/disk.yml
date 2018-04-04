@@ -1,4 +1,4 @@
 ---
-- hosts: ejl
+- hosts: pro
   roles:
     - disk_init

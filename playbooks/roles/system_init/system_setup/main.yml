@@ -71,13 +71,13 @@
 - name: Creates a cron for sync time system is 6
   cron:
     name: "create crond sync time"
-    job: "/usr/sbin/ntpdate 202.120.2.101"
+    job: "/usr/sbin/ntpdate ntp1.cloud.aliyuncs.com"
   notify:
     - restart crond centos 6
 
 - name: Creates a cron for sync time system is 7
   cron:
     name: "create crond sync time"
-    job: "/usr/sbin/ntpdate 202.120.2.101"
+    job: "/usr/sbin/ntpdate ntp1.cloud.aliyuncs.com"
   notify:
     - restart crond centos 7
