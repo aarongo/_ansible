@@ -6,8 +6,6 @@
   file:
     path: "{{INSTALL_HOME}}"
     state: directory
-    owner: root
-    group: root
   when: (base_home == 'no')
 
 
@@ -23,7 +21,7 @@
   unarchive:
     src: "../../../source_files/jdk-8u102-linux-x64.tar.gz"
     dest: "{{INSTALL_HOME}}/"
-  when: (stdout_result.stdout != "0")
+  when: (stdout_result.stdout == "0")
 
 
 # 更新系统环境变量 JAVA_HOME
@@ -33,6 +31,9 @@
     block: |
       {{item.info}}
     marker: "# {mark} ANSIBLE MANAGED BLOCK {{item.name}}"
+  become: yes
+  become_method: sudo
+  become_user: root
   with_items: "{{profile}}"
 
 
@@ -42,8 +43,6 @@
   unarchive:
     src: "../../../source_files/zookeeper-{{zookeeper_version}}.tar.gz"
     dest: "{{INSTALL_HOME}}/"
-    owner: root
-    group: root
 
 # 传送配置文件到远程服务器
 - name: transfer config to remote server

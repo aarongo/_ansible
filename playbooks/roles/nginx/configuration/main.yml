@@ -4,6 +4,7 @@
   template:
     src=nginx.conf.j2
     dest={{ nginx_dir }}conf/nginx.conf
+    group=ecommerce
     mode=0644
 
 - name: Copy(Index) Template Index To Remote Server   
@@ -13,5 +14,6 @@
     owner={{user}}
     group={{group}}
     mode=0755
+    group=ecommerce
   notify:
     - start nginx

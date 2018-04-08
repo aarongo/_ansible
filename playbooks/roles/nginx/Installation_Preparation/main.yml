@@ -5,26 +5,31 @@
     dest={{ soft_dir }} 
     mode=755
     state=directory
+    group=ecommerce
 
 - name: At Remote Server Create Nginx Logs Save_Path
   file:
     dest={{ nginx_log_dir }}
     mode=0644
     state=directory
+    group=ecommerce
 
 - name: At Remote Server Create Script Save Save_Path
   file:
     dest={{script_path}}
     mode=0644
     state=directory
+    group=ecommerce
 
 - name: Unzip Software File To Remote
   unarchive:
     src="{{ item }}" dest="{{ soft_dir }}"
+    group=ecommerce
   with_items: "{{install_packages}}"
 
 - name: After parse transfer files to remote
   template: 
     src=nginx_install.sh.j2
     dest={{soft_dir}}nginx_install.sh
+    group=ecommerce
     mode=0755

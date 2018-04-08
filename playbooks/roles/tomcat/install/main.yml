@@ -5,6 +5,7 @@
     dest: "{{ item }}"
     state: directory
     mode: 0755
+    group: ecommerce
   with_items:
     # - "{{ INSTALL_HOME }}"
     - "{{ SCRIPT_HOME }}"
@@ -23,6 +24,7 @@
   unarchive:
     src: "{{ PACKAGES_HOME }}/{{ JAVA_PACKAGES_NAME }}"
     dest: "{{ INSTALL_HOME }}"
+    group: ecommerce
   when: (stdout_result.stdout == "0")
 
 
@@ -31,6 +33,7 @@
   unarchive:
     src: "{{ PACKAGES_HOME }}/{{ TOMCAT_PACKAGES_NAME }}"
     dest: "{{INSTALL_HOME}}"
+    group: ecommerce
 
 
 # 删除 webapps 下无用文件
@@ -45,6 +48,7 @@
   file:
     path: "{{TOMCAT_DOCBASE}}"
     state: directory
+    group: ecommerce
   when: run_way == "install"
 
 - name: Create index.html to process path
@@ -52,6 +56,7 @@
     src: index.html.j2
     dest: "{{TOMCAT_DOCBASE}}/index.html"
     mode: 0600
+    group: ecommerce
   when: run_way == "install"
 
 - name: Configure Tomcat 7
@@ -59,6 +64,7 @@
     src: server.xml.j2
     dest: "{{TOMCAT_SERVER_XML}}server.xml"
     mode: 0600
+    group: ecommerce
 
 
 - name: Configure Tomcat catalina.sh
@@ -66,6 +72,7 @@
     src: catalina.sh.j2
     dest: "{{TOMCAT_SERVER_JVM}}catalina.sh"
     mode: 0755
+    group: ecommerce
 
 
 - name: Configure tomcat.py
@@ -73,14 +80,22 @@
     src: tomcat.py.j2
     dest: "{{SCRIPT_HOME}}{{project_name}}.py"
     mode: 0755
+    group: ecommerce
 
 - name: Configure tomcat script for {{ project_name }}
   template:
     src: tomcat-restapi.py.j2
     dest: "{{SCRIPT_HOME}}{{project_name}}.py"
     mode: 0755
+    group: ecommerce
   when: project_name == "rest-api"
 
 
 - name: change tomcat process name
-  command: "mv {{ UNARCHIVED_TOMCAT_PATH }} {{ TOMCAT_APP_PATH }}"
+  shell: "mv {{ UNARCHIVED_TOMCAT_PATH }} {{ TOMCAT_APP_PATH }}"
+
+- name: change tomcat directory group permissions
+  shell: "chgrp -R ecommerce {{ TOMCAT_APP_PATH }}"
+  become: yes
+  become_method: sudo
+  become_user: root

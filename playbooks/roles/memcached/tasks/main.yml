@@ -3,26 +3,30 @@
 - name: Install Libaray
   yum: name={{item}} state=latest
   with_items: "{{library_list}}"
-  tags: install memcached
+  become: yes
+  become_method: sudo
+  become_user: root
 
 - name: Set the max open file descriptors 
   sysctl: name=fs.file-max value={{ memcached_fs_file_max }} state=present ignoreerrors=yes
-  tags: install memcached
+  become: yes
+  become_method: sudo
+  become_user: root
 
 - name: Create Packages  directory if it doesn't exist
-  file: path={{Tmp_Packages}} state=directory mode=0755
-  tags: install memcached
+  file: path={{Tmp_Packages}} state=directory group=ecommerce mode=0755
+
 - name: Create Script Directory if it doesn't exist
-  file: path={{script_path}} state=directory mode=0755
-  tags: send script
+  file: path={{script_path}} state=directory group=ecommerce mode=0755
+
 
 - name: Download Memcached Packages and Unarchive
   unarchive: 
     # src=http://www.memcached.org/files/memcached-{{Version}}.tar.gz
     src: "../../../source_files/memcached-{{Version}}.tar.gz"
     dest: "{{Tmp_Packages}}"
+    group: ecommerce
     #copy: no
-  tags: install memcached
 
 - name: configure And install memcached {{Version}}
   shell: "./configure {{parameter}}&&make && make install"
@@ -31,7 +35,7 @@
 
 #配置memcached操作脚本
 - name: Transfer Memcached Script To Remote Server
-  template: src=action_memcached.py.j2 dest={{script_path}}action_memcached mode=0755
+  template: src=action_memcached.py.j2 dest={{script_path}}action_memcached group=ecommerce mode=0755
 
 - name: include install_python_packages
   include: install_python_packages/main.yml
@@ -40,4 +44,4 @@
   file:
     dest={{ Tmp_Packages }}
     state=absent
-  tags: install memcached
+    group=ecommerce

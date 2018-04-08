@@ -2,7 +2,7 @@
 - name: create mysql group
   group:
     name: "{{ GROUP }}"
-    gid: 1000
+    gid: 1100
     state: present
 
 - name: create mysql user
@@ -10,7 +10,7 @@
     name: "{{ USER }}"
     comment: "Mysql user"
     shell: /usr/sbin/nologin
-    uid: 1000
+    uid: 1100
     group: "{{ GROUP }}"
 
 - name: Installation dependencies

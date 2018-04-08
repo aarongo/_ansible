@@ -11,6 +11,15 @@
     path: "{{ solr_deploy_path }}"
     state: directory
 
+# 安装依赖包
+- name: install unzip for server
+  yum:
+    name: unzip
+    state: latest
+  become: yes
+  become_method: sudo
+  become_user: root
+
 - name: unarchive solr 4.8.0 war
   unarchive:
     src: "../../../source_files/solrcloud/solr-{{ solr_version }}.war"
@@ -22,36 +31,32 @@
   file:
     path: "{{ item }}"
     state: directory
-    mode: 0755
   with_items:
     - "{{ solrcloud_path }}"
 
 
 # 传送solr jar 到 solr 项目
-- name: transfer files to remote server
+- name: transfer jar files to remote server
   copy:
     src: "{{ item }}"
     dest: "{{ solr_libs_path }}"
-    mode: 0755
   with_fileglob:
     - "../../../source_files/solrcloud/ext/*"
 
 # 传送solr jar 到 tomcat 程序 libs
-- name: transfer files to remote server
+- name: transfer libs files to remote server
   copy:
     src: "{{ item }}"
     dest: "{{ tomcat_home }}/lib/"
-    mode: 0755
   with_fileglob:
     - "../../../source_files/solrcloud/ext/*"
 
 # 拷贝 solrcloud 配置文件
 - name: transfer config files to remote
   unarchive:
-    src: ../../../source_files/solrcloud/conf.tar.gz
+    src: "../../../source_files/solrcloud/conf.tar.gz"
     dest: "{{ solrcloud_config_path }}"
-    owner: root
-    mode: 0644
+
 
 # 拷贝 solr Jar 包到 solrcloud jar 包存放位置
 - name: copy solr jar to solrcloud_libs
@@ -60,7 +65,7 @@
 # 拷贝 solr 项目包里 jar 到 solrcloud 调用位置
 - name: unarchive libs to solrcloud
   unarchive:
-    src: ../../../source_files/solrcloud/solrlibs.tar.gz
+    src: "../../../source_files/solrcloud/solrlibs.tar.gz"
     dest: "{{ solrcloud_libs_path }}"
 
 
@@ -69,7 +74,6 @@
   template:
     src: log4j.properties
     dest: "{{ tomcat_home }}/lib/"
-    mode: 0644
 
 
 # 拷贝solrcloud 核心配置文件到 solrhome
@@ -77,19 +81,16 @@
   template:
     src: solr.xml.j2
     dest: "{{ solrcloud_home }}/solr.xml"
-    mode: 0644
 - name: transfer solrcloud config to solrhome
   template:
     src: zoo.cfg
     dest: "{{ solrcloud_home }}/zoo.cfg"
-    mode: 0644
 
 # 配置 solrhome
 - name: configure solrhome
   template:
     src: web.xml.j2
     dest: "{{ solr_deploy_path }}WEB-INF/web.xml"
-    mode: 0644
 
 
 # 更改 tomcat 启动参数
@@ -97,14 +98,12 @@
   template:
     src: catalina.sh.j2
     dest: "{{ tomcat_home }}/bin/catalina.sh"
-    mode: 0755
 
 # 配置 tomcat 配置文件
 - name: change tomcat server.xml
   template:
     src: server.xml.j2
     dest: "{{ tomcat_home }}/conf/server.xml"
-    mode: 0644
 
 
 # 配置启动脚本
@@ -116,4 +115,3 @@
   template:
     src: tomcat-solr.py.j2
     dest: "{{ script_path }}/tomcat-solr.py"
-    mode: 0755

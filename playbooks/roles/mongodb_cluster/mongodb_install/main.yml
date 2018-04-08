@@ -6,6 +6,7 @@
   file:
     dest: "{{ item }}"
     state: directory
+    group: ecommerce
   with_items:
     # - "{{ BASE_HOME }}"
     - "{{ SCRIPT_PATH }}"
@@ -17,6 +18,7 @@
   file:
     dest: "{{ MASTER_DBPATH }}"
     state: directory
+    group: ecommerce
   when: mongodb_role == "master"
 
 
@@ -24,6 +26,7 @@
   file:
     dest: "{{ SLAVE_DBPATH }}"
     state: directory
+    group: ecommerce
   when: mongodb_role == "slave"
 
 
@@ -31,6 +34,7 @@
   file:
     dest: "{{ ARBITR_DBPATH }}"
     state: directory
+    group: ecommerce
   when: mongodb_role == "arbitr"
 
 
@@ -40,10 +44,11 @@
     src: "../../../source_files/mongodb-linux-x86_64-rhel70-3.2.0.tgz"
     # src: mongodb-linux-x86_64-3.0.8.tgz
     dest: "{{ BASE_HOME }}"
+    group: ecommerce
 
 
 - name: change unarchive after directory name
-  shell: "mv {{ BASE_HOME }}/mongodb-linux-x86_64-rhel70-3.2.0/* {{ MONGODB_HOME }}"
+  shell: "cp -rp {{ BASE_HOME }}/mongodb-linux-x86_64-rhel70-3.2.0/* {{ MONGODB_HOME }}"
 
 - name: remove unarchive directory
   shell: "rm -rf {{ BASE_HOME }}/mongodb-linux-x86_64-rhel70-3.2.0"
@@ -54,6 +59,7 @@
   template:
     src: master.conf.j2
     dest: "{{ MONGODB_CONF_PATH }}/master.conf"
+    group: ecommerce
   when: mongodb_role == "master"
 
 
@@ -61,12 +67,14 @@
   template:
     src: slave.conf.j2
     dest: "{{ MONGODB_CONF_PATH }}/slave.conf"
+    group: ecommerce
   when: mongodb_role == "slave"
 
 - name: transfer config to arbitr
   template:
     src: arbitr.conf.j2
     dest: "{{ MONGODB_CONF_PATH }}/arbitr.conf"
+    group: ecommerce
   when: mongodb_role == "arbitr"
 
 
@@ -75,6 +83,7 @@
   template:
     src: action_mongodb.py.j2
     dest: "{{ SCRIPT_PATH }}/action_mongodb.py"
+    group: ecommerce
     mode: 0755
 
 
@@ -103,9 +112,10 @@
 # 配置日志切割
 - name: After parse Transfer Files For cront mongodb cut logs
   template:
-    src=logrotate.sh.j2
-    dest={{SCRIPT_PATH}}/logrotate.sh
-    mode=0755
+    src: logrotate.sh.j2
+    dest: "{{SCRIPT_PATH}}/logrotate.sh"
+    group: ecommerce
+    mode: 0755
   
 
 - name: Crontab Create For Nginx Logs Cutting At Every 00:00 system version  CentOS 7

@@ -1,4 +1,4 @@
 ---
-- hosts: pipeline
+- hosts: mysql
   roles:
     - mysql

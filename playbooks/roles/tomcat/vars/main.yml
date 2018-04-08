@@ -20,3 +20,7 @@ TOMCAT_DOCBASE: "/software/deploy_{{ project_name }}/{{ deploy_name }}"
 project_docbase: "{{ TOMCAT_DOCBASE }}/cybershop-{{ project_name }}"
 URL: "{{ parameter }}"
 TOMCAT_CHECK_URL: "http://{{ ansible_default_ipv4.address }}:{{ TOMCAT_START_PORT }}{{ URL }}"
+
+# tomcat 启动内存配置
+XMX: -Xmx{{ number_X }}m
+XMS: -Xms{{ number_S }}m

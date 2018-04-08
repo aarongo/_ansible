@@ -2,4 +2,4 @@
   hosts: "{{ hosts_name }}"
   roles:
     - role: zookeeper-cluster
-      zookeeper_hosts: "{{groups['zookeeper']}}"
+      zookeeper_hosts: "{{groups['solrcloud']}}"

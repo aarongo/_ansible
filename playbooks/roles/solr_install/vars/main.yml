@@ -16,4 +16,4 @@ solr_libs_path: "{{ solr_deploy_path }}WEB-INF/lib/"
 
 solrcloud_port: 8080
 TOMCAT_START_PORT: 8080
-JVM_OPTINOS: "$JAVA_OPTS -Xmx2048m -Xms2048m -Xmn1g -Xss1024k -DzkHost=10.167.5.23:2181,10.167.5.24:2181,10.167.5.25:2181 -Djava.security.egd=file:/dev/./urandom"
+JVM_OPTINOS: "$JAVA_OPTS -Xmx2048m -Xms2048m -Xmn1g -Xss1024k -DzkHost=172.16.217.88:2181,172.16.217.89:2181,172.16.217.90:2181 -Djava.security.egd=file:/dev/./urandom"

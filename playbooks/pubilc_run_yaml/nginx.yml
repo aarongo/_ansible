@@ -1,4 +1,4 @@
 ---
-- hosts: restapi
+- hosts: nginx
   roles:
     - nginx

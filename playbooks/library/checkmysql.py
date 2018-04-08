@@ -109,7 +109,7 @@ def delete_mariadb():
     results = {}
 
     # 判断系统是否存在 mariadb
-    if len(get_mariadb()) == 1:
+    if len(get_mariadb()):
 
         results = {
             "messages": "Do not need any operation!"

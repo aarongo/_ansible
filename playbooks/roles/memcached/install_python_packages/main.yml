@@ -8,3 +8,6 @@
   shell: "python setup.py install"
   args:
     chdir: /tmp/psutil-5.4.3
+  become: yes
+  become_method: sudo
+  become_user: root

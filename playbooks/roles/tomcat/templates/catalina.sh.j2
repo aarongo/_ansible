@@ -1,7 +1,7 @@
 #!/bin/sh
 # CATALINA_OPTS="-Xms6144m -Xmx6144m -XX:MaxNewSize=6144m -XX:PermSize=6144M -XX:MaxPermSize=1024m -Djava.security.egd=file:/dev/./urandom"
 JAVA_HOME={{ JAVA_HOME_7 }}
-JAVA_OPTS="$JAVA_OPTS -server -Xmx3072m -Xms3072m -XX:PermSize=521m -XX:MaxPermSize=1024m -Xss512k -XX:+UseG1GC -XX:MaxGCPauseMillis=50 -XX:InitiatingHeapOccupancyPercent=70 -XX:+UseCompressedOops -XX:PretenureSizeThreshold=1m -XX:+UseCMSCompactAtFullCollection -XX:CMSFullGCsBeforeCompaction=5 -XX:+DisableExplicitGC -verbose:gc -XX:+PrintGCTimeStamps -XX:+PrintGCDetails -Xloggc:/software/logs/{{ ansible_default_ipv4.address }}.log -XX:+PrintFlagsFinal -Djava.security.egd=file:/dev/./urandom"
+JAVA_OPTS="$JAVA_OPTS -server {{ XMX }} {{ XMS }} -XX:PermSize=521m -XX:MaxPermSize=1024m -Xss512k -XX:+UseG1GC -XX:MaxGCPauseMillis=50 -XX:InitiatingHeapOccupancyPercent=70 -XX:+UseCompressedOops -XX:PretenureSizeThreshold=1m -XX:+UseCMSCompactAtFullCollection -XX:CMSFullGCsBeforeCompaction=5 -XX:+DisableExplicitGC -verbose:gc -XX:+PrintGCTimeStamps -XX:+PrintGCDetails -Xloggc:/software/logs/{{ ansible_default_ipv4.address }}.log -XX:+PrintFlagsFinal -Djava.security.egd=file:/dev/./urandom"
 # OS specific support.  $var _must_ be set to either true or false.
 cygwin=false
 darwin=false

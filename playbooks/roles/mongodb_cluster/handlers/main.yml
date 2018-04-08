@@ -3,6 +3,9 @@
   service: 
     name: crond
     state: restarted
+  become: yes
+  become_method: sudo
+  become_user: root
   when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == "6"
 
 - name: restart crond centos 7
@@ -10,4 +13,7 @@
     state: restarted
     daemon_reload: yes
     name: crond
+  become: yes
+  become_method: sudo
+  become_user: root
   when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == "7"
