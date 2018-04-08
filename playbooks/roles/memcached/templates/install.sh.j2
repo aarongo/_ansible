@@ -8,5 +8,5 @@
 {{Tmp_Packages}}{{name}}-{{Version}}/configure {{parameter}};make && make install
 Memcached_bin={{prefix}}/bin/memcached
 {% for port in memcached_port_list %}
-	${Memcached_bin} -d -l {{memcached_listen_address}} -u root -p {{port}} -c {{memcached_max_conn}} -m {{memcached_meroy_size}} -P /tmp/{{port}}.pid 
+	${Memcached_bin} -d -l {{memcached_listen_address}} -u {{ start_user }} -p {{port}} -c {{memcached_max_conn}} -m {{memcached_meroy_size}} -P /tmp/{{port}}.pid
 {% endfor %}

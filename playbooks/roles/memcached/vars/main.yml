@@ -20,3 +20,4 @@ prefix: /software/{{name}}-{{Version}}
 parameter: --prefix={{prefix}} --enable-threads --enable-64bit
 ##------
 memcached_fs_file_max: 756024
+start_user: {{ user }}

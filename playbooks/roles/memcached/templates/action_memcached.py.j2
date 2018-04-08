@@ -120,7 +120,7 @@ def select_status(parameter):
 def check_arg(self, args=None):
     parser = argparse.ArgumentParser(description='Script to learn basic argparse')
     parser.add_argument('-P', '--port', help="Memcached Port Or 'all' start[11211-11215]", required='True')
-    parser.add_argument('-u', '--user', help='User Name', default='root')
+    parser.add_argument('-u', '--user', help='User Name', default='{{ start_user }}')
     parser.add_argument('-t', '--action', help='Action start|stop|status', default='status')
 
     if len(sys.argv) <= 2:
