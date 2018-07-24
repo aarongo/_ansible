@@ -1,0 +1,10 @@
+- name: start and enable service dcoker-ce
+  systemd:
+    name: dcoker-ce
+    state: started
+    enabled: yes
+
+- name: restart sshd
+  systemd:
+    name: sshd
+    state: restarted

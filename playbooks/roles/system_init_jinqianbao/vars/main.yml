@@ -1,0 +1,53 @@
+---
+# 软件依赖
+yum_tools:
+  - yum-utils
+  - device-mapper-persistent-data
+  - lvm2
+
+# docker 仓库
+docker_yum_repository: "http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo"
+
+# docker 数据目录
+docker_data: /data/lib/docker
+
+# 内核优化参数
+kernel_parameters:
+  - {name: net.core.netdev_max_backlog, info: "net.core.netdev_max_backlog = 4000"}
+  - {name: net.core.somaxconn, info: "net.core.somaxconn = 4000"}
+  - { name: net.core.rmem_default, info: "net.core.rmem_default = 2097152"}
+  - { name: net.core.wmem_default, info: "net.core.wmem_default = 2097152"}
+  - { name: net.core.rmem_max, info: "net.core.rmem_max = 4194304"}
+  - { name: net.core.wmem_max, info: "net.core.wmem_max = 4194304"}
+  - { name: net.ipv4.tcp_sack, info: "net.ipv4.tcp_sack = 1"}
+  - { name: net.ipv4.tcp_window_scaling, info: "net.ipv4.tcp_window_scaling = 1"}
+  - { name: net.ipv4.tcp_timestamps, info: "net.ipv4.tcp_timestamps = 1"}
+  - { name: net.ipv4.tcp_syn_retries, info: "net.ipv4.tcp_syn_retries = 2"}
+  - { name: net.ipv4.tcp_tw_recycle, info: "net.ipv4.tcp_tw_recycle = 1"}
+  - { name: net.ipv4.tcp_tw_reuse, info: "net.ipv4.tcp_tw_reuse = 1"}
+  - { name: net.ipv4.tcp_fin_timeout, info: "net.ipv4.tcp_fin_timeout = 30"}
+  - { name: net.ipv4.tcp_keepalive_probes, info: "net.ipv4.tcp_keepalive_probes=5"}
+  - { name: net.ipv4.tcp_keepalive_time, info: "net.ipv4.tcp_keepalive_time = 1200"}
+  - { name: net.ipv4.ip_local_port_range, info: "net.ipv4.ip_local_port_range = 1024  65535"}
+
+# 用户
+user_name: tunnel
+
+# ssh config
+ssh_config:
+  - "ClientAliveInterval 60"
+  - "ClientAliveCountMax 120"
+
+# packages
+packages:
+  - "php71w"
+  - "php71w-mbstring"
+  - "php71w-dom"
+  - "php71w-pdo"
+  - "php71w-cli"
+  - "git"
+  - "mysql"
+  - "htop"
+
+# deploy path
+custom_path: "PATH=$PATH:/data/devops/shells/"

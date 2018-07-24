@@ -5,11 +5,13 @@
     src: "{{zabbix_agent_download_url}}zabbix-{{zabbix_agent_verison}}.tar.gz"
     dest: /tmp/
     copy: no
-    owner: root
-    group: root
+    group: ecommerce
 
 - name: zabbix_agent install {{zabbix_agent_verison}}
   shell: "{{zabbix_configure}} && make && make install"
   args:
     chdir: "/tmp/zabbix-{{zabbix_agent_verison}}"
+  become: yes
+  become_method: sudo
+  become_user: root
    

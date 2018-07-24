@@ -8,6 +8,6 @@ relation:
 user: mfs
 tmp_path: /tmp/
 host_conf:
-  - { name: mfsmaster, info: "10.200.200.85    mfsmaster" }
+  - { name: mfsmaster, info: "192.168.0.2    mfsmaster" }
 
-mount_static_path: "/software/syzm_static"
+mount_static_path: "/software/gkwc_static"

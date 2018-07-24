@@ -13,12 +13,12 @@ function change_files(){
 function handle_databases(){
 	echo "handle_databases"
 	# set root password
-	# mysqladmin -u root password "123456"
+	mysqladmin -u root password "123456"
 	# crate databases
-	mysql -h {{ DB_HOST }} -uroot -p"ldms2017" -e"create database zabbix character set utf8 collate utf8_bin;";
-	mysql -h {{ DB_HOST }} -uroot -p"ldms2017" -e"grant all privileges on zabbix.* to zabbix@'localhost' identified by 'zabbix';";
-	mysql -h {{ DB_HOST }} -uroot -p"ldms2017" -e"grant all privileges on zabbix.* to zabbix@'%' identified by 'zabbix';";
-	mysql -h {{ DB_HOST }} -uroot -p"ldms2017" -e"FLUSH PRIVILEGES;";
+	mysql -h {{ DB_HOST }} -uroot -p"123456"  -e"create database zabbix character set utf8 collate utf8_bin;";
+	mysql -h {{ DB_HOST }} -uroot -p"123456"  -e"grant all privileges on zabbix.* to zabbix@'localhost' identified by 'zabbix';";
+	mysql -h {{ DB_HOST }} -uroot -p"123456"  -e"grant all privileges on zabbix.* to zabbix@'%' identified by 'zabbix';";
+	mysql -h {{ DB_HOST }} -uroot -p"123456"  -e"FLUSH PRIVILEGES;";
 }
 
 

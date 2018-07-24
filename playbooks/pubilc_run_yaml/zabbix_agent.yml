@@ -1,4 +1,4 @@
 ---
-- hosts: zabbix-agent
+- hosts: ejl_pro
   roles:
     - zabbix_agent

@@ -1,0 +1,6 @@
+---
+- name: create user for system
+  user:
+    name: "{{ user_name }}"
+    shell: /sbin/nologin
+    append: yes

@@ -7,6 +7,9 @@
 - name: install cofnigure base packages
   # yum: name=gcc state=present
   shell: yum -y install gcc
+  become: yes
+  become_method: sudo
+  become_user: root
 
 - name: unarchive zabbix_agent2.4.4
   unarchive:
@@ -17,3 +20,14 @@
   shell: "{{zabbix_configure}} && make && make install"
   args:
     chdir: /tmp/zabbix-2.4.4
+  become: yes
+  become_method: sudo
+  become_user: root
+
+- name: change_agent dir permissions
+  file:
+    path: "{{ zabbix_agent_home }}"
+    mode: 0755
+  become: yes
+  become_method: sudo
+  become_user: root

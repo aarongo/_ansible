@@ -1,0 +1,67 @@
+---
+- name: install epel-release
+  yum:
+    name: epel-release
+    state: latest
+
+#修改sshd_config配置，延长连接时长为2小时
+- name: update ssh_config of connection 2 hours
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    line: "{{ item }}"
+    backup: yes
+  with_items: "{{ ssh_config }}"
+  notify:
+    - restart sshd
+
+# 初始化 composer
+- name: transfer webtatic-release
+  copy:
+    src: webtatic-release.rpm
+    dest: /root
+    mode: 0755
+
+- name: install webtatic-release
+  yum:
+    name: /root/webtatic-release.rpm
+    state: present
+
+- name: install packages
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items: "{{ packages }}"
+
+- name: config composer
+  copy:
+    src: composer.phar
+    dest: /usr/local/bin/composer
+    mode: 0755
+
+- name: transfer composer script
+  copy:
+    src: composer.sh
+    dest: /root/composer.sh
+    mode: 0755
+
+- name: setup composer
+  shell: "~/composer.sh"
+
+# 配置发布脚本到环境变量
+- name: setup deploy script to path
+  lineinfile:
+    path: /etc/profile
+    line: "{{ custom_path }}"
+    backup: yes
+    
+# 配置用户sudo path 路径
+- name: setup sudoers
+  lineinfile:
+    path: /etc/sudoers
+    state: present
+    regexp: '^Defaults    secure_path = /sbin:/bin:/usr/sbin:/usr/bin'
+    line: 'Defaults    secure_path = /sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin:/data/devops/shells/'
+
+
+
+

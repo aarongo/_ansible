@@ -1,0 +1,31 @@
+---
+- name: install the latest version of yum tools
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items: "{{ yum_tools }}"
+
+- name: Add repository of docker
+  copy:
+    src: docker-ce.repo
+    dest: /etc/yum.repos.d/
+    mode: 0644
+
+- name: Install Docker-Ce
+  yum:
+    name: docker-ce
+    state: latest
+
+- name: Create data for docker
+  file:
+    path: "{{ docker_data }}"
+    state: directory
+    mode: 0755
+
+- name: Create soft link of docker data
+  file:
+    src: "{{ docker_data }}"
+    dest: "/var/lib/docker"
+    state: link
+  notify:
+    - start and enable service dcoker-ce

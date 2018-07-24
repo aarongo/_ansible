@@ -1,0 +1,12 @@
+---
+#- name: include docker setup
+#  include: docker_setup/main.yml
+#
+#- name: include kernel setup
+#  include: kernel_tun/main.yml
+#
+#- name: include user_setup
+#  include: user_setup/main.yml
+
+- name: include system_setup
+  include: system_setup/main.yml

@@ -5,6 +5,9 @@
   args:
     chdir: "{{soft_dir}}"
     executable: "/bin/bash"
+  become: yes
+  become_method: sudo
+  become_user: root
 
 - name: Remove Remote Packages Dir
   file:

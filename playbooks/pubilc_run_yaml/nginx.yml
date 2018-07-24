@@ -1,4 +1,4 @@
 ---
-- hosts: nginx
+- hosts: "{{ run_hosts }}"
   roles:
     - nginx

@@ -1,4 +1,4 @@
 ---
-- hosts: ejl_pro
+- hosts: syzm_pro
   roles:
     - authorized
