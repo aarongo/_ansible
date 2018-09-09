@@ -1,0 +1,4 @@
+---
+- hosts: virtuale
+  roles:
+    - kubernetes_prepare
