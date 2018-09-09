@@ -1,0 +1,47 @@
+---
+- name: 准备 Docker 相关目录
+  file:
+    name: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ docker_bin_dir }}"
+    - /etc/docker
+
+- name: 引入 docker 安装文件
+  copy:
+    src: "{{ docker_package_dir }}/docker-{{ docker_version }}-ce.tgz"
+    dest: "{{ docker_install_tmp }}"
+
+- name: 解压 docker
+  unarchive:
+    src: "/opt/docker-{{ docker_version }}-ce.tgz"
+    dest: "{{ docker_install_tmp }}"
+    remote_src: yes
+
+- name: 安装 docker
+  shell: "mv {{ docker_install_tmp }}/docker/* {{ docker_bin_dir }}"
+
+- name: 移除 docker 相应安装文件
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "/opt/docker-{{ docker_version }}-ce.tgz"
+    - /opt/docker
+
+- name: 配置 docker 使用国内镜像加速
+  template:
+    src: daemon.json.j2
+    dest: /etc/docker/daemon.json
+
+- name: 创建 docker systemd unit 文件
+  template:
+    src: docker.service.j2
+    dest: /etc/systemd/system/docker.service
+
+- name: 开机启用docker 服务
+  shell: systemctl enable docker
+  ignore_errors: true
+
+- name: 开启docker 服务
+  shell: systemctl daemon-reload && systemctl restart docker
