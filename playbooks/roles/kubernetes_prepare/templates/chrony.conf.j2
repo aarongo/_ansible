@@ -1,0 +1,20 @@
+{% if inventory_hostname == groups.chrony[0] %}
+{% for host in network_ntp %}
+server {{ host }} iburst
+{% endfor %}
+{% else %}
+server {{ groups.chrony[0] }} iburst
+{% endif %}
+stratumweight 0
+driftfile /var/lib/chrony/drift
+rtcsync
+makestep 10 3
+allow {{ allow_network }}
+bindcmdaddress 127.0.0.1
+bindcmdaddress ::1
+keyfile /etc/chrony.keys
+commandkey 1
+generatecommandkey
+noclientlog
+logchange 0.5
+logdir /var/log/chrony

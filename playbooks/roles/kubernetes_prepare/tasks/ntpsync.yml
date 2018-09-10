@@ -1,0 +1,33 @@
+---
+- name: 安装依赖
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - gcc
+    - gcc-c++
+    - make
+
+- name: 引用 Chrony 软件安装包
+  copy:
+    src: "{{ package_dir }}/chrony-{{ chrony_version }}.tar.gz"
+    dest: "{{ package_tmp }}"
+
+- name: 解压Chrony安装包
+  unarchive:
+    src: "{{ package_tmp }}/chrony-{{ chrony_version }}.tar.gz"
+    dest: "{{ package_tmp }}"
+    remote_src: yes
+
+- name: 安装 Chrony
+  shell: "./configure && make && make install"
+  args:
+    chdir: "{{ package_tmp }}/chrony-{{ chrony_version }}"
+
+- name: 配置 Chrony
+  template:
+    src: chrony.conf.j2
+    dest: /etc/chrony.conf
+
+- name: 启动 Chrony server
+  shell: "systemctl enable chronyd.service && systemctl restart chronyd.service"
