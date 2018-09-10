@@ -1,0 +1,29 @@
+global_defs {
+    router_id lb-backup
+}
+
+vrrp_script check-haproxy {
+    script "killall -0 haproxy"
+    interval 5
+    weight -60
+}
+
+vrrp_instance VI-kube-master {
+{% if k_master == 0 %}
+    state MASTER
+    priority {{ keepalived_master }}
+{% else %}
+    state BACKUP
+    priority {{ keepalived_backup }}
+{% endif %}
+    dont_track_primary
+    interface {{ interface }}
+    virtual_router_id 51
+    advert_int 3
+    track_script {
+        check-haproxy
+    }
+    virtual_ipaddress {
+        172.16.10.200
+    }
+}

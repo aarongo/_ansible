@@ -1,0 +1,63 @@
+---
+- name: 引用安装 Haproxy 文件
+  copy:
+    src: "{{ package_dir }}/haproxy-{{ haproxy_version }}.tar.gz"
+    dest: "{{ package_tmp }}"
+
+- name: 解压 Haproxy 文件
+  unarchive:
+    src: "{{ package_tmp }}/haproxy-{{ haproxy_version }}.tar.gz"
+    dest: "{{ package_tmp }}"
+    remote_src: yes
+
+- name: 安装 Haproxy
+  shell: "make TARGET=linux2628 ARCH=x86_64 PREFIX=/usr/local/haproxy && make install PREFIX=/usr/local/haproxy"
+  args:
+    chdir: "{{ package_tmp }}/haproxy-{{ haproxy_version }}"
+
+- name: 创建 Haproxy 所需目录
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - /etc/haproxy
+    - /var/lib/haproxy
+
+- name: 为二进制文件创建符号链接，以允许您以普通用户身份运行HAProxy命令
+  file:
+    src: /usr/local/haproxy/sbin/haproxy
+    dest: /usr/sbin/haproxy
+    state: link
+
+- name: 配置 Haproxy 为系统服务
+  copy:
+    src: "{{ package_tmp }}/haproxy-{{ haproxy_version }}/examples/haproxy.init"
+    dest: /etc/init.d/haproxy
+    mode: 0755
+    remote_src: yes
+
+- name: 加载Haproxy 为系统服务
+  shell: "systemctl daemon-reload && chkconfig haproxy on"
+  ignore_errors: yes
+
+- name: 添加 Haproxy 系统用户
+  user:
+    name: haproxy
+    comment: "haproxy run user"
+    state: present
+
+- name: 配置 haproxy 配置文件
+  template:
+    src: haproxy.cfg.j2
+    dest: /etc/haproxy/haproxy.cfg
+
+- name: 启动 Haproxy 
+  shell: systemctl restart haproxy
+
+- name: 移除 haproxy 相应安装文件
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ package_tmp }}/haproxy-{{ haproxy_version }}.tar.gz"
+    - "{{ package_tmp }}/haproxy-{{ haproxy_version }}"

@@ -1,0 +1,46 @@
+---
+- name: 引用安装 keepalived 文件
+  copy:
+    src: "{{ package_dir }}/keepalived-{{ keepalived_version }}.tar.gz"
+    dest: "{{ package_tmp }}"
+
+- name: 解压 keepalived 文件
+  unarchive:
+    src: "{{ package_tmp }}/keepalived-{{ keepalived_version }}.tar.gz"
+    dest: "{{ package_tmp }}"
+    remote_src: yes
+
+- name: 安装 keepalived
+  shell: "./configure --prefix=/usr/local/keepalived && make && make install"
+  args:
+    chdir: "{{ package_tmp }}/keepalived-{{ keepalived_version }}"
+
+- name: 创建 keepalived 所需目录
+  file:
+    path: /etc/keepalived
+    state: directory
+
+- name: 创建配置文件
+  template:
+    src: keepalived.conf.j2
+    dest: /etc/keepalived/keepalived.conf
+
+- name: 为二进制文件创建符号链接，以允许您以普通用户身份运行HAProxy命令
+  file:
+    src: /usr/local/keepalived/sbin/keepalived
+    dest: /usr/sbin/keepalived
+    state: link
+
+- name: 配置 keepalived 为系统服务
+  template:
+    src: keepalived.service.j2
+    dest: /lib/systemd/system/keepalived.service
+
+
+- name: 加载Haproxy 为系统服务
+  shell: "systemctl daemon-reload && systemctl enable keepalived.service"
+  ignore_errors: yes
+
+
+- name: 启动 keepalived
+  shell: "systemctl restart keepalived.service"
