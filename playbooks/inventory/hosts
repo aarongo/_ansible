@@ -1,4 +1,6 @@
-[mac]
-127.0.0.1
-[virtuale]
-172.16.10.10 docker_version=18.03.0
+[chrony]
+172.16.10.10
+
+[kuber-master]
+172.16.10.10 k_master=0 interface="eth0"
+172.16.10.11 k_master=1 interface="eth0"
