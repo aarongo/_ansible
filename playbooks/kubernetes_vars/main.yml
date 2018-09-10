@@ -1,0 +1,61 @@
+---
+# 公共使用变量
+
+# 安装文件目录
+package_dir: /Users/yuloong/Desktop/OneDrive - inc/packages
+
+# 安装文件临时存放目录
+package_tmp: /opt
+
+# 时钟同步配置
+allow_network: 172.16.10.0/24
+
+# 时钟同步 chrony 版本
+chrony_version: 3.3
+
+# 公网时钟同步服务器
+network_ntp:
+  - s2c.time.edu.cn
+  - s2m.time.edu.cn
+  - 0.cn.pool.ntp.org
+  - 3.cn.pool.ntp.org
+  - 0.centos.pool.ntp.org
+  - 3.centos.pool.ntp.org
+
+# 安装 kubernetes 所有变量存放
+# docker 安装使用变量
+docker_bin_dir: /usr/local/bin
+
+# docker 版本
+docker_version: 18.03.0
+
+# Docker daemon.json 配置
+# 国内镜像加速
+
+REG_MIRROR_1: "https://registry.docker-cn.com"
+REG_MIRROR_2: "https://docker.mirrors.ustc.edu.cn"
+# docker日志相关
+LOG_DRIVER: "json-file"
+LOG_LEVEL: "warn"
+LOG_MAX_SIZE: "10m"
+LOG_MAX_FILE: 3
+
+# docker容器存储目录
+STORAGE_DIR: "/var/lib/docker"
+
+# 安装 LB 使用变量
+# 集群 MASTER IP即 LB节点VIP地址，为区别与默认apiserver端口，设置VIP监听的服务端口8443
+# 公有云上请使用云负载均衡内网地址和监听端口
+MASTER_IP: "172.16.10.200"
+KUBE_APISERVER: "https://{{ MASTER_IP }}:8443"
+
+# haproxy 版本
+haproxy_version: 1.8.13
+
+# keepalived 版本
+keepalived_version: 2.0.7
+
+# keepalived 主从编号
+keepalived_master: 110
+keepalived_backup: 210
+
