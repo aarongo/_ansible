@@ -1,0 +1,6 @@
+---
+- hosts: all
+  roles:
+    - kubernetes_prepare
+  vars_files:
+    - ../kubernetes_vars/main.yml

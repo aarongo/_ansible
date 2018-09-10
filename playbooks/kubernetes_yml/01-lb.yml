@@ -1,0 +1,4 @@
+---
+- hosts: kuber-master
+  roles:
+    - kubernetes_lb

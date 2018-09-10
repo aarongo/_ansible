@@ -1,0 +1,8 @@
+---
+- hosts: kuber-master
+  roles:
+    - kubernetes_prepare
+    - kubernetes_docker
+    - kubernetes_lb
+  vars_files:
+    - ../kubernetes_vars/main.yml
