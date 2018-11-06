@@ -59,3 +59,14 @@ keepalived_version: 2.0.7
 keepalived_master: 110
 keepalived_backup: 210
 
+#TLS Bootstrapping 使用的 Token，使用 head -c 16 /dev/urandom | od -An -t x | tr -d ' ' 生成
+BOOTSTRAP_TOKEN: "67e1b561435996ccfab3f3d0d3978c2c"
+
+KUBE_VERSION: 1.11.0
+
+ca_dir: /etc/kubernetes/ssl
+
+# etcd 集群使用
+
+TMP_NODES: "{% for h in groups['etcd'] %}{{ hostvars[h]['NODE_NAME'] }}=https://{{ h }}:2380,{% endfor %}"
+ETCD_NODES: "{{ TMP_NODES.rstrip(',') }}"

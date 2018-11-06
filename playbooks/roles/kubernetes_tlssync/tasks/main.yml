@@ -1,0 +1,25 @@
+---
+- name: 分发文件准备--后续提出到公共 playbooks
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - /root/.kube
+    - "{{ ca_dir }}"
+
+- name: 分发 kubeconfig配置文件
+  synchronize: 
+    src: /root/.kube/config
+    dest: /root/.kube/config
+  delegate_to: "{{ groups.deploy[0] }}"
+
+- name: 分发 CA 证书
+  synchronize: 
+    src: "{{ ca_dir }}/{{ item }}"
+    dest: "{{ ca_dir }}/{{ item }}"
+  with_items:
+  - ca.pem
+  - ca-key.pem
+  - ca.csr
+  - ca-config.json
+  delegate_to: "{{ groups.deploy[0] }}"

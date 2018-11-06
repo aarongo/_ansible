@@ -4,3 +4,16 @@
 [kuber-master]
 172.16.10.10 k_master=0 interface="eth0"
 172.16.10.11 k_master=1 interface="eth0"
+
+[deploy]
+172.16.10.100
+
+[etcd]
+172.16.10.11 NODE_NAME=etcd1
+172.16.10.12 NODE_NAME=etcd2
+172.16.10.13 NODE_NAME=etcd3
+
+
+[kube-node]
+172.16.10.12
+172.16.10.13

@@ -1,0 +1,2 @@
+---
+- import_tasks: cfssl_setup.yml

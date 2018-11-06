@@ -1,8 +1,45 @@
 ---
-- hosts: kuber-master
+# 进行时间同步配置
+- hosts: all
   roles:
     - kubernetes_prepare
+  vars_files:
+    - ../kubernetes_vars/main.yml
+
+# 安装 docker
+- hosts: all
+  roles:
     - kubernetes_docker
+  vars_files:
+    - ../kubernetes_vars/main.yml
+
+# 安装 master 集群高可用
+- hosts: kuber-master
+  roles:
     - kubernetes_lb
+  vars_files:
+    - ../kubernetes_vars/main.yml
+
+# 生成证书相关
+- hosts: deploy
+  roles:
+    - kubernetes_tls
+  vars_files:
+    - ../kubernetes_vars/main.yml
+
+# 传送证书
+- hosts:
+    - kuber-master
+    - etcd
+    - kube-node
+  roles:
+    - kubernetes_tlssync
+  vars_files:
+    - ../kubernetes_vars/main.yml
+
+# 安装
+- hosts: etcd
+  roles:
+    - kubernetes_etcd
   vars_files:
     - ../kubernetes_vars/main.yml

@@ -1,0 +1,152 @@
+---
+# 配置 生成 ssl 证书工具
+- name: 准备备用目录
+  file:
+    name: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ ca_dir }}"
+    - "/etc/kubernetes"
+
+- name: 引用 cfssl 源码工具
+  copy:
+    src: "{{ package_dir }}/cfssl_package/{{ item }}"
+    dest: /usr/local/bin/
+    mode: 0755
+  with_items:
+    - cfssl
+    - cfssljson
+    - cfssl-certinfo
+
+- name: 引用kubectl 工具
+  copy:
+    src: "{{ package_dir }}/k8s-{{ KUBE_VERSION }}/kubectl"
+    dest: /usr/local/bin/
+    mode: 0755
+
+- name: 设置环境变量引用 cfssl 命令与 kubectl
+  shell: "export PATH=/usr/local/bin:$PATH"
+    
+# 注册变量st，根据p的stat信息判断是否已经生成过ca证书，如果没有，下一步生成证书
+- name: 读取 CA 证书 stat 信息
+  stat:
+    path: "{{ ca_dir }}/ca.pem"
+  register: st
+
+- name: 引用 CA 证书配置文件
+  template:
+    src: ca-config.json.j2
+    dest: "{{ ca_dir }}/ca-config.json"
+  when: st.stat.isreg is not defined
+
+- name: 引用 CA 签名文件
+  template:
+    src: ca-csr.json.j2
+    dest: "{{ ca_dir }}/ca-csr.json"
+  when: st.stat.isreg is not defined
+
+- name: 生成 CA 证书和私钥
+  shell: "cfssl gencert -initca ca-csr.json | cfssljson -bare ca"
+  args:
+    chdir: "{{ ca_dir }}"
+  when: st.stat.isreg is not defined
+
+#----------- 创建kubectl kubeconfig文件: /root/.kube/config
+- name: 引用 kubectl使用 admin 证书签名文件
+  template:
+    src: admin-csr.json.j2
+    dest: "{{ ca_dir }}/admin-csr.json"
+
+- name: 生成 admin 证书和私钥
+  shell: cfssl gencert -ca={{ ca_dir }}/ca.pem -ca-key={{ ca_dir }}/ca-key.pem -config={{ ca_dir }}/ca-config.json -profile=kubernetes admin-csr.json | cfssljson -bare admin
+  args:
+    chdir: "{{ ca_dir }}"
+
+# 设置集群参数，指定CA证书和apiserver地址
+- name: 设置集群参数
+  shell: "kubectl config set-cluster kubernetes \
+        --certificate-authority={{ ca_dir }}/ca.pem \
+        --embed-certs=true \
+        --server={{ KUBE_APISERVER }}"
+
+# 设置客户端认证参数，指定使用admin证书和私钥
+- name: 设置客户端认证参数
+  shell: "kubectl config set-credentials admin \
+        --client-certificate={{ ca_dir }}/admin.pem \
+        --embed-certs=true \
+        --client-key={{ ca_dir }}/admin-key.pem"
+
+# 设置上下文参数，说明使用cluster集群和用户admin
+- name: 设置上下文参数
+  shell: "kubectl config set-context kubernetes \
+        --cluster=kubernetes --user=admin"
+
+- name: 设置默认上下文
+  shell: "kubectl config use-context kubernetes"
+
+#-------------创建bootstrap.kubeconfig配置文件: /root/bootstrap.kubeconfig
+- name: 设置集群参数
+  shell: "kubectl config set-cluster kubernetes \
+        --certificate-authority={{ ca_dir }}/ca.pem \
+        --embed-certs=true \
+        --server={{ KUBE_APISERVER }} \
+        --kubeconfig=bootstrap.kubeconfig"
+
+- name: 设置客户端认证参数
+  shell: "kubectl config set-credentials kubelet-bootstrap \
+        --token={{ BOOTSTRAP_TOKEN }} \
+        --kubeconfig=bootstrap.kubeconfig"
+
+- name: 设置上下文参数
+  shell: "kubectl config set-context default \
+        --cluster=kubernetes \
+        --user=kubelet-bootstrap \
+        --kubeconfig=bootstrap.kubeconfig"
+
+- name: 选择默认上下文
+  shell: "kubectl config use-context default --kubeconfig=bootstrap.kubeconfig"
+
+- name: 移动 bootstrap.kubeconfig
+  shell: "mv /root/bootstrap.kubeconfig /etc/kubernetes/"
+
+
+#------------创建kube-proxy.kubeconfig配置文件: /root/kube-proxy.kubeconfig
+- name: 准备kube-proxy 证书签名请求
+  template:
+    src: kube-proxy-csr.json.j2
+    dest: "{{ ca_dir }}/kube-proxy-csr.json"
+
+- name: 创建 kube-proxy证书与私钥
+  shell: "cfssl gencert \
+        -ca={{ ca_dir }}/ca.pem \
+        -ca-key={{ ca_dir }}/ca-key.pem \
+        -config={{ ca_dir }}/ca-config.json \
+        -profile=kubernetes kube-proxy-csr.json | cfssljson -bare kube-proxy"
+  args:
+    chdir: "{{ ca_dir }}"
+
+- name: 设置集群参数
+  shell: "kubectl config set-cluster kubernetes \
+        --certificate-authority={{ ca_dir }}/ca.pem \
+        --embed-certs=true \
+        --server={{ KUBE_APISERVER }} \
+        --kubeconfig=kube-proxy.kubeconfig"
+
+- name: 设置客户端认证参数
+  shell: "kubectl config set-credentials kube-proxy \
+        --client-certificate={{ ca_dir }}/kube-proxy.pem \
+        --client-key={{ ca_dir }}/kube-proxy-key.pem \
+        --embed-certs=true \
+        --kubeconfig=kube-proxy.kubeconfig"
+
+- name: 设置上下文参数
+  shell: "kubectl config set-context default \
+        --cluster=kubernetes \
+        --user=kube-proxy \
+        --kubeconfig=kube-proxy.kubeconfig"
+
+- name: 选择默认上下文
+  shell: "kubectl config use-context default --kubeconfig=kube-proxy.kubeconfig"
+
+- name: 移动 kube-proxy.kubeconfig
+  shell: "mv /root/kube-proxy.kubeconfig /etc/kubernetes/"

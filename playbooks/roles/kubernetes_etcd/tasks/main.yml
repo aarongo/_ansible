@@ -1,0 +1,64 @@
+---
+- name: 下载 etcd 二进制文件
+  copy:
+    src: "{{ package_dir }}/etcd_package/{{ item }}"
+    dest: /usr/local/bin
+    mode: 0755
+  with_items:
+    - etcd
+    - etcdctl
+
+- name: 下载 cfssl 二进制文件--后续抽离到公共 playbook;需要在公共 playbooks 中配置主机文件 hosts;需要在公共 playbooks 中增加 deploy 到所有机器的免密登录
+  copy:
+    src: "{{ package_dir }}/cfssl_package/{{ item }}"
+    dest: /usr/local/bin/
+    mode: 0755
+  with_items:
+    - cfssl
+    - cfssljson
+    - cfssl-certinfo
+
+- name: 设置环境变量引用 cfssl 命令与 etcd
+  shell: "export PATH=/usr/local/bin:$PATH"
+
+- name: 创建存放etcd 证书目录
+  file:
+    name: /etc/etcd/ssl
+    state: directory
+
+- name: 读取etcd证书stat信息
+  stat: 
+    path: "/etc/etcd/ssl/etcd.pem"
+  register: st
+
+- name: 导入etcd json
+  template:
+    src: etcd-csr.json.j2
+    dest: /etc/etcd/ssl/etcd-csr.json
+  when: st.stat.isreg is not defined
+
+- name: 创建证书
+  shell: "cfssl gencert \
+        -ca={{ ca_dir }}/ca.pem \
+        -ca-key={{ ca_dir }}/ca-key.pem \
+        -config={{ ca_dir }}/ca-config.json \
+        -profile=kubernetes etcd-csr.json | cfssljson -bare etcd"
+  args:
+    chdir: /etc/etcd/ssl
+
+- name: 创建工作目录
+  file:
+    name: /var/lib/etcd
+    state: directory
+
+- name: 创建etcd 服务
+  template:
+    src: etcd.service.j2
+    dest: /etc/systemd/system/etcd.service
+
+- name: 开机启用etcd服务
+  shell: systemctl enable etcd
+  ignore_errors: true
+
+- name: 启动 etcd 服务
+  shell: systemctl daemon-reload && systemctl restart etcd
