@@ -2,7 +2,7 @@
 # mysql rpm 方式安装
 - name: mysql rpm packages
   unarchive:
-    src: ../../source_files/mysql/el6.tar.gz
+    src: /Users/yuloong/Desktop/OneDrive - inc/packages/mysql/el6.tar.gz
     dest: /tmp/
 
 - name: The install mysql rpm for centos 6

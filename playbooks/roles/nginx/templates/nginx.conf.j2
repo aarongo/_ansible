@@ -40,6 +40,12 @@ http {
     open_file_cache_valid 30s;
     open_file_cache_min_uses 1;
 
+# realip
+    # 过滤阿里云的 SLB 监控检测 IP
+    set_real_ip_from 10.64.0.0/10;
+    real_ip_header X-Forwarded-For;
+    real_ip_recursive on;
+
 #proxy
     proxy_http_version 1.1;
     proxy_buffer_size 16k;
@@ -47,12 +53,17 @@ http {
     proxy_busy_buffers_size 64k;
     proxy_temp_file_write_size 64k;
     proxy_set_header Host  $host;
-    proxy_set_header wm-client-ip $http_carrefour_client_ip;
     proxy_set_header X-Real-IP $remote_addr;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_hide_header X-Powered-By;
     add_header Via $Hit_Host;
 
+# map
+    map $request_uri $loggable {
+        "/" 0;
+        "/health.html" 0;
+        default 1;
+    }
     log_format project_log '{"@timestamp":"$time_iso8601",'
                  '"host":"$server_addr",'
                  '"clientip":"$remote_addr",'
@@ -67,7 +78,7 @@ http {
                  '"referer":"$http_referer",'
                  '"agent":"$http_user_agent",'
                  '"status":"$status"}';
-    access_log  {{ nginx_log_dir}}{{ ansible_hostname }}-{{ nginx_access_log_name }} project_log;
+    access_log  {{ nginx_log_dir}}{{ ansible_hostname }}-{{ nginx_access_log_name }} project_log if=$loggable;
     error_log  {{ nginx_log_dir}}{{ ansible_hostname }}-{{ nginx_error_log_name}};
 
 server {

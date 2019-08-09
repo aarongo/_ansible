@@ -11,6 +11,13 @@
     - "{{ LOGSDIR }}"
     - "{{ PIDSOCK }}"
 
+- name: mysql error logs
+  file:
+    path: "{{ LOGSDIR }}/{{LOGERRNAME}}"
+    state: touch
+    owner: "{{ USER }}"
+    group: "{{ GROUP }}"
+
 - name: setup mysql cnf
   template:
     src: my.cnf.j2
