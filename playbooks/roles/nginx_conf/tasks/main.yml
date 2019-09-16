@@ -43,7 +43,7 @@
 
 # # for syzm aliyun config  Management
 # - name: syzm config update
-#   template:
+#   templates:
 #     src: "{{ NGINX_SOURCE_CONF_PATH }}/{{ NGINX_SOURCE_CONF_NAME }}"
 #     dest: "{{ NGINX_DEST_CONF_PATH }}/{{ NGINX_DEST_CONF_NAME }}"
 #     mode: 0600

@@ -1,6 +1,6 @@
 ---
 # tasks file for roles/authorized
-# 推送公钥到远端服务器, hosts 文件中要存在主机和主机密码
+# 推送公钥到远端服务器, hosts.j2 文件中要存在主机和主机密码
 - name: Set authorized key took from file
   authorized_key:
     user: comall-lddf

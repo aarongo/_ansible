@@ -19,7 +19,7 @@
 # 安装 JAVA_HOME
 - name: Install Java 8u102
   unarchive:
-    src: "../../../source_files/jdk-8u102-linux-x64.tar.gz"
+    src: "/Users/yuloong/Desktop/OneDrive - inc/packages/jdk-8u102-linux-x64.tar.gz"
     dest: "{{INSTALL_HOME}}/"
   when: (stdout_result.stdout == "0")
 
@@ -41,7 +41,7 @@
 # 直接网络下载安装 zookeeper
 - name: Download zookeeper {{zookeeper_version}}
   unarchive:
-    src: "../../../source_files/zookeeper-{{zookeeper_version}}.tar.gz"
+    src: "/Users/yuloong/Desktop/OneDrive - inc/packages/zookeeper-{{zookeeper_version}}.tar.gz"
     dest: "{{INSTALL_HOME}}/"
 
 # 传送配置文件到远程服务器

@@ -13,9 +13,9 @@ packages:
 # Mysql 配置文件
 PORT: 3306
 PASSWORD: 27GUv%y7
-DATADIR: /software/databases/
-LOGSDIR: /software/mysqllogs
+DATADIR: /data/databases/
+LOGSDIR: /data/mysql_logs
 LOGERRNAME: mysql.err
-PIDSOCK: /software/runinfo
+PIDSOCK: /data/run_info
 # thread_concurrency应设为CPU核数的2倍
-THREAD_CONCURRENCY: 8
+THREAD_CONCURRENCY: 4

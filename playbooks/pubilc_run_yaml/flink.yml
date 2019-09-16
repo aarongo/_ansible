@@ -1,0 +1,4 @@
+---
+- hosts: "{{ flink_hosts }}"
+  roles:
+    - flink

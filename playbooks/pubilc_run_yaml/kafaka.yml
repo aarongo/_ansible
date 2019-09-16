@@ -1,0 +1,6 @@
+---
+- name: 安装 kafaka
+  hosts: "{{ hosts_groups }}"
+  roles:
+    - role: kafaka
+      zookeeper_hosts: "{{groups['kafaka']}}"

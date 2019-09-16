@@ -21,10 +21,10 @@
   script: templates/build.sh
 
 
-# 更改 hosts 文件
-- name: Add mappings to /etc/hosts
+# 更改 hosts.j2 文件
+- name: Add mappings to /etc/hosts.j2
   blockinfile:
-    dest: "/etc/hosts"
+    dest: "/etc/hosts.j2"
     block: |
       {{item.info}}
     marker: "# {mark} ANSIBLE MANAGED BLOCK {{item.name}}"

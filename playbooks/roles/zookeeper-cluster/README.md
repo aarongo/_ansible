@@ -36,3 +36,10 @@ Author Information
 ------------------
 
 An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+
+------------------
+Run Example
+
+```bash
+ansible-playbook playbooks/pubilc_run_yaml/zookeeper-cluster.yml --extra-vars "hosts_name=kafaka base_home=no zookeeper_version=3.4.14"
+```

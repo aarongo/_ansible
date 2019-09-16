@@ -8,7 +8,7 @@
     - etcd
     - etcdctl
 
-- name: 下载 cfssl 二进制文件--后续抽离到公共 playbook;需要在公共 playbooks 中配置主机文件 hosts;需要在公共 playbooks 中增加 deploy 到所有机器的免密登录
+- name: 下载 cfssl 二进制文件--后续抽离到公共 playbook;需要在公共 playbooks 中配置主机文件 hosts.j2;需要在公共 playbooks 中增加 deploy 到所有机器的免密登录
   copy:
     src: "{{ package_dir }}/cfssl_package/{{ item }}"
     dest: /usr/local/bin/

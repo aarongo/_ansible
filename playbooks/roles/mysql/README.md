@@ -1,5 +1,5 @@
 # Mysql 安装流程
-1. 卸载mariadb-libs
+1. 卸载mariadb-libs 不可用需要检查
 2. 创建 Mysql 用户和组
 3. 安装依赖yum install numactl，yum install perl，yum install net-tools perl-Module-Install.noarch
 4. Mysql安装
